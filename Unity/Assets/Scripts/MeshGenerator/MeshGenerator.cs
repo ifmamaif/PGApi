@@ -6,12 +6,13 @@ using UnityEngine;
 // PROCEDURAL TERRAIN in Unity! - Mesh Generation : https://youtu.be/64NblGkAabk?list=WL
 
 [RequireComponent(typeof(MeshFilter))]
-public class MeshGenerator : MonoBehaviour
+public class MeshGenerator : GenericBehaviour
 {
     private GameObject terrain;
     private Mesh mesh;
     private Vector3[] vertices;
     private int[] triangles;
+    private Color[] colors;
 
     public int xSize = 20;
     public int zSize = 20;
@@ -22,23 +23,28 @@ public class MeshGenerator : MonoBehaviour
     public GameObject parent;
 
     // Start is called before the first frame update
-    public void Start()
+    public override void Start()
     {
-        terrain = new GameObject("Terrain");
+        if (terrain != null)
+            return;
+
+        terrain  = new GameObject("Terrain");
         mesh = new Mesh();
+
         terrain.AddComponent<MeshFilter>().mesh = mesh;
         MeshRenderer meshRenderer = terrain.AddComponent<MeshRenderer>();
-        meshRenderer.material = new Material(Shader.Find("Specular"));
+        meshRenderer.material = new Material(Shader.Find("Legacy Shaders/Particles/Additive"));
 
         CreateShape();
-        UpdateShape();
+       // Generate();
+        
 
         parent = gameObject;
         if(parent)
             terrain.transform.SetParent(parent.transform);
     }
 
-    public void GenerateNewMesh()
+    public override void Generate()
     {
         xOffSet = Random.Range(0, 1000);
         zOffSet = Random.Range(0, 1000);
@@ -49,6 +55,8 @@ public class MeshGenerator : MonoBehaviour
             {
                 float y = Mathf.PerlinNoise(xOffSet + x * .3f, zOffSet + z * .3f) * 2f;
                 vertices[i] = new Vector3(x, y, z);
+                float colorValue = Mathf.PerlinNoise(xOffSet + x * .3f, zOffSet + z * .3f);
+                colors[i] = Color.Lerp(Color.red, Color.green, colorValue);
                 i++;
             }
         }
@@ -56,29 +64,10 @@ public class MeshGenerator : MonoBehaviour
         UpdateShape();
     }
 
-    //private void Update()
-    //{
-    //    //reload scene, for testing purposes
-    //    if (Input.GetKeyDown("r"))
-    //        {
-    //            GenerateNewMesh();
-    //        }
-    //}
-
-
     private void CreateShape()
     {
         vertices = new Vector3[(xSize + 1) * (zSize + 1)];
-
-        for (int i = 0, z = 0; z <= zSize; z++)
-        {
-            for (int x = 0; x <= xSize; x++)
-            {
-                float y = Mathf.PerlinNoise(xOffSet + x * .3f,zOffSet + z * .3f) * 2f;
-                vertices[i] = new Vector3(x, y, z);
-                i++;
-            }
-        }
+        colors = new Color[(xSize + 1) * (zSize + 1)];
 
         triangles = new int[6 * xSize * zSize];
         int vert = 0;
@@ -106,16 +95,17 @@ public class MeshGenerator : MonoBehaviour
         mesh.Clear();
         mesh.vertices = vertices;
         mesh.triangles = triangles;
+        mesh.colors = colors; 
     }
 
-    private void OnDrawGizmos()
-    {
-        if (vertices == null)
-            return;
-
-        for (int i = 0; i < vertices.Length; i++)
-        {
-            Gizmos.DrawSphere(vertices[i], 0.1f);
-        }
-    }
+    //private void OnDrawGizmos()
+    //{
+    //    if (vertices == null)
+    //        return;
+    //
+    //    for (int i = 0; i < vertices.Length; i++)
+    //    {
+    //        Gizmos.DrawSphere(vertices[i], 0.1f);
+    //    }
+    //}
 }

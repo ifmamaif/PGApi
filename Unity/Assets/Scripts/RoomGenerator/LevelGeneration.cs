@@ -5,7 +5,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelGeneration : MonoBehaviour
+public class LevelGeneration : GenericBehaviour
 {
     private GameObject level;
     private Vector2 worldSize = new Vector2(4, 4);
@@ -15,14 +15,14 @@ public class LevelGeneration : MonoBehaviour
     public GameObject roomWhiteObj;
     public GameObject parent;
     
-    private void Start()
+    public override void Start()
     {
         roomWhiteObj = (UnityEngine.GameObject)Resources.Load("Prefabs/MapSprite", typeof(GameObject));
         parent = gameObject;
-        CreateLevel();
+        Generate();
     }
 
-    public void CreateLevel()
+    public override void Generate()
     {
         Destroy(level);
         level = new GameObject("Level");
@@ -70,7 +70,7 @@ public class LevelGeneration : MonoBehaviour
                 } while (NumberOfNeighbors(checkPos, takenPositions) > 1 && iterations < 100);
                 if (iterations >= 50)
                 {
-                    print("error: could not create with fewer neighbors than : " + NumberOfNeighbors(checkPos, takenPositions));
+                   // print("error: could not create with fewer neighbors than : " + NumberOfNeighbors(checkPos, takenPositions));
                 }
             }
             //finalize position

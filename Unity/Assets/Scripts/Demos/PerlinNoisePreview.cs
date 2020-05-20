@@ -6,7 +6,7 @@ using UnityEngine;
 // https://www.youtube.com/watch?v=bG0uEXV6aHQ
 // Brackeys
 
-public class PerlinNoisePreview : MonoBehaviour
+public class PerlinNoisePreview : GenericBehaviour
 {
     public int width = 256;
     public int height = 256;
@@ -18,7 +18,7 @@ public class PerlinNoisePreview : MonoBehaviour
     private GameObject randomObject;
 
     // Start is called before the first frame update
-    void Start()
+    public new void Start()
     {
         perlinObject = GameObject.CreatePrimitive(PrimitiveType.Quad);
         randomObject = GameObject.CreatePrimitive(PrimitiveType.Quad);
@@ -31,12 +31,15 @@ public class PerlinNoisePreview : MonoBehaviour
 
         perlinObject.transform.localPosition = new Vector3(0.51f, 0, 0.9f);
         randomObject.transform.localPosition = new Vector3(-0.51f, 0, 0.9f);
-               
-        GenerateTexture();
+
+        perlinObject.transform.localScale = Vector3.one;
+        randomObject.transform.localScale = Vector3.one;
+
+        Generate();
         GenerateTextureRandom();
     }
 
-    public void GenerateTexture()
+    public new void Generate()
     {
         Renderer renderer = perlinObject.GetComponent<MeshRenderer>();
         Texture2D texture = new Texture2D(width, height);
@@ -74,9 +77,9 @@ public class PerlinNoisePreview : MonoBehaviour
 
 
     // Update is called once per frame
-    void Update()
+    public void Update()
     {
-       GenerateTexture();
+       Generate();
       // GenerateTextureRandom();
     }
 }

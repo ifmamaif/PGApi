@@ -45,7 +45,7 @@ public class MainScene : MonoBehaviour
         m_MainCamera.nearClipPlane = 0.3f;
 
         m_UI = new GameObject("UI");
-        m_UI.transform.localPosition = new Vector3(0, 45, 3f);
+        m_UI.transform.localPosition = new Vector3(0, 45, -9f);
         m_UI.transform.localScale = new Vector3(1, 1, 1);
 
         GameObject pressR = new GameObject("Press R to reload");
@@ -84,15 +84,21 @@ public class MainScene : MonoBehaviour
         text.font = null;
         text.color = Color.black;
 
-        m_RoomGenerator = NewDemo<LevelGeneration>("Room Generator", () => { });
+        m_RoomGenerator = NewDemo<LevelGeneration>("Room Generator");//, () => { });
 
-        m_Atestat = NewDemo<Atestat>("Atestat", () => { m_Atestat.GetComponent<Atestat>().GenerareLabirint(); });
-        m_Atestat.transform.localPosition = new Vector3(22, -28, -10f);
+        m_Atestat = NewDemo<Atestat>("Atestat");//, () => { m_Atestat.GetComponent<Atestat>().Generate(); });
+        //m_Atestat.transform.localPosition = Vector3.zero;// new Vector3(22, -28, -10f);
         m_Atestat.transform.localScale = new Vector3(6.6f, 6.6f, 1);
 
-        m_MeshGenerator = NewDemo<MeshGenerator>("Mesh Generator", () => { m_MeshGenerator.GetComponent<MeshGenerator>().GenerateNewMesh(); });
-        m_MDS = NewDemo<Landv2>("MDS", () => { m_MDS.GetComponent<Landv2>().Generate(); });
-        m_PerlinPreview = NewDemo<PerlinNoisePreview>("Perlin Preview", () => { m_PerlinPreview.GetComponent<PerlinNoisePreview>().GenerateTexture(); });
+        m_MeshGenerator = NewDemo<MeshGenerator>("Mesh Generator");//, () => { m_MeshGenerator.GetComponent<MeshGenerator>().Generate(); });
+        m_MeshGenerator.transform.localPosition = new Vector3(-60, -38, 5);
+        m_MeshGenerator.transform.localEulerAngles = new Vector3(-30f, -1, -5);
+        m_MeshGenerator.transform.localScale = new Vector3(7, 7, 7);
+
+        m_MDS = NewDemo<MDS>("MDS");//, () => { m_MDS.GetComponent<MDS>().Generate(); });
+
+        m_PerlinPreview = NewDemo<PerlinNoisePreview>("Perlin Preview");//, () => { m_PerlinPreview.GetComponent<PerlinNoisePreview>().Generate(); });
+        m_PerlinPreview.transform.localScale = new Vector3(88, 88, 1);
 
         ActivateDemo(m_RoomGenerator);
     }
@@ -130,13 +136,13 @@ public class MainScene : MonoBehaviour
         }
     }
 
-    GameObject NewDemo<T>(string Name, ResetLevelFunction function) where T : Component
+    GameObject NewDemo<T>(string Name) where T : GenericBehaviour
     {
         GameObject newObject = new GameObject(Name);
-        newObject.AddComponent<T>();
+        var newComponentScript = newObject.AddComponent<T>();
 
-        listOfDemos.Add(new KeyValuePair<GameObject, ResetLevelFunction>(newObject, function));
-        //newObject.Start();
+        listOfDemos.Add(new KeyValuePair<GameObject, ResetLevelFunction>(newObject, () => { newComponentScript.Generate(); }));
+        newComponentScript.Start();
 
         return newObject;
     }

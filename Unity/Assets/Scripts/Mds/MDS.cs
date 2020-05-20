@@ -1,6 +1,6 @@
 ﻿using UnityEngine;	//	GameObject , Color
 
-public class Landv2 : MonoBehaviour  {
+public class MDS: GenericBehaviour  {
 	private GameObject boardHolder;
 	private GameObject terrain;
 
@@ -30,21 +30,22 @@ public class Landv2 : MonoBehaviour  {
 
 
 	// Use this for initialization
-	void Start() {
-		perlinWidth = 100;
-		perlinHeight = 100;
+	public override void Start() {
+		perlinWidth = 90;
+		perlinHeight = 90;
 
 		perlinOffsetX =  100;
 		perlinOffsetY = 100;
 
+		if (boardHolder)
+			return;
 
 		boardHolder = new GameObject ("Terrain");       //Instantiate Board and set boardHolder to its transform.
 		boardHolder.transform.SetParent(this.transform);
 
 		initialPosition = boardHolder.transform.position;
 
-		//terrain = new GameObject ("Land");	//	the land based on procedural generate by perlinnoise
-		terrain = GameObject.CreatePrimitive(PrimitiveType.Quad);
+		terrain = GameObject.CreatePrimitive(PrimitiveType.Quad);   //	the land based on procedural generate by perlinnoise
 		terrain.GetComponent<MeshCollider> ().enabled = false;
 		Material landMaterial = new Material(Shader.Find ("Unlit/Texture"));
 		landMaterial.name = "landMaterial";
@@ -56,10 +57,10 @@ public class Landv2 : MonoBehaviour  {
 
 		SetRegions ();
 
-		UpdateMap ();
+		//UpdateMap ();
 	}
 
-	void Update()
+	public void Update()
 	{
 		if(autoMove || autoUpdate)
 		{
@@ -68,7 +69,7 @@ public class Landv2 : MonoBehaviour  {
 	}
 
 
-	public void Generate()
+	public override void Generate()
 	{
 		perlinOffsetX = Random.value * 1000;
 		perlinOffsetY = Random.value * 1000;
