@@ -86,7 +86,7 @@ public class MainScene : MonoBehaviour
 
         m_RoomGenerator = NewDemo<LevelGeneration>("Room Generator", () => { });
 
-        m_Atestat = NewDemo<GenLab>("Atestat", () => { m_Atestat.GetComponent<GenLab>().GenerareLabirint(); });
+        m_Atestat = NewDemo<Atestat>("Atestat", () => { m_Atestat.GetComponent<Atestat>().GenerareLabirint(); });
         m_Atestat.transform.localPosition = new Vector3(22, -28, -10f);
         m_Atestat.transform.localScale = new Vector3(6.6f, 6.6f, 1);
 

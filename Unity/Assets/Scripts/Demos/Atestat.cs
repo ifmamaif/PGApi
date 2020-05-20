@@ -1,6 +1,6 @@
 ﻿using UnityEngine;  //  GameObject , Color
 
-public class GenLab : MonoBehaviour
+public class Atestat : MonoBehaviour
 {
 	private GameObject boardHolder;       //Instantiate Board and set boardHolder to its transform.
 	private int Width = 10;
@@ -13,7 +13,7 @@ public class GenLab : MonoBehaviour
 
 	// Start is called before the first frame update
 	public void Start()
-    {
+	{
 		Height = 20;
 		Width = 20;
 		terrainValue = new int[Height, Width];
