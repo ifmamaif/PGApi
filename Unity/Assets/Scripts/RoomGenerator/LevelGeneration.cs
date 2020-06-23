@@ -7,18 +7,16 @@ using UnityEngine;
 
 public class LevelGeneration : GenericBehaviour
 {
-    private GameObject level;
+    private GameObject level = null;
     private Vector2 worldSize = new Vector2(4, 4);
-    private Room[,] rooms;
-    private List<Vector2> takenPositions;
-    private int gridSizeX, gridSizeY, numberOfRooms = 20;
-    public GameObject roomWhiteObj;
-    public GameObject parent;
+    private Room[,] rooms = null;
+    private List<Vector2> takenPositions = null;
+    private int gridSizeX, gridSizeY, numberOfRooms = 32;
+    public GameObject roomWhiteObj = null;
     
     public override void Start()
     {
-        roomWhiteObj = (UnityEngine.GameObject)Resources.Load("Prefabs/MapSprite", typeof(GameObject));
-        parent = gameObject;
+        roomWhiteObj = (GameObject)Resources.Load("Prefabs/MapSprite", typeof(GameObject));
         Generate();
     }
 

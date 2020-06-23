@@ -4,11 +4,11 @@ using UnityEngine;  //  GameObject , Color
 public class Atestat : GenericBehaviour
 {
 	private GameObject boardHolder = null;       //Instantiate Board and set boardHolder to its transform.
-	private int Width = 20;
-	private int Height = 20;
+	private readonly int Width = 20;
+	private readonly int Height = 20;
 	private GameObject[,] terrainTexture = null;
-	private int[,] terrainValue;
-	private float textureSize = 0.64f;
+	private int[,] terrainValue = null;
+	private readonly float textureSize = 0.64f;
 
 	public override void Generate()
 	{
@@ -78,24 +78,12 @@ public class Atestat : GenericBehaviour
 			Debug.Log(x + " " + y + " " + value + " value: NULL");
 			return null;
 		}
-
 		
 		GameObject cell = new GameObject(x + " " + y);
 		cell.transform.localScale = Vector3.one;
 		SpriteRenderer cellRenderer = cell.AddComponent(typeof(SpriteRenderer)) as SpriteRenderer;
-		//cell.transform.SetParent(boardHolder.transform);
-		//var da = cell.GetComponent<Renderer>().bounds.size;
-		//cell.transform.SetParent(boardHolder.transform);
-		//float da = (float)Math.Round(cell.transform.localScale.x,2);
-		//float newTextureSize = ((float)1 / da) * textureSize;
-		//newTextureSize = (float)Math.Floor(newTextureSize);
-		//textureSize = newTextureSize;
-		//cell.transform.localScale = Vector3.one;
-		//da = cell.GetComponent<Renderer>().bounds.size;
-		//cell.transform.position = new Vector3(textureSize * y - Width / 2, -textureSize * x + Height / 2, 0.1f);
-		//cell.transform.SetParent(boardHolder.transform);
 
-		Texture2D cellTexture = (UnityEngine.Texture2D)Resources.Load("Resurse/" + value, typeof(Texture2D));
+		Texture2D cellTexture = (Texture2D)Resources.Load("Resurse/" + value, typeof(Texture2D));
 		if (cellTexture == null)
 		{
 			Debug.Log(x + " " + y + " " + value + " NULL");
