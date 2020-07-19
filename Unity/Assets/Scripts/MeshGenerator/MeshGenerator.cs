@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// MESH GENERATION in Unity - Basics : https://youtu.be/eJEpeUH1EMg?list=WL
-// PROCEDURAL TERRAIN in Unity! - Mesh Generation : https://youtu.be/64NblGkAabk?list=WL
-
 [RequireComponent(typeof(MeshFilter))]
 public class MeshGenerator : GenericBehaviour
 {

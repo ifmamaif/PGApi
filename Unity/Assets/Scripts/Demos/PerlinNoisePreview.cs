@@ -2,10 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// PERLIN NOISE in Unity - Procedural Generation Tutorial
-// https://www.youtube.com/watch?v=bG0uEXV6aHQ
-// Brackeys
-
 public class PerlinNoisePreview : GenericBehaviour
 {
     public int width = 256;

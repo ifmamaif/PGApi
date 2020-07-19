@@ -1,7 +1,3 @@
-﻿//  Procedural Generation in Unity (Tutorial)
-//  https://www.youtube.com/watch?v=nADIYwgKHv4&list=PLfSI4LSq4loOPd5H7mfGBfyKCM2NTLuzP&index=2&t=551s
-//  https://github.com/wbeaty/binding-of-isaac-style-procedural-generation
-
 using System.Collections.Generic;
 using UnityEngine;
 
