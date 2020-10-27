@@ -14,6 +14,11 @@ public static class Utils
         return OutSide(thisOne.x, thisOne.y, other.x, other.y);
     }
 
+    public static bool OutSide(this Vector2Int thisOne, Vector2Int other)
+    {
+        return OutSide(thisOne.x, thisOne.y, other.x, other.y);
+    }
+
     public static bool OutSide(int x1,int y1,int x2,int y2)
     {
         return x1 >= x2

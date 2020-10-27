@@ -6,7 +6,7 @@ public class LevelGeneration : GenericBehaviour
     private GameObject m_Level = null;
     private Vector2Int m_WorldSize = new Vector2Int(4, 4);
     private Room[,] m_Rooms = null;
-    private List<Vector2> m_TakenPositions = null;
+    private List<Vector2Int> m_TakenPositions = null;
     private int m_NumberOfRooms = 32;
     private Vector2Int m_GridSize;
 
@@ -48,7 +48,7 @@ public class LevelGeneration : GenericBehaviour
         //setup
         m_Rooms = new Room[m_GridSize.x * 2, m_GridSize.y * 2];
         m_Rooms[m_GridSize.x, m_GridSize.y] = new Room(Vector2.zero, 1);
-        m_TakenPositions = new List<Vector2>() { Vector2.zero };
+        m_TakenPositions = new List<Vector2Int>() { Vector2Int.zero };
 
         //magic numbers
         const float RANDOM_COMPARE_START = 0.2f;
@@ -59,7 +59,7 @@ public class LevelGeneration : GenericBehaviour
             float randomPerc = i / ((float)m_NumberOfRooms - 1);
             float randomCompare = Mathf.Lerp(RANDOM_COMPARE_START, RANDOM_COMPARE_END, randomPerc);
             //grab new position
-            Vector2 checkPos = NewPosition();
+            Vector2Int checkPos = NewPosition();
             //test new position
             if (NumberOfNeighbors(checkPos, m_TakenPositions) > 1 && Random.value > randomCompare)
             {
@@ -80,9 +80,9 @@ public class LevelGeneration : GenericBehaviour
         }
     }
 
-    private Vector2 NewPosition()
+    private Vector2Int NewPosition()
     {
-        Vector2 checkingPos;
+        Vector2Int checkingPos;
         int index;
         do
         {
@@ -96,10 +96,10 @@ public class LevelGeneration : GenericBehaviour
     }
 
     // method differs from the above in the two commented ways
-    private Vector2 SelectiveNewPosition()
+    private Vector2Int SelectiveNewPosition()
     { 
         int inc;
-        Vector2 checkingPos;
+        Vector2Int checkingPos;
         do
         {
             inc = 0;
@@ -124,34 +124,35 @@ public class LevelGeneration : GenericBehaviour
         return checkingPos;
     }
 
-    private Vector2 GetNewPosition(int index)
+    private Vector2Int GetNewPosition(int index)
     {
         //capture its x, y position
-        int x = (int)m_TakenPositions[index].x;
-        int y = (int)m_TakenPositions[index].y;
-        bool UpDown = Random.value < 0.5f;      //randomly pick wether to look on hor or vert axis
-        bool positive = Random.value < 0.5f;    //pick whether to be positive or negative on that axis
+        int positionX = m_TakenPositions[index].x;
+        int positionY = m_TakenPositions[index].y;
+
+        bool UpDown = Random.value < 0.5f;              //randomly pick wether to look on hor or vert axis
+        int positive = Random.value < 0.5f ? 1 : -1;    //pick whether to be positive or negative on that axis
 
         //find the position bnased on the above bools
         if (UpDown)
         {
-            y += positive ? 1 : -1;
+            positionY += positive;
         }
         else
         {
-            x += positive ? 1 : -1;
+            positionX += positive;
         }
 
-        return new Vector2(x, y);
+        return new Vector2Int(positionX, positionY);
     }
 
-    private int NumberOfNeighbors(Vector2 checkingPos, List<Vector2> usedPositions)
+    private int NumberOfNeighbors(Vector2Int checkingPos, List<Vector2Int> usedPositions)
     {
         int ret = 0; // start at zero, add 1 for each side there is already a room
-        ret += usedPositions.Contains(checkingPos + Vector2.right) ? 1 : 0;
-        ret += usedPositions.Contains(checkingPos + Vector2.left) ? 1 : 0;
-        ret += usedPositions.Contains(checkingPos + Vector2.up) ? 1 : 0;
-        ret += usedPositions.Contains(checkingPos + Vector2.down) ? 1 : 0;
+        ret += usedPositions.Contains(checkingPos + Vector2Int.right) ? 1 : 0;
+        ret += usedPositions.Contains(checkingPos + Vector2Int.left) ? 1 : 0;
+        ret += usedPositions.Contains(checkingPos + Vector2Int.up) ? 1 : 0;
+        ret += usedPositions.Contains(checkingPos + Vector2Int.down) ? 1 : 0;
 
         return ret;
     }
