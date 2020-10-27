@@ -11,13 +11,8 @@ public class MainScene : MonoBehaviour
     private delegate void ResetLevelFunction();
     private ResetLevelFunction resetLevel;
 
-    List<KeyValuePair<GameObject, ResetLevelFunction>> listOfDemos = new List<KeyValuePair<GameObject, ResetLevelFunction>>();
+    readonly List<KeyValuePair<GameObject, ResetLevelFunction>> listOfDemos = new List<KeyValuePair<GameObject, ResetLevelFunction>>();
 
-    GameObject m_RoomGenerator;
-    GameObject m_Atestat;
-    GameObject m_MeshGenerator;
-    GameObject m_MDS;
-    GameObject m_PerlinPreview;
     #endregion
 
     #region Methods
@@ -84,23 +79,22 @@ public class MainScene : MonoBehaviour
         text.font = null;
         text.color = Color.black;
 
-        m_RoomGenerator = NewDemo<LevelGeneration>("Room Generator");//, () => { });
+        GameObject demo_Level = NewDemo<LevelGeneration>("Room Generator");
 
-        m_Atestat = NewDemo<Atestat>("Atestat");//, () => { m_Atestat.GetComponent<Atestat>().Generate(); });
-        //m_Atestat.transform.localPosition = Vector3.zero;// new Vector3(22, -28, -10f);
-        m_Atestat.transform.localScale = new Vector3(6.6f, 6.6f, 1);
+        demo_Level = NewDemo<Atestat>("Atestat");
+        demo_Level.transform.localScale = new Vector3(6.6f, 6.6f, 1);
 
-        m_MeshGenerator = NewDemo<MeshGenerator>("Mesh Generator");//, () => { m_MeshGenerator.GetComponent<MeshGenerator>().Generate(); });
-        m_MeshGenerator.transform.localPosition = new Vector3(-60, -38, 5);
-        m_MeshGenerator.transform.localEulerAngles = new Vector3(-30f, -1, -5);
-        m_MeshGenerator.transform.localScale = new Vector3(7, 7, 7);
+        demo_Level = NewDemo<MeshGenerator>("Mesh Generator");
+        demo_Level.transform.localPosition = new Vector3(-60, -38, 5);
+        demo_Level.transform.localEulerAngles = new Vector3(-30f, -1, -5);
+        demo_Level.transform.localScale = new Vector3(7, 7, 7);
 
-        m_MDS = NewDemo<MDS>("MDS");//, () => { m_MDS.GetComponent<MDS>().Generate(); });
+        NewDemo<MDS>("MDS");
 
-        m_PerlinPreview = NewDemo<PerlinNoisePreview>("Perlin Preview");//, () => { m_PerlinPreview.GetComponent<PerlinNoisePreview>().Generate(); });
-        m_PerlinPreview.transform.localScale = new Vector3(88, 88, 1);
+        demo_Level = NewDemo<PerlinNoisePreview>("Perlin Preview");
+        demo_Level.transform.localScale = new Vector3(88, 88, 1);
 
-        ActivateDemo(m_RoomGenerator);
+        ActivateDemo(listOfDemos[0].Key);
     }
 
     // Update is called once per frame
@@ -109,30 +103,21 @@ public class MainScene : MonoBehaviour
         if (Input.GetKeyDown("r"))
         {
             resetLevel();
+            return;
         }
-        else if (Input.GetKeyDown("d"))
+        if (Input.GetKeyDown("d"))
         {
             m_UI.SetActive(!m_UI.activeSelf);
+            return;
         }
-        else if (Input.GetKeyDown("1"))
+
+        for (int i = 0; i < 10 && i < listOfDemos.Count; i++)
         {
-            ActivateDemo(m_RoomGenerator);
-        }
-        else if (Input.GetKeyDown("2"))
-        {
-            ActivateDemo(m_Atestat);
-        }
-        else if (Input.GetKeyDown("3"))
-        {
-            ActivateDemo(m_MeshGenerator);
-        }
-        else if (Input.GetKeyDown("4"))
-        {
-            ActivateDemo(m_MDS);
-        }
-        else if (Input.GetKeyDown("0"))
-        {
-            ActivateDemo(m_PerlinPreview);
+            if (Input.GetKeyDown(i.ToString()))
+            {
+                ActivateDemo(listOfDemos[i].Key);
+                return;
+            }
         }
     }
 

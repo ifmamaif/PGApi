@@ -3,24 +3,31 @@
     public static class Math
     {
         public static readonly float EPSILON = 1e-7F;
+
         public static double Abs(double value)
         {
             return value > 0 ? value : -value;
         }
+
         public static float Floor(float f)
         {
-            if (Abs(f - (int)f) > EPSILON)
-                return f < 0 ? (int)f + 1 : (int)f;
+            int integer_f = (int)f;
+            if (Abs(f - integer_f) > EPSILON)
+            {
+                return f < 0 ? integer_f + 1 : integer_f;
+            }
             return f;
         }
 
         public static int FloorToInt(float f)
         {
-            if (Abs(f - (int)f) > EPSILON)
-                return f < 0 ? (int)f + 1 : (int)f;
-            return (int)f;
+            int integer_f = (int)f;
+            if (Abs(f - integer_f) > EPSILON)
+            {
+                return f < 0 ? integer_f + 1 : integer_f;
+            }
+            return integer_f;
         }
-
 
         // Function to linearly interpolate between a0 and a1
         // weight should be in the range [0.0, 1.0]

@@ -3,11 +3,12 @@ using UnityEngine;
 
 public class LevelGeneration : GenericBehaviour
 {
-    private GameObject level = null;
-    private Vector2 worldSize = new Vector2(4, 4);
-    private Room[,] rooms = null;
-    private List<Vector2> takenPositions = null;
+    private GameObject m_Level = null;
+    private Vector2 m_WorldSize = new Vector2(4, 4);
+    private Room[,] m_Rooms = null;
+    private List<Vector2> m_TakenPositions = null;
     private int gridSizeX, gridSizeY, numberOfRooms = 32;
+
     public GameObject roomWhiteObj = null;
     
     public override void Start()
@@ -18,19 +19,19 @@ public class LevelGeneration : GenericBehaviour
 
     public override void Generate()
     {
-        Destroy(level);
-        level = new GameObject("Level");
-        level.transform.SetParent(gameObject.transform);
+        Destroy(m_Level);
+        m_Level = new GameObject("Level");
+        m_Level.transform.SetParent(gameObject.transform);
 
         if(roomWhiteObj == null)
             roomWhiteObj = (UnityEngine.GameObject)Resources.Load("Prefabs/MapSprite", typeof(GameObject));
 
-        if (numberOfRooms >= worldSize.x * 2 * (worldSize.y * 2))
+        if (numberOfRooms >= m_WorldSize.x * 2 * (m_WorldSize.y * 2))
         { // make sure we dont try to make more rooms than can fit in our grid
-            numberOfRooms = Mathf.RoundToInt(worldSize.x * 2 * (worldSize.y * 2));
+            numberOfRooms = Mathf.RoundToInt(m_WorldSize.x * 2 * (m_WorldSize.y * 2));
         }
-        gridSizeX = Mathf.RoundToInt(worldSize.x); //note: these are half-extents
-        gridSizeY = Mathf.RoundToInt(worldSize.y);
+        gridSizeX = Mathf.RoundToInt(m_WorldSize.x); //note: these are half-extents
+        gridSizeY = Mathf.RoundToInt(m_WorldSize.y);
         CreateRooms(); //lays out the actual map
         SetRoomDoors(); //assigns the doors where rooms would connect
         DrawMap(); //instantiates objects to make up a map
@@ -39,10 +40,10 @@ public class LevelGeneration : GenericBehaviour
     private void CreateRooms()
     {
         //setup
-        rooms = new Room[gridSizeX * 2, gridSizeY * 2];
-        rooms[gridSizeX, gridSizeY] = new Room(Vector2.zero, 1);
-        takenPositions = new List<Vector2>();
-        takenPositions.Insert(0, Vector2.zero);
+        m_Rooms = new Room[gridSizeX * 2, gridSizeY * 2];
+        m_Rooms[gridSizeX, gridSizeY] = new Room(Vector2.zero, 1);
+        m_TakenPositions = new List<Vector2>();
+        m_TakenPositions.Insert(0, Vector2.zero);
 
         //magic numbers
         float randomCompareStart = 0.2f, randomCompareEnd = 0.01f;
@@ -54,22 +55,22 @@ public class LevelGeneration : GenericBehaviour
             //grab new position
             Vector2 checkPos = NewPosition();
             //test new position
-            if (NumberOfNeighbors(checkPos, takenPositions) > 1 && Random.value > randomCompare)
+            if (NumberOfNeighbors(checkPos, m_TakenPositions) > 1 && Random.value > randomCompare)
             {
                 int iterations = 0;
                 do
                 {
                     checkPos = SelectiveNewPosition();
                     iterations++;
-                } while (NumberOfNeighbors(checkPos, takenPositions) > 1 && iterations < 100);
+                } while (NumberOfNeighbors(checkPos, m_TakenPositions) > 1 && iterations < 100);
                 if (iterations >= 50)
                 {
                    // print("error: could not create with fewer neighbors than : " + NumberOfNeighbors(checkPos, takenPositions));
                 }
             }
             //finalize position
-            rooms[(int)checkPos.x + gridSizeX, (int)checkPos.y + gridSizeY] = new Room(checkPos, 0);
-            takenPositions.Insert(0, checkPos);
+            m_Rooms[(int)checkPos.x + gridSizeX, (int)checkPos.y + gridSizeY] = new Room(checkPos, 0);
+            m_TakenPositions.Insert(0, checkPos);
         }
     }
 
@@ -79,11 +80,11 @@ public class LevelGeneration : GenericBehaviour
         int index;
         do
         {
-            index = Mathf.RoundToInt(Random.value * (takenPositions.Count - 1)); // pick a random room
+            index = Mathf.RoundToInt(Random.value * (m_TakenPositions.Count - 1)); // pick a random room
 
             checkingPos = GetNewPosition(index);
 
-        } while (takenPositions.Contains(checkingPos)
+        } while (m_TakenPositions.Contains(checkingPos)
             || checkingPos.x >= gridSizeX
             || checkingPos.x < -gridSizeX
             || checkingPos.y >= gridSizeY
@@ -105,13 +106,13 @@ public class LevelGeneration : GenericBehaviour
             {
                 //instead of getting a room to find an adject empty space, we start with one that only 
                 //as one neighbor. This will make it more likely that it returns a room that branches out
-                index = Mathf.RoundToInt(Random.value * (takenPositions.Count - 1));
+                index = Mathf.RoundToInt(Random.value * (m_TakenPositions.Count - 1));
                 inc++;
-            } while (NumberOfNeighbors(takenPositions[index], takenPositions) > 1 && inc < 100);
+            } while (NumberOfNeighbors(m_TakenPositions[index], m_TakenPositions) > 1 && inc < 100);
 
             checkingPos = GetNewPosition(index);
 
-        } while (takenPositions.Contains(checkingPos)
+        } while (m_TakenPositions.Contains(checkingPos)
             || checkingPos.x >= gridSizeX
             || checkingPos.x < -gridSizeX
             || checkingPos.y >= gridSizeY
@@ -128,8 +129,8 @@ public class LevelGeneration : GenericBehaviour
     private Vector2 GetNewPosition(int index)
     {
         //capture its x, y position
-        int x = (int)takenPositions[index].x;
-        int y = (int)takenPositions[index].y;
+        int x = (int)m_TakenPositions[index].x;
+        int y = (int)m_TakenPositions[index].y;
         bool UpDown = Random.value < 0.5f;      //randomly pick wether to look on hor or vert axis
         bool positive = Random.value < 0.5f;    //pick whether to be positive or negative on that axis
 
@@ -170,7 +171,7 @@ public class LevelGeneration : GenericBehaviour
 
     private void DrawMap()
     {
-        foreach (Room room in rooms)
+        foreach (Room room in m_Rooms)
         {
             if (room == null)
             {
@@ -181,7 +182,7 @@ public class LevelGeneration : GenericBehaviour
             drawPos.y *= 8;
             //create map obj and assign its variables
             GameObject cell = Instantiate(roomWhiteObj, drawPos, Quaternion.identity);
-            cell.transform.SetParent(level.transform);
+            cell.transform.SetParent(m_Level.transform);
             MapSpriteSelector mapper = cell.GetComponent<MapSpriteSelector>();
             mapper.type = room.type;
             mapper.up = room.doorTop;
@@ -197,15 +198,15 @@ public class LevelGeneration : GenericBehaviour
         {
             for (int y = 0; y < gridSizeY * 2; y++)
             {
-                if (rooms[x, y] == null)
+                if (m_Rooms[x, y] == null)
                 {
                     continue;
                 }
 
-                rooms[x, y].doorBot = y - 1 >= 0 && rooms[x, y - 1] != null;
-                rooms[x, y].doorTop = y + 1 < gridSizeY * 2 && rooms[x, y + 1] != null;
-                rooms[x, y].doorLeft = x - 1 >= 0 && rooms[x - 1, y] != null;
-                rooms[x, y].doorRight = x + 1 < gridSizeX * 2 && rooms[x + 1, y] != null;
+                m_Rooms[x, y].doorBot = y - 1 >= 0 && m_Rooms[x, y - 1] != null;
+                m_Rooms[x, y].doorTop = y + 1 < gridSizeY * 2 && m_Rooms[x, y + 1] != null;
+                m_Rooms[x, y].doorLeft = x - 1 >= 0 && m_Rooms[x - 1, y] != null;
+                m_Rooms[x, y].doorRight = x + 1 < gridSizeX * 2 && m_Rooms[x + 1, y] != null;
             }
         }
     }
