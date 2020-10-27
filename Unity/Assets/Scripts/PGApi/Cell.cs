@@ -4,7 +4,7 @@
     {
         public byte type;
 
-        public Cell (byte value = 0)
+        public Cell(byte value = 0)
         {
             type = (byte)(value & 0x0f);
         }

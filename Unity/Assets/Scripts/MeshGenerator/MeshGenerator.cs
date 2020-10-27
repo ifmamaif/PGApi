@@ -25,7 +25,7 @@ public class MeshGenerator : GenericBehaviour
         if (terrain != null)
             return;
 
-        terrain  = new GameObject("Terrain");
+        terrain = new GameObject("Terrain");
         mesh = new Mesh();
 
         terrain.AddComponent<MeshFilter>().mesh = mesh;
@@ -33,11 +33,9 @@ public class MeshGenerator : GenericBehaviour
         meshRenderer.material = new Material(Shader.Find("Legacy Shaders/Particles/Additive"));
 
         CreateShape();
-       // Generate();
-        
 
         parent = gameObject;
-        if(parent)
+        if (parent)
             terrain.transform.SetParent(parent.transform);
     }
 
@@ -92,7 +90,7 @@ public class MeshGenerator : GenericBehaviour
         mesh.Clear();
         mesh.vertices = vertices;
         mesh.triangles = triangles;
-        mesh.colors = colors; 
+        mesh.colors = colors;
     }
 
     //private void OnDrawGizmos()

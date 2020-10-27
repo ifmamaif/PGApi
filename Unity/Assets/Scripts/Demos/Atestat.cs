@@ -78,7 +78,7 @@ public class Atestat : GenericBehaviour
 			Debug.Log(x + " " + y + " " + value + " value: NULL");
 			return null;
 		}
-		
+
 		GameObject cell = new GameObject(x + " " + y);
 		cell.transform.localScale = Vector3.one;
 		SpriteRenderer cellRenderer = cell.AddComponent(typeof(SpriteRenderer)) as SpriteRenderer;

@@ -41,7 +41,7 @@ public class PerlinNoisePreview : GenericBehaviour
         Texture2D texture = new Texture2D(width, height);
 
         double[,] preColors = PGApi.Perlin.Generate2DMap(width, height, scale, offsetx, offsety);
-        
+
         for (int x = 0; x < width; x++)
             for (int y = 0; y < height; y++)
             {
@@ -75,7 +75,6 @@ public class PerlinNoisePreview : GenericBehaviour
     // Update is called once per frame
     public void Update()
     {
-       Generate();
-      // GenerateTextureRandom();
+        Generate();
     }
 }

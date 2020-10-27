@@ -97,7 +97,7 @@ public class LevelGeneration : GenericBehaviour
 
     // method differs from the above in the two commented ways
     private Vector2Int SelectiveNewPosition()
-    { 
+    {
         int inc;
         Vector2Int checkingPos;
         do

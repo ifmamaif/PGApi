@@ -1,6 +1,7 @@
-﻿using UnityEngine;	//	GameObject , Color
+﻿using UnityEngine;  //	GameObject , Color
 
-public class MDS: GenericBehaviour  {
+public class MDS : GenericBehaviour
+{
 	private GameObject boardHolder;
 	private GameObject terrain;
 
@@ -13,7 +14,8 @@ public class MDS: GenericBehaviour  {
 	public float perlinOffsetY = 0f;
 
 	[System.Serializable]
-	public struct TerrainType {
+	public struct TerrainType
+	{
 		public string name;
 		public double height;
 		public Color colour;
@@ -24,45 +26,46 @@ public class MDS: GenericBehaviour  {
 	public bool autoMove = false;
 	public bool usePGApi = false;
 
-	private float textureSize = 1.24f;	// texturi 124 x 124
+	private float textureSize = 1.24f;  // texturi 124 x 124
 	private Vector3 initialPosition;
 	private Renderer thisrenderer;
 
 
 	// Use this for initialization
-	public override void Start() {
+	public override void Start()
+	{
 		perlinWidth = 90;
 		perlinHeight = 90;
 
-		perlinOffsetX =  100;
+		perlinOffsetX = 100;
 		perlinOffsetY = 100;
 
 		if (boardHolder)
 			return;
 
-		boardHolder = new GameObject ("Terrain");       //Instantiate Board and set boardHolder to its transform.
+		boardHolder = new GameObject("Terrain");       //Instantiate Board and set boardHolder to its transform.
 		boardHolder.transform.SetParent(this.transform);
 
 		initialPosition = boardHolder.transform.position;
 
 		terrain = GameObject.CreatePrimitive(PrimitiveType.Quad);   //	the land based on procedural generate by perlinnoise
-		terrain.GetComponent<MeshCollider> ().enabled = false;
-		Material landMaterial = new Material(Shader.Find ("Unlit/Texture"));
+		terrain.GetComponent<MeshCollider>().enabled = false;
+		Material landMaterial = new Material(Shader.Find("Unlit/Texture"));
 		landMaterial.name = "landMaterial";
-		terrain.GetComponent<MeshRenderer> ().material = landMaterial;
+		terrain.GetComponent<MeshRenderer>().material = landMaterial;
 		terrain.name = "Land";
 		terrain.transform.SetParent(boardHolder.transform);
 
 		thisrenderer = terrain.GetComponent<Renderer>();
 
-		SetRegions ();
+		SetRegions();
 
 		//UpdateMap ();
 	}
 
 	public void Update()
 	{
-		if(autoMove || autoUpdate)
+		if (autoMove || autoUpdate)
 		{
 			UpdateMap();
 		}
@@ -73,27 +76,32 @@ public class MDS: GenericBehaviour  {
 	{
 		perlinOffsetX = Random.value * 1000;
 		perlinOffsetY = Random.value * 1000;
-		UpdateMap ();
+		UpdateMap();
 	}
 
-	public void Move(Vector2Int move,int speed){
-		if (move.x != 0) {
-			boardHolder.transform.Translate (-move.x * textureSize / speed, 0, 0);
+	public void Move(Vector2Int move, int speed)
+	{
+		if (move.x != 0)
+		{
+			boardHolder.transform.Translate(-move.x * textureSize / speed, 0, 0);
 
-			if (	(int)(boardHolder.transform.position.x/ textureSize )	!=	(int)(initialPosition.x/ textureSize )	) {				
-				terrain.transform.Translate (move.x * textureSize, 0, 0);
-				perlinOffsetX += perlinScale/perlinWidth * move.x;
-				UpdateMap ();
+			if ((int)(boardHolder.transform.position.x / textureSize) != (int)(initialPosition.x / textureSize))
+			{
+				terrain.transform.Translate(move.x * textureSize, 0, 0);
+				perlinOffsetX += perlinScale / perlinWidth * move.x;
+				UpdateMap();
 				initialPosition = boardHolder.transform.position;
 			}
 
 		}
-		else if (move.y != 0) {
-			boardHolder.transform.Translate (0, -move.y * textureSize / speed, 0);
-			if (	(int)(boardHolder.transform.position.y/ textureSize )	!=	(int)(initialPosition.y/ textureSize )	) {				
-				terrain.transform.Translate (0,move.y * textureSize, 0);
-				perlinOffsetY += perlinScale/perlinHeight * move.y;
-				UpdateMap ();
+		else if (move.y != 0)
+		{
+			boardHolder.transform.Translate(0, -move.y * textureSize / speed, 0);
+			if ((int)(boardHolder.transform.position.y / textureSize) != (int)(initialPosition.y / textureSize))
+			{
+				terrain.transform.Translate(0, move.y * textureSize, 0);
+				perlinOffsetY += perlinScale / perlinHeight * move.y;
+				UpdateMap();
 				initialPosition = boardHolder.transform.position;
 			}
 		}
@@ -130,38 +138,46 @@ public class MDS: GenericBehaviour  {
 
 
 
-	void UpdateMap(){
+	void UpdateMap()
+	{
 		if (autoMove == true)
 		{
 			perlinOffsetX += perlinScale / perlinWidth;
 		}
 
-		if (terrain.transform.localScale != new Vector3(perlinWidth*textureSize,perlinHeight*textureSize,1)) {
-			terrain.transform.localScale = new Vector3(perlinWidth*textureSize,perlinHeight*textureSize,1);
+		if (terrain.transform.localScale != new Vector3(perlinWidth * textureSize, perlinHeight * textureSize, 1))
+		{
+			terrain.transform.localScale = new Vector3(perlinWidth * textureSize, perlinHeight * textureSize, 1);
 		}
 		thisrenderer.material.mainTexture = TextureFromcolorMap();
 	}
 
-	public Texture2D TextureFromcolorMap() {
+	public Texture2D TextureFromcolorMap()
+	{
 		Color[] colorMap = GeneratecolorMap();
-		Texture2D texture = new Texture2D (perlinWidth, perlinHeight);
+		Texture2D texture = new Texture2D(perlinWidth, perlinHeight);
 		texture.filterMode = FilterMode.Point;
 		texture.wrapMode = TextureWrapMode.Clamp;
-		texture.SetPixels (colorMap);
-		texture.Apply ();
+		texture.SetPixels(colorMap);
+		texture.Apply();
 		return texture;
 	}
 
-	public Color[] GeneratecolorMap(){
-		double[,] noiseMap = usePGApi ? 
-			PGApi.Perlin.Generate2DMap(perlinWidth, perlinHeight, perlinScale, perlinOffsetX, perlinOffsetY) : 
+	public Color[] GeneratecolorMap()
+	{
+		double[,] noiseMap = usePGApi ?
+			PGApi.Perlin.Generate2DMap(perlinWidth, perlinHeight, perlinScale, perlinOffsetX, perlinOffsetY) :
 			GenerateNoiseMap();
 		Color[] colorMap = new Color[perlinWidth * perlinHeight];
-		for (int y = 0; y < perlinHeight; y++) {
-			for (int x = 0; x < perlinWidth; x++) {
-				for (int i = 0; i < regions.Length; i++) {
-					if (noiseMap [x, y] <= regions [i].height) {
-						colorMap [y * perlinWidth + x] = regions [i].colour;
+		for (int y = 0; y < perlinHeight; y++)
+		{
+			for (int x = 0; x < perlinWidth; x++)
+			{
+				for (int i = 0; i < regions.Length; i++)
+				{
+					if (noiseMap[x, y] <= regions[i].height)
+					{
+						colorMap[y * perlinWidth + x] = regions[i].colour;
 						break;
 					}
 				}
@@ -170,21 +186,25 @@ public class MDS: GenericBehaviour  {
 		return colorMap;
 	}
 
-	public double[,] GenerateNoiseMap(){
-		double[,] noiseMap = new double[perlinWidth,perlinHeight];
-		for (int y = 0; y < perlinHeight; y++) {
-			for (int x = 0; x < perlinWidth; x++) {
+	public double[,] GenerateNoiseMap()
+	{
+		double[,] noiseMap = new double[perlinWidth, perlinHeight];
+		for (int y = 0; y < perlinHeight; y++)
+		{
+			for (int x = 0; x < perlinWidth; x++)
+			{
 				float xCoord = (float)x / perlinWidth * perlinScale + perlinOffsetX;
 				float yCoord = (float)y / perlinHeight * perlinScale + perlinOffsetY;
-				noiseMap [x, y] = Mathf.PerlinNoise(xCoord,yCoord);
+				noiseMap[x, y] = Mathf.PerlinNoise(xCoord, yCoord);
 			}
 		}
 		return noiseMap;
 	}
 
-	public static Color HexToColor(string hex){
-		Color myColor = new Color ();
-		ColorUtility.TryParseHtmlString (hex, out myColor);
+	public static Color HexToColor(string hex)
+	{
+		Color myColor = new Color();
+		ColorUtility.TryParseHtmlString(hex, out myColor);
 		return myColor;
 	}
 

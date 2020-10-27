@@ -51,20 +51,20 @@
 
 		private static double grad(int hash, double x, double y, double z = 0)
 		{
-			int h = hash & 15;											// Take the hashed value and take the first 4 bits of it (15 == 0b1111)
-			double u = h < 8 /* 0b1000 */ ? x : y;						// If the most significant bit (MSB) of the hash is 0 then set u = x.  Otherwise y.
+			int h = hash & 15;                                          // Take the hashed value and take the first 4 bits of it (15 == 0b1111)
+			double u = h < 8 /* 0b1000 */ ? x : y;                      // If the most significant bit (MSB) of the hash is 0 then set u = x.  Otherwise y.
 
-			double v;													// In Ken Perlin's original implementation this was another conditional operator (?:).  I
+			double v;                                                   // In Ken Perlin's original implementation this was another conditional operator (?:).  I
 																		// expanded it for readability.
 
-			if (h < 4 /* 0b0100 */)										// If the first and second significant bits are 0 set v = y
+			if (h < 4 /* 0b0100 */)                                     // If the first and second significant bits are 0 set v = y
 				v = y;
-			else if (h == 12 /* 0b1100 */ || h == 14 /* 0b1110*/)		// If the first and second significant bits are 1 set v = x
+			else if (h == 12 /* 0b1100 */ || h == 14 /* 0b1110*/)       // If the first and second significant bits are 1 set v = x
 				v = x;
-			else														// If the first and second significant bits are not equal (0/1, 1/0) set v = z
+			else                                                        // If the first and second significant bits are not equal (0/1, 1/0) set v = z
 				v = z;
 
-			return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);	// Use the last 2 bits to decide if u and v are positive or negative.  Then return their addition.
+			return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);   // Use the last 2 bits to decide if u and v are positive or negative.  Then return their addition.
 		}
 
 		private static double fade(double t)
@@ -78,18 +78,18 @@
 		private static double MutationValue(double x)
 		{
 			//return (x + 1) / 2;					     	// For convenience we bound it to 0 - 1 (theoretical min/max before is -1 - 1)
-			return (x + 0.7) / 1.5;							// Magic value to obtain [-0.2,1.13] 
+			return (x + 0.7) / 1.5;                         // Magic value to obtain [-0.2,1.13] 
 		}
-        #endregion
+		#endregion
 
-        #region Specific Noise functions
+		#region Specific Noise functions
 
-        public static double OctavePerlin(double x, double y, double z, int octaves, double persistence)
+		public static double OctavePerlin(double x, double y, double z, int octaves, double persistence)
 		{
 			double total = 0;
 			double frequency = 1;
 			double amplitude = 1;
-			double maxValue = 0;							// Used for normaling result to 0.0 - 1.0
+			double maxValue = 0;                            // Used for normaling result to 0.0 - 1.0
 			for (int i = 0; i < octaves; i++)
 			{
 				total += Noise(x * frequency, y * frequency, z * frequency) * amplitude;
@@ -147,9 +147,9 @@
 
 		public static double Noise(double x, double y)
 		{
-			int xi = (int)x & 255;                          
-			int yi = (int)y & 255;                          
-			double xf = x - (int)x;                         
+			int xi = (int)x & 255;
+			int yi = (int)y & 255;
+			double xf = x - (int)x;
 			double yf = y - (int)y;
 			double u = fade(xf);
 			double v = fade(yf);
@@ -161,11 +161,11 @@
 			bba = permutation[permutation[permutation[xi + 1] + yi + 1]];
 
 			double x1, x2;
-			x1 = Math.Lerp(grad(aaa, xf, yf, 0),                  
-						   grad(baa, xf - 1, yf, 0),              
-						   u);                                    
-			x2 = Math.Lerp(grad(aba, xf, yf - 1, 0),              
-						   grad(bba, xf - 1, yf - 1, 0),          
+			x1 = Math.Lerp(grad(aaa, xf, yf, 0),
+						   grad(baa, xf - 1, yf, 0),
+						   u);
+			x2 = Math.Lerp(grad(aba, xf, yf - 1, 0),
+						   grad(bba, xf - 1, yf - 1, 0),
 						   u);
 
 			return MutationValue(Math.Lerp(x1, x2, v));
