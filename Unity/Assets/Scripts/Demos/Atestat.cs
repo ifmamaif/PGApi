@@ -7,27 +7,13 @@ public class Atestat : GenericBehaviour
 	private readonly int m_Width = 20;
 	private readonly int m_Height = 20;
 	private GameObject[,] m_TerrainTexture = null;
-	private int[,] m_TerrainValue = null;
 	private const float TEXTURE_SIZE = 0.64f;
 
 	public override void Generate()
 	{
-		m_TerrainValue = new int[m_Height, m_Width];
-		Vector2Int playerPos = new Vector2Int(0, 0);
+		int[,] m_TerrainValue = DumbLabirint.GenerateDumbMaze(m_Width, m_Height);
 
 		DestroyOthers();
-
-		int randomNumber;
-		System.Random randomGenerator = new System.Random();
-		for (int i = 0; i < m_Height; i++)
-		{
-			for (int j = 0; j < m_Width; j++)
-			{
-				randomNumber = randomGenerator.Next(1, 101); // de la 1 la 100
-				m_TerrainValue[i, j] = (randomNumber < 66) ? 1 : 0;
-			}
-		}
-		m_TerrainValue[playerPos.y, playerPos.x] = 1;
 
 		for (int i = 0; i < m_Height; i++)
 		{
