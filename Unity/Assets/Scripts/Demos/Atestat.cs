@@ -3,72 +3,65 @@ using UnityEngine;  //  GameObject , Color
 
 public class Atestat : GenericBehaviour
 {
-	private GameObject boardHolder = null;       //Instantiate Board and set boardHolder to its transform.
-	private readonly int Width = 20;
-	private readonly int Height = 20;
-	private GameObject[,] terrainTexture = null;
-	private int[,] terrainValue = null;
-	private readonly float textureSize = 0.64f;
+	private GameObject m_BoardHolder = null;       //Instantiate Board and set boardHolder to its transform.
+	private readonly int m_Width = 20;
+	private readonly int m_Height = 20;
+	private GameObject[,] m_TerrainTexture = null;
+	private int[,] m_TerrainValue = null;
+	private const float TEXTURE_SIZE = 0.64f;
 
 	public override void Generate()
 	{
-		terrainValue = new int[Height, Width];
+		m_TerrainValue = new int[m_Height, m_Width];
 		Vector2Int playerPos = new Vector2Int(0, 0);
 
 		DestroyOthers();
 
 		int randomNumber;
 		System.Random randomGenerator = new System.Random();
-		for (int i = 0; i < Height; i++)
+		for (int i = 0; i < m_Height; i++)
 		{
-			for (int j = 0; j < Width; j++)
+			for (int j = 0; j < m_Width; j++)
 			{
 				randomNumber = randomGenerator.Next(1, 101); // de la 1 la 100
-				if (randomNumber < 66)
-				{
-					terrainValue[i, j] = 1;
-				}
-				else
-				{
-					terrainValue[i, j] = 0;
-				}
+				m_TerrainValue[i, j] = (randomNumber < 66) ? 1 : 0;
 			}
 		}
-		terrainValue[playerPos.y, playerPos.x] = 1;
+		m_TerrainValue[playerPos.y, playerPos.x] = 1;
 
-		for (int i = 0; i < Height; i++)
+		for (int i = 0; i < m_Height; i++)
 		{
-			for (int j = 0; j < Width; j++)
+			for (int j = 0; j < m_Width; j++)
 			{
-				terrainTexture[i, j] = NewCell(i, j, terrainValue[i, j].ToString());
+				m_TerrainTexture[i, j] = NewCell(i, j, m_TerrainValue[i, j].ToString());
 			}
 		}
 	}
 
 	private void DestroyOthers()
 	{
-		if (terrainTexture != null)
+		if (m_TerrainTexture != null)
 		{
-			for (int i = 0; i < Height; i++)
-				for (int j = 0; j < Width; j++)
+			for (int i = 0; i < m_Height; i++)
+				for (int j = 0; j < m_Width; j++)
 				{
-					if (terrainTexture[i, j] != null)
+					if (m_TerrainTexture[i, j] != null)
 					{
-						UnityEngine.Object.Destroy(terrainTexture[i, j]);
+						UnityEngine.Object.Destroy(m_TerrainTexture[i, j]);
 					}
 				}
 		}
 
-		if (boardHolder != null)
+		if (m_BoardHolder != null)
 		{
-			Destroy(boardHolder);
+			Destroy(m_BoardHolder);
 		}
 
-		terrainTexture = new GameObject[Height, Width];
-		boardHolder = new GameObject("Terrain");
-		boardHolder.transform.SetParent(gameObject.transform);
-		boardHolder.transform.localScale = Vector3.one;
-		boardHolder.transform.localPosition = Vector3.zero;
+		m_TerrainTexture = new GameObject[m_Height, m_Width];
+		m_BoardHolder = new GameObject("Terrain");
+		m_BoardHolder.transform.SetParent(gameObject.transform);
+		m_BoardHolder.transform.localScale = Vector3.one;
+		m_BoardHolder.transform.localPosition = Vector3.zero;
 	}
 
 	private GameObject NewCell(int x, int y, string value)
@@ -91,9 +84,9 @@ public class Atestat : GenericBehaviour
 		}
 		cellRenderer.sprite = Sprite.Create(cellTexture, new Rect(0.0f, 0.0f, cellTexture.width, cellTexture.height), new Vector2(0.5f, 0.5f));
 
-		cell.transform.SetParent(boardHolder.transform);
+		cell.transform.SetParent(m_BoardHolder.transform);
 		cell.transform.localScale = Vector3.one;
-		cell.transform.localPosition = new Vector3(textureSize * (y - Width / 2), -textureSize * (x - Height / 2), 0f);
+		cell.transform.localPosition = new Vector3(TEXTURE_SIZE * (y - m_Width / 2), -TEXTURE_SIZE * (x - m_Height / 2), 0f);
 
 		return cell;
 	}
