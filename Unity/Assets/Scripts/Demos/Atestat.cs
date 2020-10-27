@@ -11,7 +11,7 @@ public class Atestat : GenericBehaviour
 
 	public override void Generate()
 	{
-		int[,] m_TerrainValue = DumbLabirint.GenerateDumbMaze(m_Width, m_Height);
+		int[,] m_TerrainValue = MazeDumb.Generate(m_Width, m_Height);
 
 		DestroyOthers();
 

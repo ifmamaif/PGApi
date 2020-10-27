@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class DumbLabirint
+public static class MazeDumb
 {
-    public static int[,] GenerateDumbMaze(int width,int height)
+    public static int[,] Generate(int width,int height)
     {
 		int[,] result = new int[height, width];
 		Vector2Int playerPos = new Vector2Int(0, 0);
