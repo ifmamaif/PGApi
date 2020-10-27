@@ -104,7 +104,6 @@
                 if (buffer[i, j] != null)
                 {
                     buffer[i, j].type = (byte)(
-
                         (buffer[i, j - 1] != null ? 1 : 0) +
                         ((buffer[i, j + 1] != null ? 1 : 0) << 1) +
                         ((buffer[i - 1, j] != null ? 1 : 0) << 2) +
