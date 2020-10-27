@@ -41,7 +41,9 @@ public class MDS : GenericBehaviour
 		perlinOffsetY = 100;
 
 		if (boardHolder)
+		{
 			return;
+		}
 
 		boardHolder = new GameObject("Terrain");       //Instantiate Board and set boardHolder to its transform.
 		boardHolder.transform.SetParent(this.transform);

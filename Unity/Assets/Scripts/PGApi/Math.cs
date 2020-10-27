@@ -29,6 +29,16 @@
             return integer_f;
         }
 
+        public static int RoundToInt(float f)
+        {
+            const float HALF = 0.5f;
+            if(f>=0)
+            {
+                return (int)(f + HALF);
+            }
+            return (int)-(Abs(f) + HALF);
+        }
+
         // Function to linearly interpolate between a0 and a1
         // weight should be in the range [0.0, 1.0]
         public static float Lerp(float a0, float a1, float weight)
