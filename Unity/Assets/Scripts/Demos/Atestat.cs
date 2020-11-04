@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;  //  GameObject , Color
+using System.Runtime.InteropServices;
 
 public class Atestat : GenericBehaviour
 {
@@ -8,6 +9,9 @@ public class Atestat : GenericBehaviour
 	private readonly int m_Height = 20;
 	private GameObject[,] m_TerrainTexture = null;
 	private const float TEXTURE_SIZE = 0.64f;
+
+	[DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
+	private static extern IntPtr PrintHello();
 
 	public override void Generate()
 	{
@@ -22,6 +26,7 @@ public class Atestat : GenericBehaviour
 				m_TerrainTexture[i, j] = NewCell(i, j, m_TerrainValue[i, j].ToString());
 			}
 		}
+		Debug.Log(Marshal.PtrToStringAnsi(PrintHello()));
 	}
 
 	private void DestroyOthers()
