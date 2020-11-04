@@ -27,18 +27,42 @@
     <ClInclude Include="Random.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Math.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="KenPerlin.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MazeWorm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Allocation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="pch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Math.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="KenPerlin.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="dllmain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="pch.cpp">
+    <ClCompile Include="Random.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Random.cpp">
+    <ClCompile Include="MazeWorm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Allocation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

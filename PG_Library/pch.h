@@ -10,6 +10,8 @@
 // add headers that you want to pre-compile here
 #include "framework.h"
 
-//#include "IUnityInterface.h"
+#include <malloc.h>
+#include <stdio.h>
+#include <stdarg.h>
 
 #endif //PCH_H
