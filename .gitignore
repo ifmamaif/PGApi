@@ -23,6 +23,7 @@ Unity/[Aa]ssets/Plugins/Editor/JetBrains*
 
 # Visual Studio cache directory
 Unity/.vs/
+.vs/
 
 # Gradle cache directory
 Unity/.gradle/
@@ -60,7 +61,7 @@ Unity/*.unitypackage
 # Crashlytics generated file
 Unity/crashlytics-build.properties
 
-#
+# Ignore Debug/Release files
 Unity/[Dd]ebug/
 Unity/[Rr]elease/
 Unity/x64/[Dd]ebug/
@@ -69,3 +70,5 @@ PG_Library/x64/[Rr]elease/
 PG_Library/x64/[Dd]ebug/
 PG_Library/[Dd]ebug/
 PG_Library/[Rr]elease/
+[Dd]ebug/
+[Rrelease]/
