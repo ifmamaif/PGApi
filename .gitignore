@@ -64,10 +64,8 @@ Unity/crashlytics-build.properties
 # Ignore Debug/Release files
 Unity/[Dd]ebug/
 Unity/[Rr]elease/
-Unity/x64/[Dd]ebug/
-Unity/x64/[Rr]elease/
-PG_Library/x64/[Rr]elease/
-PG_Library/x64/[Dd]ebug/
+Unity/x64/
+PG_Library/x64/
 PG_Library/[Dd]ebug/
 PG_Library/[Rr]elease/
 [Dd]ebug/
