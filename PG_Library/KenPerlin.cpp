@@ -182,10 +182,15 @@ double Noise(double x)
 
 double** Generate2DMap(int width, int height, float scale, float offsetX, float offsetY)
 {
-	double** noiseMap = (double**)malloc(width);
+	//double** noiseMap = (double**)malloc(sizeof(double*)*width);
+	//for (int i = 0; i < width; i++)
+	//{
+	//	noiseMap[i] = (double*)malloc(sizeof(double)*height);
+	//}
+	double** noiseMap = new double*[width];
 	for (int i = 0; i < width; i++)
 	{
-		noiseMap[i] = (double*)malloc(height);
+		noiseMap[i] = new double[height];
 	}
 
 	for (int x = 0; x < width; x++)
@@ -194,7 +199,7 @@ double** Generate2DMap(int width, int height, float scale, float offsetX, float 
 		{
 			double xCoord = (double)x / width * scale + offsetX;
 			double yCoord = (double)y / height * scale + offsetY;
-			noiseMap[x][y] = (double)Noise3(xCoord, yCoord, 0.f);
+			noiseMap[x][y] = (double)Noise(xCoord, yCoord, 0.f);
 		}
 	}
 	return noiseMap;

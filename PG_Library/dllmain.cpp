@@ -1,7 +1,6 @@
 // dllmain.cpp : Defines the entry point for the DLL application.
 #include "pch.h"
-
-#define EXPORT_API __declspec(dllexport) // Visual Studio needs annotating exported functions with this
+#include "PreDefines.h"
 
 extern "C"
 {
