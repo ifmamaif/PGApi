@@ -4,7 +4,7 @@ int Abs(int value);
 float Abs(float value);
 double Abs(double value);
 
-float Floor(float f);
+//float Floor(float f);
 
 int FloorToInt(float f);
 

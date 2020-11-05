@@ -1,4 +1,6 @@
 ﻿using UnityEngine;  //	GameObject , Color
+using System.Runtime.InteropServices;
+using System;
 
 public class MDS : GenericBehaviour
 {
@@ -12,6 +14,9 @@ public class MDS : GenericBehaviour
 
 	public float perlinOffsetX = 0f;
 	public float perlinOffsetY = 0f;
+
+	[DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
+	private static extern IntPtr Generate2DMap(int width, int height, float scale, float offsetX, float offsetY);
 
 	[System.Serializable]
 	public struct TerrainType
@@ -76,8 +81,8 @@ public class MDS : GenericBehaviour
 
 	public override void Generate()
 	{
-		perlinOffsetX = Random.value * 1000;
-		perlinOffsetY = Random.value * 1000;
+		perlinOffsetX = UnityEngine.Random.value * 1000;
+		perlinOffsetY = UnityEngine.Random.value * 1000;
 		UpdateMap();
 	}
 
@@ -170,6 +175,17 @@ public class MDS : GenericBehaviour
 		double[,] noiseMap = usePGApi ?
 			PGApi.Perlin.Generate2DMap(perlinWidth, perlinHeight, perlinScale, perlinOffsetX, perlinOffsetY) :
 			GenerateNoiseMap();
+
+		//double[,] noiseMap = null;
+		//if(usePGApi)
+		//{
+		//	Marshal.PtrToStructure(Generate2DMap(perlinWidth, perlinHeight, perlinScale, perlinOffsetX, perlinOffsetY), noiseMap);
+		//}
+		//else
+		//{
+		//	noiseMap = GenerateNoiseMap();
+		//}
+
 		Color[] colorMap = new Color[perlinWidth * perlinHeight];
 		for (int y = 0; y < perlinHeight; y++)
 		{

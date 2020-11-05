@@ -19,7 +19,6 @@ int g_GridSizeX, g_GridSizeY;
 Queue<int> g_TakenPositionsX, g_TakenPositionsY;
 
 
-
 int CheckInputData(int worldSizeX, int worldSizeY, int numberOfRooms)
 {
     int maximFit = worldSizeX * 2 * worldSizeY * 2;
@@ -178,4 +177,9 @@ char** GenerateMazeWorm(int worldSizeX, int worldSizeY, int numberOfRooms)
     auto result = CreateRooms(numberOfRooms);   //lays out the actual map
     SetRoomDoors(result);                       //assigns the doors where rooms would connect
     return result;
+}
+
+const char* DADA23()
+{
+    return "dada";
 }

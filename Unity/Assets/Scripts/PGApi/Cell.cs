@@ -1,4 +1,5 @@
-﻿namespace PGApi
+﻿
+namespace PGApi
 {
     public class Cell
     {
@@ -9,10 +10,10 @@
             type = (byte)(value & 0x0f);
         }
 
-        public void AddFreedom()
-        {
-            type = (byte)Random.Rand((uint)(type + 1), 16);
-        }
+        //public void AddFreedom()
+        //{
+        //    type = (byte) Random.Rand((uint)(type + 1), 16);
+        //}
 
         public static Cell SetTypeCell(Cell[,] buffer, int rows, int columns, int x, int y)
         {

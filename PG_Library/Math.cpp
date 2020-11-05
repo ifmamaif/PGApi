@@ -20,15 +20,15 @@ double Abs(double value)
     return Macro_Abs(value);
 }
 
-float Floor(float f)
-{
-    int integer_f = (int)f;
-    if (Abs(f - integer_f) > EPSILON)
-    {
-        return f < 0 ? integer_f + 1 : integer_f;
-    }
-    return f;
-}
+//float Floor(float f)
+//{
+//    int integer_f = (int)f;
+//    if (Abs(f - integer_f) > EPSILON)
+//    {
+//        return f < 0.f ? integer_f + 1 : integer_f;
+//    }
+//    return f;
+//}
 
 int FloorToInt(float f)
 {

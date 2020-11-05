@@ -11,4 +11,5 @@ extern "C"
 	// 4 - link with left
 	// 8 - link with right
 	EXPORT_API char** GenerateMazeWorm(int worldSizeX, int worldSizeY, int numberOfRooms);
+	EXPORT_API const char* DADA23();
 }

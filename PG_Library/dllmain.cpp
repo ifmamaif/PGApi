@@ -2,6 +2,8 @@
 #include "pch.h"
 #include "PreDefines.h"
 
+#include "MazeWorm.h"
+
 extern "C"
 {
     EXPORT_API int DADA() { return 13; }

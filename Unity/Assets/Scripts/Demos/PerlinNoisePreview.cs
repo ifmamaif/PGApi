@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Runtime.InteropServices;
+using System;
 
 public class PerlinNoisePreview : GenericBehaviour
 {
@@ -12,6 +14,9 @@ public class PerlinNoisePreview : GenericBehaviour
 
     private GameObject perlinObject;
     private GameObject randomObject;
+
+    [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr Generate2DMap(int width, int height, float scale, float offsetX, float offsetY);
 
     // Start is called before the first frame update
     public new void Start()
@@ -40,6 +45,8 @@ public class PerlinNoisePreview : GenericBehaviour
         Renderer renderer = perlinObject.GetComponent<MeshRenderer>();
         Texture2D texture = new Texture2D(width, height);
 
+        //double[,] preColors=null;
+        //Marshal.PtrToStructure(Generate2DMap(width, height, scale, offsetx, offsety), preColors);
         double[,] preColors = PGApi.Perlin.Generate2DMap(width, height, scale, offsetx, offsety);
 
         for (int x = 0; x < width; x++)
@@ -62,7 +69,7 @@ public class PerlinNoisePreview : GenericBehaviour
         for (int x = 0; x < width; x++)
             for (int y = 0; y < height; y++)
             {
-                float rand = Random.value;
+                float rand = UnityEngine.Random.value;
                 Color color = new Color(rand, rand, rand);
                 texture.SetPixel(x, y, color);
             }
