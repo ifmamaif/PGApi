@@ -41,7 +41,7 @@ public class LevelGeneration : GenericBehaviour
             roomWhiteObj = (UnityEngine.GameObject)Resources.Load(PATH_SPRITE, typeof(GameObject));
         }
 
-        //Debug.Log(Marshal.PtrToStringAnsi(PrintHello()));
+        Debug.Log(Marshal.PtrToStringAnsi(PrintHello()));
         //Debug.Log((DADA().ToString()));
 
         char[,] m_Rooms = new char[WORLD_SIZE.x,WORLD_SIZE.y];

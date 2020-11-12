@@ -8,8 +8,6 @@ extern "C"
 {
     EXPORT_API int DADA() { return 13; }
 
-    EXPORT_API const char* PrintHello() {
-        return "Hello";
-    }
+    
 
 }

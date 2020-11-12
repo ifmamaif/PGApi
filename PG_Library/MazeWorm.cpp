@@ -103,16 +103,23 @@ void SelectiveNewPosition(int* checkingPosX, int* checkingPosY)
 char** CreateRooms(int numberOfRooms)
 {
     //setup
-    //char** rooms = (char**)malloc(sizeof(char*) * g_GridSizeX * 2);
-    //for (int i = 0; i < g_GridSizeX * 2; i++)
-    //{
-    //    rooms[i] = (char*)malloc(sizeof(char) * g_GridSizeY * 2);
-    //}
-    char** rooms = new char* [g_GridSizeX * 2];
+    char** rooms = (char**)malloc(sizeof(char*) * g_GridSizeX * 2);
     for (int i = 0; i < g_GridSizeX * 2; i++)
     {
-        rooms[i] = new char [g_GridSizeX * 2];
+        rooms[i] = (char*)malloc(sizeof(char) * g_GridSizeY * 2);
+        for (int j = 0; j < g_GridSizeY * 2; j++)
+        {
+            rooms[i][j] = 0;
+        }
     }
+    
+    //char** rooms = new char* [(g_GridSizeX * 2)];
+    //for (int i = 0; i < g_GridSizeX * 2; i++)
+    //{
+    //    rooms[i] = new char [(g_GridSizeY * 2)];
+    //    for (int j = 0; j < g_GridSizeY*2; j++)
+    //        rooms[i][j] = 0;
+    //}
 
     g_TakenPositionsX.PushBack(0);
     g_TakenPositionsY.PushBack(0);
@@ -156,16 +163,17 @@ void SetRoomDoors(char** rooms)
     {
         for (int y = 0; y < g_GridSizeY * 2; y++)
         {
-            if (rooms[x, y] == 0)
+            char& room = rooms[x][y];
+            if (room == 0)
             {
                 continue;
             }
 
-            rooms[x, y] = 0;
-            rooms[x, y] += (y - 1 >= 0 && rooms[x, y - 1] != 0) ? DOOR_BOTTOM : 0;
-            rooms[x, y] += (y + 1 < g_GridSizeY * 2 && rooms[x, y + 1] != 0) ? DOOR_TOP : 0;
-            rooms[x, y] += (x - 1 >= 0 && rooms[x - 1, y] != 0) ? DOOR_LEFT : 0;
-            rooms[x, y] += (x + 1 < g_GridSizeX * 2 && rooms[x + 1, y] != 0) ? DOOR_RIGHT : 0;
+            room = 0;
+            room += (y - 1 >= 0 && rooms[x, y - 1] != 0) ? DOOR_BOTTOM : 0;
+            room += (y + 1 < g_GridSizeY * 2 && rooms[x, y + 1] != 0) ? DOOR_TOP : 0;
+            room += (x - 1 >= 0 && rooms[x - 1, y] != 0) ? DOOR_LEFT : 0;
+            room += (x + 1 < g_GridSizeX * 2 && rooms[x + 1, y] != 0) ? DOOR_RIGHT : 0;
         }
     }
 }
@@ -179,7 +187,24 @@ char** GenerateMazeWorm(int worldSizeX, int worldSizeY, int numberOfRooms)
     return result;
 }
 
+void ShowMazeWorm(char** buffer, int worldSizeX, int worldSizeY)
+{
+    for (int i = 0; i < worldSizeX; i++)
+    {
+        for (int j = 0; j < worldSizeY; j++)
+        {
+            std::cout << (int)(buffer[i][j]);
+        }
+        std::cout << std::endl;
+    }
+}
+
 const char* DADA23()
 {
     return "dada";
+}
+
+const char* PrintHello()
+{
+    return "Hello";
 }
