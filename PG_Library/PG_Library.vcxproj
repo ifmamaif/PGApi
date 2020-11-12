@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
-    <ProjectConfiguration Include="Debug X64|Win32">
-      <Configuration>Debug X64</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Debug X64|x64">
-      <Configuration>Debug X64</Configuration>
-      <Platform>x64</Platform>
-    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
@@ -59,12 +51,6 @@
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
-  </PropertyGroup>
-  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug X64|Win32'">
-    <PlatformToolset>v142</PlatformToolset>
-  </PropertyGroup>
-  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug X64|x64'">
-    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -177,18 +163,6 @@ xcopy "$(SolutionDir)x64\$(Configuration)\$(MSBuildProjectName).lib" "$(Solution
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
     </Link>
-    <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)x64\$(Configuration)\$(MSBuildProjectName).dll" "$(SolutionDir)Assets\Plugins\" /Y /I
-xcopy "$(SolutionDir)x64\$(Configuration)\$(MSBuildProjectName).lib" "$(SolutionDir)testCpp\" /Y /I</Command>
-    </PostBuildEvent>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug X64|Win32'">
-    <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)x64\$(Configuration)\$(MSBuildProjectName).dll" "$(SolutionDir)Assets\Plugins\" /Y /I
-xcopy "$(SolutionDir)x64\$(Configuration)\$(MSBuildProjectName).lib" "$(SolutionDir)testCpp\" /Y /I</Command>
-    </PostBuildEvent>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug X64|x64'">
     <PostBuildEvent>
       <Command>xcopy "$(SolutionDir)x64\$(Configuration)\$(MSBuildProjectName).dll" "$(SolutionDir)Assets\Plugins\" /Y /I
 xcopy "$(SolutionDir)x64\$(Configuration)\$(MSBuildProjectName).lib" "$(SolutionDir)testCpp\" /Y /I</Command>
