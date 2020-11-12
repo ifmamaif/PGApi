@@ -78,10 +78,10 @@ public class MainScene : MonoBehaviour
         text.richText = true;
         text.font = null;
         text.color = Color.black;
+        
+        NewDemo<LevelGeneration>("Room Generator");
 
-        GameObject demo_Level = NewDemo<LevelGeneration>("Room Generator");
-
-        demo_Level = NewDemo<Atestat>("Atestat");
+        GameObject demo_Level = NewDemo<Atestat>("Atestat");
         demo_Level.transform.localScale = new Vector3(6.6f, 6.6f, 1);
 
         demo_Level = NewDemo<MeshGenerator>("Mesh Generator");
