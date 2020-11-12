@@ -74,7 +74,6 @@
     <Compile Include="Assets\Scripts\PGApi\Math.cs" />
     <Compile Include="Assets\Scripts\PGApi\MazeDumb.cs" />
     <Compile Include="Assets\Scripts\PGApi\MazeWorm.cs" />
-    <Compile Include="Assets\Scripts\PGApi\Random.cs" />
     <Compile Include="Assets\Scripts\PGApi\Utils.cs" />
     <Compile Include="Assets\Scripts\RoomGenerator\LevelGeneration.cs" />
     <Compile Include="Assets\Scripts\RoomGenerator\MapSpriteSelector.cs" />
