@@ -1,10 +1,17 @@
 ﻿using PGApi;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 public static class MazeWhorm
 {
+    [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
+    private static extern int RoundToInt(float f);
+
+    [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
+    private static extern float Lerpf(float a0, float a1, float weight);
+
     public class Room
     {
         public bool doorTop, doorBot, doorLeft, doorRight;
@@ -22,7 +29,7 @@ public static class MazeWhorm
         half_Iteration = MAX_ITERATIONS / 2;
 
         var result = CreateRooms(numberOfRooms);//lays out the actual map
-        result = SetRoomDoors(result); //assigns the doors where rooms would connect
+        result = SetRoomDoors(result);          //assigns the doors where rooms would connect
         return result;
     }
 
@@ -31,7 +38,7 @@ public static class MazeWhorm
         int maximFit = worldSize.x * 2 * worldSize.y * 2;
         if (numberOfRooms >= maximFit)
         { // make sure we dont try to make more rooms than can fit in our grid
-            numberOfRooms = Math.RoundToInt(maximFit);
+            numberOfRooms = RoundToInt(maximFit);
         }
 
         //note: these are half-extents
@@ -54,7 +61,7 @@ public static class MazeWhorm
         for (int i = 0; i < numberOfRooms - 1; i++)
         {
             float randomPerc = i / ((float)numberOfRooms - 1);
-            float randomCompare = Math.Lerp(RANDOM_COMPARE_START, RANDOM_COMPARE_END, randomPerc);
+            float randomCompare = Lerpf(RANDOM_COMPARE_START, RANDOM_COMPARE_END, randomPerc);
             //grab new position
             Vector2Int checkPos = NewPosition();
             //test new position
@@ -160,7 +167,7 @@ public static class MazeWhorm
         int index;
         do
         {
-            index = Math.RoundToInt(UnityEngine.Random.value * (ms_TakenPositions.Count - 1)); // pick a random room
+            index = RoundToInt(UnityEngine.Random.value * (ms_TakenPositions.Count - 1)); // pick a random room
             checkingPos = GetNewPosition(index);
         } while (ms_TakenPositions.Contains(checkingPos) || checkingPos.OutSide(ms_GridSize)); //make sure the position is valid
 

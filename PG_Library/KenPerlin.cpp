@@ -122,22 +122,22 @@ double PerlinNoise3D(double x, double y, double z)
 	bbb = permutation[permutation[permutation[xi + 1] + yi + 1] + zi + 1];
 
 	double x1, x2, y1, y2;
-	x1 = Lerp(grad(aaa, xf, yf, zf),					// The gradient function calculates the dot product between a pseudorandom
+	x1 = Lerpd(grad(aaa, xf, yf, zf),					// The gradient function calculates the dot product between a pseudorandom
 		      grad(baa, xf - 1, yf, zf),				// gradient vector and the vector from the input coordinate to the 8
 		      u);										// surrounding points in its unit cube.
-	x2 = Lerp(grad(aba, xf, yf - 1, zf),				// This is all then lerped together as a sort of weighted average based on the faded (u,v,w)
+	x2 = Lerpd(grad(aba, xf, yf - 1, zf),				// This is all then lerped together as a sort of weighted average based on the faded (u,v,w)
 		      grad(bba, xf - 1, yf - 1, zf),			// values we made earlier.
 		      u);
-	y1 = Lerp(x1, x2, v);
-	x1 = Lerp(grad(aab, xf, yf, zf - 1),
+	y1 = Lerpd(x1, x2, v);
+	x1 = Lerpd(grad(aab, xf, yf, zf - 1),
 			  grad(bab, xf - 1, yf, zf - 1),
 			  u);
-	x2 = Lerp(grad(abb, xf, yf - 1, zf - 1),
+	x2 = Lerpd(grad(abb, xf, yf - 1, zf - 1),
 			  grad(bbb, xf - 1, yf - 1, zf - 1),
 			  u);
-	y2 = Lerp(x1, x2, v);
+	y2 = Lerpd(x1, x2, v);
 
-	return MutationValue(Lerp(y1, y2, w));
+	return MutationValue(Lerpd(y1, y2, w));
 }
 
 double PerlinNoise2D(double x, double y)
@@ -156,14 +156,14 @@ double PerlinNoise2D(double x, double y)
 	bba = permutation[permutation[permutation[xi + 1] + yi + 1]];
 
 	double x1, x2;
-	x1 = Lerp(grad(aaa, xf, yf, 0),
+	x1 = Lerpd(grad(aaa, xf, yf, 0),
 		grad(baa, xf - 1, yf, 0),
 		u);
-	x2 = Lerp(grad(aba, xf, yf - 1, 0),
+	x2 = Lerpd(grad(aba, xf, yf - 1, 0),
 		grad(bba, xf - 1, yf - 1, 0),
 		u);
 
-	return MutationValue(Lerp(x1, x2, v));
+	return MutationValue(Lerpd(x1, x2, v));
 }
 
 double PerlinNoise(double x)
@@ -175,7 +175,7 @@ double PerlinNoise(double x)
 	aaa = permutation[permutation[permutation[xi]]];
 	baa = permutation[permutation[permutation[xi + 1]]];
 
-	return MutationValue(Lerp(grad(aaa, xf, 0, 0),
+	return MutationValue(Lerpd(grad(aaa, xf, 0, 0),
 		grad(baa, xf - 1, 0, 0),
 		fade(xf)));
 }

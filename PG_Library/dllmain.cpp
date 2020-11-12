@@ -4,6 +4,7 @@
 
 #include "MazeWorm.h"
 #include "KenPerlin.h"
+#include "Math.h"
 
 extern "C"
 {

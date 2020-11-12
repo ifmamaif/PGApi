@@ -131,7 +131,7 @@ char** CreateRooms(int numberOfRooms)
     for (int i = 0; i < numberOfRooms - 1; i++)
     {
         float randomPerc = i / ((float)numberOfRooms - 1);
-        float randomCompare = Lerp(RANDOM_COMPARE_START, RANDOM_COMPARE_END, randomPerc);
+        float randomCompare = Lerpf(RANDOM_COMPARE_START, RANDOM_COMPARE_END, randomPerc);
         //grab new position
         int x, y;
         NewPosition(&x, &y);

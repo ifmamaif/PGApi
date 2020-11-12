@@ -1,19 +1,24 @@
 #pragma once
 
-int Abs(int value);
-float Abs(float value);
-double Abs(double value);
+#include "PreDefines.h"
 
-//float Floor(float f);
+extern "C"
+{
+	EXPORT_API int Absi(int value);
+	EXPORT_API float Absf(float value);
+	EXPORT_API double Absd(double value);
 
-int FloorToInt(float f);
+	//float Floor(float f);
 
-int RoundToInt(float f);
+	EXPORT_API int FloorToInt(float f);
 
-// Function to linearly interpolate between a0 and a1
-// weight should be in the range [0.0, 1.0]
-float Lerp(float a0, float a1, float weight);
+	EXPORT_API int RoundToInt(float f);
 
-// Function to linearly interpolate between a0 and a1
-// weight should be in the range [0.0, 1.0]
-double Lerp(double a0, double a1, double weight);
+	// Function to linearly interpolate between a0 and a1
+	// weight should be in the range [0.0, 1.0]
+	EXPORT_API float Lerpf(float a0, float a1, float weight);
+
+	// Function to linearly interpolate between a0 and a1
+	// weight should be in the range [0.0, 1.0]
+	EXPORT_API double Lerpd(double a0, double a1, double weight);
+}
