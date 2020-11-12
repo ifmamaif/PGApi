@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Runtime.InteropServices;
 using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter))]
@@ -19,11 +18,16 @@ public class MeshGenerator : GenericBehaviour
 
     public GameObject parent;
 
+    [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
+    private static extern double PerlinNoise2D(double x, double y);
+
     // Start is called before the first frame update
     public override void Start()
     {
         if (terrain != null)
+        {
             return;
+        }
 
         terrain = new GameObject("Terrain");
         mesh = new Mesh();
@@ -36,7 +40,9 @@ public class MeshGenerator : GenericBehaviour
 
         parent = gameObject;
         if (parent)
+        {
             terrain.transform.SetParent(parent.transform);
+        }
     }
 
     public override void Generate()
@@ -48,9 +54,9 @@ public class MeshGenerator : GenericBehaviour
         {
             for (int x = 0; x <= xSize; x++)
             {
-                float y = Mathf.PerlinNoise(xOffSet + x * .3f, zOffSet + z * .3f) * 2f;
+                float y = (float)PerlinNoise2D(xOffSet + (x * .3f), zOffSet + (z * .3f)) * 2f;
                 vertices[i] = new Vector3(x, y, z);
-                float colorValue = Mathf.PerlinNoise(xOffSet + x * .3f, zOffSet + z * .3f);
+                float colorValue = (float)PerlinNoise2D(xOffSet + x * .3f, zOffSet + z * .3f);
                 colors[i] = Color.Lerp(Color.red, Color.green, colorValue);
                 i++;
             }

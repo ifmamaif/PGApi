@@ -88,7 +88,7 @@ double OctavePerlin(double x, double y, double z, int octaves, double persistenc
 	double maxValue = 0;                            // Used for normaling result to 0.0 - 1.0
 	for (int i = 0; i < octaves; i++)
 	{
-		total += Noise(x * frequency, y * frequency, z * frequency) * amplitude;
+		total += PerlinNoise3D(x * frequency, y * frequency, z * frequency) * amplitude;
 
 		maxValue += amplitude;
 
@@ -99,7 +99,7 @@ double OctavePerlin(double x, double y, double z, int octaves, double persistenc
 	return total / maxValue;
 }
 
-double Noise(double x, double y, double z)
+double PerlinNoise3D(double x, double y, double z)
 {
 	int xi = (int)x & 255;                              // Calculate the "unit cube" that the point asked will be located in
 	int yi = (int)y & 255;                              // The left bound is ( |_x_|,|_y_|,|_z_| ) and the right bound is that
@@ -140,7 +140,7 @@ double Noise(double x, double y, double z)
 	return MutationValue(Lerp(y1, y2, w));
 }
 
-double Noise(double x, double y)
+double PerlinNoise2D(double x, double y)
 {
 	int xi = (int)x & 255;
 	int yi = (int)y & 255;
@@ -166,7 +166,7 @@ double Noise(double x, double y)
 	return MutationValue(Lerp(x1, x2, v));
 }
 
-double Noise(double x)
+double PerlinNoise(double x)
 {
 	int xi = (int)x & 255;
 	double xf = x - (int)x;
@@ -199,7 +199,7 @@ double** Generate2DMap(int width, int height, float scale, float offsetX, float 
 		{
 			double xCoord = (double)x / width * scale + offsetX;
 			double yCoord = (double)y / height * scale + offsetY;
-			noiseMap[x][y] = (double)Noise(xCoord, yCoord, 0.f);
+			noiseMap[x][y] = (double)PerlinNoise3D(xCoord, yCoord, 0.f);
 		}
 	}
 	return noiseMap;

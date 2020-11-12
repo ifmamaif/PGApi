@@ -3,6 +3,7 @@
 #include "PreDefines.h"
 
 #include "MazeWorm.h"
+#include "KenPerlin.h"
 
 extern "C"
 {
