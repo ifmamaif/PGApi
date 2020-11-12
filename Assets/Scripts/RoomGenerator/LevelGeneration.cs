@@ -41,36 +41,42 @@ public class LevelGeneration : GenericBehaviour
             roomWhiteObj = (UnityEngine.GameObject)Resources.Load(PATH_SPRITE, typeof(GameObject));
         }
 
-        Debug.Log(Marshal.PtrToStringAnsi(PrintHello()));
-        //Debug.Log((DADA().ToString()));
-
-        char[,] m_Rooms = new char[WORLD_SIZE.x,WORLD_SIZE.y];
-        //Marshal.PtrToStructure(GenerateMazeWorm(WORLD_SIZE.x, WORLD_SIZE.y,NUMBER_OF_ROOMS), m_Rooms);
-        //m_Rooms = Marshal.PtrToStructure<char[,]>(GenerateMazeWorm(WORLD_SIZE.x, WORLD_SIZE.y, NUMBER_OF_ROOMS));
-        IntPtr pUnmanagedArray = GenerateMazeWorm(WORLD_SIZE.x, WORLD_SIZE.y, NUMBER_OF_ROOMS);
-        for(int i=0;i< WORLD_SIZE.x;i++)
-        {
-            IntPtr pDoubleArray = (IntPtr)((int)pUnmanagedArray + (Marshal.SizeOf(typeof(char)) * (WORLD_SIZE.y * i)));
-            char[] tmp = new char[WORLD_SIZE.y];
-            Marshal.Copy(pDoubleArray, tmp, 0, WORLD_SIZE.y);
+        ///
+        //Debug.Log(Marshal.PtrToStringAnsi(PrintHello()));
+        ////Debug.Log((DADA().ToString()));
+        //
+        //char[,] m_Rooms = new char[WORLD_SIZE.x,WORLD_SIZE.y];
+        ////Marshal.PtrToStructure(GenerateMazeWorm(WORLD_SIZE.x, WORLD_SIZE.y,NUMBER_OF_ROOMS), m_Rooms);
+        ////m_Rooms = Marshal.PtrToStructure<char[,]>(GenerateMazeWorm(WORLD_SIZE.x, WORLD_SIZE.y, NUMBER_OF_ROOMS));
+        //IntPtr pUnmanagedArray = GenerateMazeWorm(WORLD_SIZE.x, WORLD_SIZE.y, NUMBER_OF_ROOMS);
+        //for(int i=0;i< WORLD_SIZE.x;i++)
+        //{
+        //    IntPtr pDoubleArray = (IntPtr)((int)pUnmanagedArray + (Marshal.SizeOf(typeof(char)) * (WORLD_SIZE.y * i)));
+        //    char[] tmp = new char[WORLD_SIZE.y];
+        //    Marshal.Copy(pDoubleArray, tmp, 0, WORLD_SIZE.y);
+        //
+        //    for(int j=0;j<WORLD_SIZE.y;j++)
+        //    {
+        //        m_Rooms[i,j] = tmp[j];
+        //    }
+        //}
         
-            for(int j=0;j<WORLD_SIZE.y;j++)
-            {
-                m_Rooms[i,j] = tmp[j];
-            }
-        }
+        ///
         
-        //var m_Rooms = MazeWhorm.Generate(WORLD_SIZE, NUMBER_OF_ROOMS);
+        var m_Rooms = MazeWhorm.Generate(WORLD_SIZE, NUMBER_OF_ROOMS);
         DrawMap(m_Rooms); //instantiates objects to make up a map
     }
 
-    private void DrawMap(char[,] m_Rooms)
+    //private void DrawMap(char[,] m_Rooms)
+        private void DrawMap(MazeWhorm.Room[,] m_Rooms)
     {
         for (int i = 0; i < WORLD_SIZE.x * 2; i++)
             for (int j = 0; j < WORLD_SIZE.y * 2; j++)
             {
-                char room = m_Rooms[i, j];
-                if (room == 0)
+                //char room = m_Rooms[i, j];
+                //if (room == 0)
+                MazeWhorm.Room room= m_Rooms[i, j];
+                if(room == null)
                 {
                     continue; //skip where there is no room
                 }
@@ -84,10 +90,15 @@ public class LevelGeneration : GenericBehaviour
                 MapSpriteSelector mapper = cell.GetComponent<MapSpriteSelector>();
 
                 mapper.type = drawPos == Vector2Int.zero ? 1 : 0;
-                mapper.up = ((room & 1) == 1); //room.doorTop;
-                mapper.down = ((room & 2) == 2);
-                mapper.left = ((room & 4) == 4);
-                mapper.right = ((room & 8) == 8);
+                //mapper.up = ((room & 1) == 1); //room.doorTop;
+                //mapper.down = ((room & 2) == 2);
+                //mapper.left = ((room & 4) == 4);
+                //mapper.right = ((room & 8) == 8);
+
+                mapper.up = room.doorTop;
+                mapper.down = room.doorBot;
+                mapper.left = room.doorLeft;
+                mapper.right = room.doorRight;
             }
     }
 }

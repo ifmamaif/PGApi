@@ -18,6 +18,9 @@ public class MDS : GenericBehaviour
 	[DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
 	private static extern IntPtr Generate2DMap(int width, int height, float scale, float offsetX, float offsetY);
 
+	[DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
+	private static extern double PerlinNoise2D(double x, double y);
+
 	[System.Serializable]
 	public struct TerrainType
 	{
