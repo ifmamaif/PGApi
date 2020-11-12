@@ -111,6 +111,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy "$(SolutionDir)x64\$(Configuration)\$(MSBuildProjectName).dll" "$(SolutionDir)Assets\Plugins\" /Y /I
+xcopy "$(SolutionDir)x64\$(Configuration)\$(MSBuildProjectName).lib" "$(SolutionDir)testCpp\" /Y /I</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -127,8 +131,8 @@
       <EnableUAC>false</EnableUAC>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy "$(SolutionDir)x64\$(Configuration)\$(MSBuildProjectName).dll" "$(SolutionDir)Assets\Plugins\" /Y /I
+xcopy "$(SolutionDir)x64\$(Configuration)\$(MSBuildProjectName).lib" "$(SolutionDir)testCpp\" /Y /I</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -150,6 +154,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy "$(SolutionDir)x64\$(Configuration)\$(MSBuildProjectName).dll" "$(SolutionDir)Assets\Plugins\" /Y /I
+xcopy "$(SolutionDir)x64\$(Configuration)\$(MSBuildProjectName).lib" "$(SolutionDir)testCpp\" /Y /I</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -170,8 +178,20 @@
       <EnableUAC>false</EnableUAC>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy "$(SolutionDir)x64\$(Configuration)\$(MSBuildProjectName).dll" "$(SolutionDir)Assets\Plugins\" /Y /I
+xcopy "$(SolutionDir)x64\$(Configuration)\$(MSBuildProjectName).lib" "$(SolutionDir)testCpp\" /Y /I</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug X64|Win32'">
+    <PostBuildEvent>
+      <Command>xcopy "$(SolutionDir)x64\$(Configuration)\$(MSBuildProjectName).dll" "$(SolutionDir)Assets\Plugins\" /Y /I
+xcopy "$(SolutionDir)x64\$(Configuration)\$(MSBuildProjectName).lib" "$(SolutionDir)testCpp\" /Y /I</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug X64|x64'">
+    <PostBuildEvent>
+      <Command>xcopy "$(SolutionDir)x64\$(Configuration)\$(MSBuildProjectName).dll" "$(SolutionDir)Assets\Plugins\" /Y /I
+xcopy "$(SolutionDir)x64\$(Configuration)\$(MSBuildProjectName).lib" "$(SolutionDir)testCpp\" /Y /I</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
