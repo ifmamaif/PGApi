@@ -204,3 +204,8 @@ double** Generate2DMap(int width, int height, float scale, float offsetX, float 
 	}
 	return noiseMap;
 }
+
+double& Get2DMapValue(double** buffer, int width, int height)
+{
+	return buffer[width][height];
+}

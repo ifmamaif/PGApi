@@ -24,6 +24,9 @@ public class LevelGeneration : GenericBehaviour
     [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
     private static extern IntPtr PrintHello();
 
+    [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr DADA222();
+
     public override void Start()
     {
         roomWhiteObj = (GameObject)Resources.Load(PATH_SPRITE, typeof(GameObject));
@@ -42,27 +45,13 @@ public class LevelGeneration : GenericBehaviour
         }
 
         ///
-        //Debug.Log(Marshal.PtrToStringAnsi(PrintHello()));
-        ////Debug.Log((DADA().ToString()));
-        //
-        //char[,] m_Rooms = new char[WORLD_SIZE.x,WORLD_SIZE.y];
-        ////Marshal.PtrToStructure(GenerateMazeWorm(WORLD_SIZE.x, WORLD_SIZE.y,NUMBER_OF_ROOMS), m_Rooms);
-        ////m_Rooms = Marshal.PtrToStructure<char[,]>(GenerateMazeWorm(WORLD_SIZE.x, WORLD_SIZE.y, NUMBER_OF_ROOMS));
-        //IntPtr pUnmanagedArray = GenerateMazeWorm(WORLD_SIZE.x, WORLD_SIZE.y, NUMBER_OF_ROOMS);
-        //for(int i=0;i< WORLD_SIZE.x;i++)
-        //{
-        //    IntPtr pDoubleArray = (IntPtr)((int)pUnmanagedArray + (Marshal.SizeOf(typeof(char)) * (WORLD_SIZE.y * i)));
-        //    char[] tmp = new char[WORLD_SIZE.y];
-        //    Marshal.Copy(pDoubleArray, tmp, 0, WORLD_SIZE.y);
-        //
-        //    for(int j=0;j<WORLD_SIZE.y;j++)
-        //    {
-        //        m_Rooms[i,j] = tmp[j];
-        //    }
-        //}
-        
-        ///
-        
+        IntPtr pointner = DADA222();
+        int[] da = new int[2];
+        Marshal.Copy(pointner, da, 0, 2);
+
+
+        Debug.Log("da: " + da.Length + " " + da[0] + " " + da[1]);
+
         var m_Rooms = MazeWhorm.Generate(WORLD_SIZE, NUMBER_OF_ROOMS);
         DrawMap(m_Rooms); //instantiates objects to make up a map
     }

@@ -45,8 +45,6 @@ public class PerlinNoisePreview : GenericBehaviour
         Renderer renderer = perlinObject.GetComponent<MeshRenderer>();
         Texture2D texture = new Texture2D(width, height);
 
-        //double[,] preColors=null;
-        //Marshal.PtrToStructure(Generate2DMap(width, height, scale, offsetx, offsety), preColors);
         double[,] preColors = PGApi.Perlin.Generate2DMap(width, height, scale, offsetx, offsety);
 
         for (int x = 0; x < width; x++)

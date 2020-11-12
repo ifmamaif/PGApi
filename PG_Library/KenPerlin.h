@@ -11,4 +11,6 @@ extern "C"
 	EXPORT_API double PerlinNoise(double x);
 
 	EXPORT_API double** Generate2DMap(int width, int height, float scale, float offsetX, float offsetY);
+
+	EXPORT_API double& Get2DMapValue(double** buffer, int width, int height);
 }

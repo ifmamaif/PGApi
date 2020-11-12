@@ -9,7 +9,6 @@ public static class MazeDumb
 		int[,] result = new int[height, width];
 		Vector2Int playerPos = new Vector2Int(0, 0);
 
-
 		int randomNumber;
 		System.Random randomGenerator = new System.Random();
 		for (int i = 0; i < height; i++)

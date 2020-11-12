@@ -78,7 +78,7 @@ public class MainScene : MonoBehaviour
         text.richText = true;
         text.font = null;
         text.color = Color.black;
-        
+
         NewDemo<LevelGeneration>("Room Generator");
 
         GameObject demo_Level = NewDemo<Atestat>("Atestat");

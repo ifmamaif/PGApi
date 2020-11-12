@@ -53,7 +53,7 @@ public class MDS : GenericBehaviour
 			return;
 		}
 
-		boardHolder = new GameObject("Terrain");       //Instantiate Board and set boardHolder to its transform.
+		boardHolder = new GameObject("Terrain");					//Instantiate Board and set boardHolder to its transform.
 		boardHolder.transform.SetParent(this.transform);
 
 		initialPosition = boardHolder.transform.position;
@@ -69,7 +69,6 @@ public class MDS : GenericBehaviour
 		thisrenderer = terrain.GetComponent<Renderer>();
 
 		SetRegions();
-
 		//UpdateMap ();
 	}
 
@@ -80,7 +79,6 @@ public class MDS : GenericBehaviour
 			UpdateMap();
 		}
 	}
-
 
 	public override void Generate()
 	{
@@ -146,8 +144,6 @@ public class MDS : GenericBehaviour
 		regions[7].colour = HexToColor("#FFFFFF");
 	}
 
-
-
 	void UpdateMap()
 	{
 		if (autoMove == true)
@@ -178,16 +174,6 @@ public class MDS : GenericBehaviour
 		double[,] noiseMap = usePGApi ?
 			PGApi.Perlin.Generate2DMap(perlinWidth, perlinHeight, perlinScale, perlinOffsetX, perlinOffsetY) :
 			GenerateNoiseMap();
-
-		//double[,] noiseMap = null;
-		//if(usePGApi)
-		//{
-		//	Marshal.PtrToStructure(Generate2DMap(perlinWidth, perlinHeight, perlinScale, perlinOffsetX, perlinOffsetY), noiseMap);
-		//}
-		//else
-		//{
-		//	noiseMap = GenerateNoiseMap();
-		//}
 
 		Color[] colorMap = new Color[perlinWidth * perlinHeight];
 		for (int y = 0; y < perlinHeight; y++)
