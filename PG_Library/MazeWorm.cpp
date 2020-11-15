@@ -52,7 +52,7 @@ void GetNewPosition(int index, int* xOut, int* yOut)
     int y = g_TakenPositionsY[index];
 
     int upDown = Randf() < 0.5f ? 1 : 0;        //randomly pick wether to look on hor or vert axis
-    int positive = Randf() < 0.5f ? 1 : -1;    //pick whether to be positive or negative on that axis
+    int positive = Randf() < 0.5f ? 1 : -1;     //pick whether to be positive or negative on that axis
 
     //find the position bnased on the above bools
     *xOut = x + (1 - upDown) * positive;
@@ -112,14 +112,6 @@ char** CreateRooms(int numberOfRooms)
             rooms[i][j] = 0;
         }
     }
-    
-    //char** rooms = new char* [(g_GridSizeX * 2)];
-    //for (int i = 0; i < g_GridSizeX * 2; i++)
-    //{
-    //    rooms[i] = new char [(g_GridSizeY * 2)];
-    //    for (int j = 0; j < g_GridSizeY*2; j++)
-    //        rooms[i][j] = 0;
-    //}
 
     g_TakenPositionsX.PushBack(0);
     g_TakenPositionsY.PushBack(0);
@@ -187,6 +179,20 @@ char** GenerateMazeWorm(int worldSizeX, int worldSizeY, int numberOfRooms)
     return result;
 }
 
+char GetValueMazeWorm(char** buffer, int x, int y)
+{
+    return buffer[x][y];
+}
+
+void DeleteMazeWorm(char** buffer, int x, int y)
+{
+    for (int i = 0; i < g_GridSizeX * 2; i++)
+    {
+        free(buffer[i]);
+    }
+    free(buffer);
+}
+
 void ShowMazeWorm(char** buffer, int worldSizeX, int worldSizeY)
 {
     for (int i = 0; i < worldSizeX; i++)
@@ -197,14 +203,4 @@ void ShowMazeWorm(char** buffer, int worldSizeX, int worldSizeY)
         }
         std::cout << std::endl;
     }
-}
-
-const char* DADA23()
-{
-    return "dada";
-}
-
-const char* PrintHello()
-{
-    return "Hello";
 }
