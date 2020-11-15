@@ -5,10 +5,10 @@
 
 static int InitializeSeed();
 
-static int ms_Scale = 1103515245;
-static int ms_Offset = 12345;
-static int ms_Module = 2147483647; // 2 << 31; INT_MAX
-static int ms_Seed = InitializeSeed();//691;
+static unsigned int ms_Scale = 1103515245;
+static unsigned int ms_Offset = 12345;
+static unsigned int ms_Module = 2147483647; // 2 << 31; INT_MAX
+static unsigned int ms_Seed = InitializeSeed();//691;
 
 int Rand()
 {

@@ -165,11 +165,10 @@ public static class MazeWhorm
         {
             index = PGApi.Math.RoundToInt(UnityEngine.Random.value * (ms_TakenPositions.Count - 1)); // pick a random room
             checkingPos = GetNewPosition(index);
-        } while (ms_TakenPositions.Contains(checkingPos) || 
-                 PGApi.Utils.OutSidei(checkingPos.x, checkingPos.y,ms_GridSize.x,ms_GridSize.y)
+        } while (ms_TakenPositions.Contains(checkingPos) ||
+                 PGApi.Utils.OutSidei(checkingPos.x, checkingPos.y, ms_GridSize.x, ms_GridSize.y)
                  ); //make sure the position is valid
 
         return checkingPos;
     }
-
 }

@@ -1,11 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 public static class MazeDumb
 {
-    public static int[,] Generate(int width,int height)
-    {
+	[DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
+	private static extern int RandBetween(int minInclusive, int maxExclusive);
+
+	public static int[,] Generate(int width, int height)
+	{
 		int[,] result = new int[height, width];
 		Vector2Int playerPos = new Vector2Int(0, 0);
 
@@ -15,7 +19,7 @@ public static class MazeDumb
 		{
 			for (int j = 0; j < width; j++)
 			{
-				randomNumber = randomGenerator.Next(1, 101); // de la 1 la 100
+				randomNumber = RandBetween(1, 101);
 				result[i, j] = (randomNumber < 66) ? 1 : 0;
 			}
 		}
@@ -23,6 +27,4 @@ public static class MazeDumb
 
 		return result;
 	}
-
-
 }

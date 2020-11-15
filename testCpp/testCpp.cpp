@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "../PG_Library/MazeWorm.h"
+#include "../PG_Library/Random.h"
 
 #include <time.h>
 
@@ -12,23 +13,7 @@ int main()
     //char** da = GenerateMazeWorm(10, 10, 3);
     //ShowMazeWorm(da, 20, 20);
 
-    //std::cout << PrintHello();
-    //
-    //std::cout << "Hello World!\n";
-
-    time_t rawtime;
-    struct tm* timeinfo;
-
-    time(&rawtime);
-    timeinfo = localtime(&rawtime);
-    //printf("Current local time and date: %s", asctime(timeinfo));
-
-    std::cout << timeinfo->tm_mon << " "
-        << timeinfo->tm_mday << " "
-        << timeinfo->tm_hour << " "
-        << timeinfo->tm_min << " "
-        << timeinfo->tm_sec
-        << std::endl;
+    std::cout << RandBetween(1, 101);
 
     system("pause");
 }
