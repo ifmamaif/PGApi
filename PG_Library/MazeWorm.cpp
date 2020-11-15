@@ -68,7 +68,7 @@ void NewPosition(int* checkingPosX, int* checkingPosY)
         GetNewPosition(index, checkingPosX, checkingPosY);
     } while ((g_TakenPositionsX.Contains(*checkingPosX) &&
         g_TakenPositionsY.Contains(*checkingPosY)) ||
-        OutSide(*checkingPosX, *checkingPosY, g_GridSizeX, g_GridSizeY)); //make sure the position is valid
+        OutSidei(*checkingPosX, *checkingPosY, g_GridSizeX, g_GridSizeY)); //make sure the position is valid
 }
 
 // method differs from the above in the two commented ways
@@ -91,7 +91,7 @@ void SelectiveNewPosition(int* checkingPosX, int* checkingPosY)
 
     } while ((g_TakenPositionsX.Contains(*checkingPosX) &&
         g_TakenPositionsY.Contains(*checkingPosY)) ||
-        OutSide(*checkingPosX, *checkingPosY, g_GridSizeX, g_GridSizeY));
+        OutSidei(*checkingPosX, *checkingPosY, g_GridSizeX, g_GridSizeY));
 
 
     if (inc >= MAX_ITERATIONS)

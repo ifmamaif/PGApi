@@ -105,7 +105,9 @@ public static class MazeWhorm
 
             checkingPos = GetNewPosition(index);
 
-        } while (ms_TakenPositions.Contains(checkingPos) || checkingPos.OutSide(ms_GridSize));
+        } while (ms_TakenPositions.Contains(checkingPos) ||
+                 PGApi.Utils.OutSidei(checkingPos.x, checkingPos.y, ms_GridSize.x, ms_GridSize.y)
+                );
 
         if (inc >= MAX_ITERATIONS)
         { // break loop if it takes too long: this loop isnt garuanteed to find solution, which is fine for this
@@ -167,9 +169,11 @@ public static class MazeWhorm
         int index;
         do
         {
-            index = RoundToInt(UnityEngine.Random.value * (ms_TakenPositions.Count - 1)); // pick a random room
+            index = PGApi.Math.RoundToInt(UnityEngine.Random.value * (ms_TakenPositions.Count - 1)); // pick a random room
             checkingPos = GetNewPosition(index);
-        } while (ms_TakenPositions.Contains(checkingPos) || checkingPos.OutSide(ms_GridSize)); //make sure the position is valid
+        } while (ms_TakenPositions.Contains(checkingPos) || 
+                 PGApi.Utils.OutSidei(checkingPos.x, checkingPos.y,ms_GridSize.x,ms_GridSize.y)
+                 ); //make sure the position is valid
 
         return checkingPos;
     }

@@ -22,4 +22,12 @@ namespace PGApi
 			return noiseMap;
 		}
 	}
+
+	public static class Utils
+	{
+
+		[DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
+		public static extern bool OutSidei(int x1, int y1, int x2, int y2);
+	}
+
 }
