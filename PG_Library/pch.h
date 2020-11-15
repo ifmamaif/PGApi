@@ -10,9 +10,11 @@
 // add headers that you want to pre-compile here
 #include "framework.h"
 
-#include <malloc.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <malloc.h>
 #include <stdarg.h>
+#include <time.h>
 
 #include <iostream>
 
