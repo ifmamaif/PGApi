@@ -13,14 +13,12 @@ public static class MazeWhorm
 
     private static Vector2Int ms_GridSize = new Vector2Int();
     private static List<Vector2Int> ms_TakenPositions = null;
-    private static int half_Iteration;
-
     private const int MAX_ITERATIONS = 100;
+    private const int HALF_ITERATION = MAX_ITERATIONS / 2;
 
     public static Room[,] Generate(Vector2Int worldSize, int numberOfRooms)
     {
         numberOfRooms = CheckInputData(worldSize, numberOfRooms);
-        half_Iteration = MAX_ITERATIONS / 2;
 
         var result = CreateRooms(numberOfRooms);//lays out the actual map
         result = SetRoomDoors(result);          //assigns the doors where rooms would connect
@@ -31,7 +29,7 @@ public static class MazeWhorm
     {
         int maximFit = worldSize.x * 2 * worldSize.y * 2;
         if (numberOfRooms >= maximFit)
-        { // make sure we dont try to make more rooms than can fit in our grid
+        { // make sure we don't try to make more rooms than can fit in our grid
             numberOfRooms = PGApi.Math.RoundToInt(maximFit);
         }
 
@@ -67,7 +65,7 @@ public static class MazeWhorm
                     checkPos = SelectiveNewPosition();
                     iterations++;
                 } while (NumberOfNeighbors(checkPos, ms_TakenPositions) > 1 && iterations < MAX_ITERATIONS);
-                if (iterations >= half_Iteration)
+                if (iterations >= HALF_ITERATION)
                 {
                     // print("error: could not create with fewer neighbors than : " + NumberOfNeighbors(checkPos, takenPositions));
                 }
@@ -104,7 +102,7 @@ public static class MazeWhorm
                 );
 
         if (inc >= MAX_ITERATIONS)
-        { // break loop if it takes too long: this loop isnt garuanteed to find solution, which is fine for this
+        { // break loop if it takes too long: this loop isn't garuanteed to find solution, which is fine for this
           // print("Error: could not find position with only one neighbor");
         }
 
@@ -117,10 +115,10 @@ public static class MazeWhorm
         int x = ms_TakenPositions[index].x;
         int y = ms_TakenPositions[index].y;
 
-        int upDown = UnityEngine.Random.value < 0.5f ? 1 : 0;        //randomly pick wether to look on hor or vert axis
+        int upDown = UnityEngine.Random.value < 0.5f ? 1 : 0;       //randomly pick wether to look on hor or vert axis
         int positive = UnityEngine.Random.value < 0.5f ? 1 : -1;    //pick whether to be positive or negative on that axis
 
-        //find the position bnased on the above bools
+        //find the position based on the above bools
         return new Vector2Int(x + (1 - upDown) * positive, y + (upDown * positive));
     }
 
