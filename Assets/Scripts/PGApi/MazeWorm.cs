@@ -6,12 +6,6 @@ using UnityEngine;
 
 public static class MazeWhorm
 {
-    [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
-    private static extern int RoundToInt(float f);
-
-    [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
-    private static extern float Lerpf(float a0, float a1, float weight);
-
     public class Room
     {
         public bool doorTop, doorBot, doorLeft, doorRight;
@@ -38,7 +32,7 @@ public static class MazeWhorm
         int maximFit = worldSize.x * 2 * worldSize.y * 2;
         if (numberOfRooms >= maximFit)
         { // make sure we dont try to make more rooms than can fit in our grid
-            numberOfRooms = RoundToInt(maximFit);
+            numberOfRooms = PGApi.Math.RoundToInt(maximFit);
         }
 
         //note: these are half-extents
@@ -61,7 +55,7 @@ public static class MazeWhorm
         for (int i = 0; i < numberOfRooms - 1; i++)
         {
             float randomPerc = i / ((float)numberOfRooms - 1);
-            float randomCompare = Lerpf(RANDOM_COMPARE_START, RANDOM_COMPARE_END, randomPerc);
+            float randomCompare = PGApi.Math.Lerpf(RANDOM_COMPARE_START, RANDOM_COMPARE_END, randomPerc);
             //grab new position
             Vector2Int checkPos = NewPosition();
             //test new position
