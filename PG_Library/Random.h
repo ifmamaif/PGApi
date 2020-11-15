@@ -1,6 +1,13 @@
 #pragma once
 
- unsigned int Rand();
- unsigned int Rand(unsigned int newseed);
- unsigned int Rand(unsigned int a, unsigned int b);
- float Randf();
+#include "PreDefines.h"
+#include <time.h>
+
+extern "C"
+{
+    EXPORT_API const struct tm* GetCurrentLocalTime();
+    EXPORT_API int Rand();
+    EXPORT_API int RandNewSeed(int newseed);
+    EXPORT_API int RandBetween(int minInclusive, int maxExclusive);
+    EXPORT_API float Randf();
+}
