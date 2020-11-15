@@ -30,7 +30,6 @@ namespace PGApi
 		public static extern bool OutSidei(int x1, int y1, int x2, int y2);
 	}
 
-
 	public static class Math
 	{
 		[DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]

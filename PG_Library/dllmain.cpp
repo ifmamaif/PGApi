@@ -2,9 +2,11 @@
 #include "pch.h"
 #include "PreDefines.h"
 
-#include "MazeWorm.h"
 #include "KenPerlin.h"
 #include "Math.h"
+#include "MazeWorm.h"
+#include "Random.h"
+#include "Utils.h"
 
 extern "C"
 {
