@@ -10,10 +10,9 @@
 
 int main()
 {
-    //char** da = GenerateMazeWorm(10, 10, 3);
-    //ShowMazeWorm(da, 20, 20);
+    auto** da = GenerateMazeWorm(4, 4, 32);
+    ShowMazeWorm(da, 8, 8);
 
-    std::cout << RandBetween(1, 101);
 
     system("pause");
 }

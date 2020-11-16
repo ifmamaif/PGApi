@@ -179,6 +179,7 @@ xcopy "$(SolutionDir)x64\$(Configuration)\$(MSBuildProjectName).lib" "$(Solution
     <ClInclude Include="Queue.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="Utils.h" />
+    <ClInclude Include="Vector2Int.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Allocation.cpp" />
@@ -195,6 +196,7 @@ xcopy "$(SolutionDir)x64\$(Configuration)\$(MSBuildProjectName).lib" "$(Solution
     <ClCompile Include="Queue.cpp" />
     <ClCompile Include="Random.cpp" />
     <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="Vector2Int.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

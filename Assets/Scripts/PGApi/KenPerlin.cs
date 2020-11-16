@@ -25,7 +25,6 @@ namespace PGApi
 
 	public static class Utils
 	{
-
 		[DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool OutSidei(int x1, int y1, int x2, int y2);
 	}
@@ -37,5 +36,11 @@ namespace PGApi
 
 		[DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
 		public static extern float Lerpf(float a0, float a1, float weight);
+	}
+
+	public static class Random
+	{
+		[DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
+		public static extern float Randf();
 	}
 }

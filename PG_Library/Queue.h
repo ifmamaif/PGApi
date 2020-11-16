@@ -10,6 +10,7 @@ public:
 	Queue()
 		: m_Front(nullptr)
 		, m_Back(nullptr)
+		, m_Size(0)
 	{
 	}
 
@@ -39,7 +40,8 @@ public:
 		m_Front = newNode;
 		m_Size++;
 	}
-	bool Contains(T value)
+
+	bool Contains (T value) const
 	{
 		for (Node<T>* it = m_Front; it != nullptr; it = it->m_Next)
 		{
@@ -51,9 +53,35 @@ public:
 
 		return false;
 	}
-	int Size() { return m_Size; }
+
+	int Size() const { return m_Size; }
 
 	T& operator[] (int index)
+	{
+		static T ms_DefaultValue;
+		if (index < 0 || index > m_Size)
+		{
+			// error: out of bounds
+			fprintf(stderr, "Out of bounds");
+			return ms_DefaultValue;
+		}
+
+		int count = 0;
+		for (Node<T>* it = m_Front; it != nullptr; it = it->m_Next)
+		{
+			if (count == index)
+			{
+				return it->m_Value;
+			}
+			count++;
+		}
+
+		// error: out of bounds
+		fprintf(stderr, "Out of bounds");
+		return ms_DefaultValue;
+	}
+
+	const T& operator[] (int index) const
 	{
 		static T ms_DefaultValue;
 		if (index < 0 || index > m_Size)

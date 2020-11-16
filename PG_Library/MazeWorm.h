@@ -10,11 +10,11 @@ extern "C"
 	// 2 - link with bot
 	// 4 - link with left
 	// 8 - link with right
-	EXPORT_API char** GenerateMazeWorm(int worldSizeX, int worldSizeY, int numberOfRooms);
+	EXPORT_API int** GenerateMazeWorm(int worldSizeX, int worldSizeY, int numberOfRooms);
 
-	EXPORT_API char GetValueMazeWorm(char** buffer, int x, int y);
+	EXPORT_API int GetValueMazeWorm(int** buffer, int x, int y);
 
-	EXPORT_API void DeleteMazeWorm(char** buffer, int x, int y);
+	EXPORT_API void DeleteMazeWorm(int** buffer, int x, int y);
 
-	EXPORT_API void ShowMazeWorm(char** buffer,int worldSizeX, int worldSizeY);
+	EXPORT_API void ShowMazeWorm(int** buffer,int worldSizeX, int worldSizeY);
 }
