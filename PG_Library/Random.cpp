@@ -3,16 +3,29 @@
 
 #include "Math.h"
 
+#include <mutex>
+
 static int InitializeSeed();
 
-static unsigned int ms_Scale = 1103515245;
-static unsigned int ms_Offset = 12345;
-static unsigned int ms_Module = 2147483647; // 2 << 31; INT_MAX
+static const unsigned int ms_Scale = 1103515245;
+static const unsigned int ms_Offset = 12345;
+static const unsigned int ms_Module = 2147483647; // 2 << 31; INT_MAX
+
 static unsigned int ms_Seed = InitializeSeed();//691;
+static unsigned int ms_Seed_s = InitializeSeed();
+static std::mutex gs_Mutex;
 
 int Rand()
 {
     return ms_Seed = ((ms_Scale * ms_Seed) + ms_Offset) % ms_Module;
+}
+
+int Rand_s()
+{
+    gs_Mutex.lock();
+    const int newSeed = ms_Seed_s = ((ms_Scale * ms_Seed_s) + ms_Offset) % ms_Module;
+    gs_Mutex.unlock();
+    return newSeed;
 }
 
 int RandBetween(int minInclusive, int maxExclusive)

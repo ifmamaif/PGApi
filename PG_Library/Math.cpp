@@ -65,3 +65,23 @@ double Lerpd(double a0, double a1, double weight)
     // this is slightly faster equivalent formula for : (1.0 - w)*a0 + w * a1
     return a0 + weight * (a1 - a0);
 }
+
+int FastFloor(double d)
+{
+    return d > 0 ? (int)d : (int)d - 1;
+}
+
+double Dot2(const int g[], double x, double y)
+{
+	return g[0] * x + g[1] * y;
+}
+
+double Dot3(const int g[], double x, double y, double z)
+{
+	return g[0] * x + g[1] * y + g[2] * z;
+}
+
+double Dot4(const int g[], double x, double y, double z, double w)
+{
+	return g[0] * x + g[1] * y + g[2] * z + g[3] * w;
+}

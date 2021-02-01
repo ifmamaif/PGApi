@@ -10,6 +10,8 @@ extern "C"
 
 	//float Floor(float f);
 
+	EXPORT_API int FastFloor(double d);
+
 	EXPORT_API int FloorToInt(float f);
 
 	EXPORT_API int RoundToInt(float f);
@@ -21,4 +23,8 @@ extern "C"
 	// Function to linearly interpolate between a0 and a1
 	// weight should be in the range [0.0, 1.0]
 	EXPORT_API double Lerpd(double a0, double a1, double weight);
+
+	EXPORT_API double Dot2(const int g[], double x, double y);
+	EXPORT_API double Dot3(const int g[], double x, double y, double z);
+	EXPORT_API double Dot4(const int g[], double x, double y, double z, double w);
 }
