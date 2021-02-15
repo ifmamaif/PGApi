@@ -27,4 +27,6 @@ extern "C"
 	EXPORT_API double Dot2(const int g[], double x, double y);
 	EXPORT_API double Dot3(const int g[], double x, double y, double z);
 	EXPORT_API double Dot4(const int g[], double x, double y, double z, double w);
+
+	EXPORT_API int CheckBitStatus(int number, int bitPosition);
 }

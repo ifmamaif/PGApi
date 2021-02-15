@@ -47,7 +47,7 @@ public class LevelGeneration : GenericBehaviour
 
         IntPtr bufferMaze = GenerateMazeWorm(WORLD_SIZE.x, WORLD_SIZE.y, NUMBER_OF_ROOMS);
         DrawMap(bufferMaze); //instantiates objects to make up a map
-        DeleteMazeWorm(bufferMaze, WORLD_SIZE.x * 2, WORLD_SIZE.y * 2);
+        //DeleteMazeWorm(bufferMaze, WORLD_SIZE.x * 2, WORLD_SIZE.y * 2);
     }
 
     private void DrawMap(IntPtr bufferMaze)

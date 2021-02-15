@@ -20,16 +20,6 @@ double Absd(double value)
     return Macro_Abs(value);
 }
 
-//float Floor(float f)
-//{
-//    int integer_f = (int)f;
-//    if (Abs(f - integer_f) > EPSILON)
-//    {
-//        return f < 0.f ? integer_f + 1 : integer_f;
-//    }
-//    return f;
-//}
-
 int FloorToInt(float f)
 {
     int integer_f = (int)f;
@@ -84,4 +74,25 @@ double Dot3(const int g[], double x, double y, double z)
 double Dot4(const int g[], double x, double y, double z, double w)
 {
 	return g[0] * x + g[1] * y + g[2] * z + g[3] * w;
+}
+
+//double DotN(int nDim, ...)
+//{
+//    double result = 0;
+//
+//	va_list list;
+//	va_start(list, nDim);
+//	for (int i = 0; i < nDim; i++)
+//	{
+//        result = result+  (va_arg(list, double));
+//	}
+//	va_end(list);
+//}
+
+int CheckBitStatus(int number, int bitPosition)
+{
+    int bitChecker = 1 << bitPosition;
+    int si = number & bitChecker;
+
+    return (number & (1 << bitPosition)) > 0 ? 1 : 0;
 }

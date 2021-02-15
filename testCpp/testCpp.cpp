@@ -1,17 +1,43 @@
-// testCpp.cpp : This file contains the 'main' function. Program execution begins and ends there.
+﻿// testCpp.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
 #include <iostream>
 
 #include "../PG_Library/MazeWorm.h"
 #include "../PG_Library/Random.h"
+#include "../PG_Library/KenPerlin.h"
 
 #include <time.h>
 
-int main()
+bool TestPerlinNDim()
 {
-    auto** da = GenerateMazeWorm(4, 4, 32);
-    ShowMazeWorm(da, 8, 8);
+	for (int i = 0; i < 100; i++)
+	{
+		double x = Randf();
+		double y = Randf();
+		double z = Randf();
+
+        const double* result1 = ClassicPerlinNoise3D(x, y, z);
+        const double* result2 = PerlinNoiseND(3, x, y, z);
+        for (int j = 0; j < 8; j++)
+        {
+            if (result1[j] != result2[j])
+            {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+
+
+int main(int argc,char* argv[])
+{
+    //auto** da = GenerateMazeWorm(4, 4, 32);
+    //ShowMazeWorm(da, 8, 8);
+
+    std::cout << TestPerlinNDim()? 1:0;
 
 
     system("pause");
