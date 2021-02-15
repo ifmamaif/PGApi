@@ -126,41 +126,20 @@ double OctavePerlin(double x, double y, double z, int octaves, double persistenc
 
 double ClassicPerlinNoise3D(double x, double y, double z)
 {
-	// delete this
-	double* input = new double[3];
-	input[0] = x;
-	input[1] = y;
-	input[2] = z;
-	//return input;
-
 	// Find unit grid cell containing point
 	int xi = FastFloor(x);
 	int yi = FastFloor(y);
 	int zi = FastFloor(z);
-	double* floors = new double[3];
-	floors[0] = xi;
-	floors[1] = yi;
-	floors[2] = zi;
-	//return floors;
 
 	// Get relative xyz coordinates of point within that cell
 	x = x - xi;
 	y = y - yi;
 	z = z - zi;
-	//delete this
-	input[0] = x;
-	input[1] = y;
-	input[2] = z;
-	//return input;
 
 	// Wrap the integer cells at 255 (smaller integer period can be introduced here)
 	xi = xi & 255;
 	yi = yi & 255;
 	zi = zi & 255;
-	floors[0] = xi;
-	floors[1] = yi;
-	floors[2] = zi;
-	//return floors;
 
 	// Calculate a set of eight hashed gradient indices
 	int gi000 = permutation[xi + permutation[yi + permutation[zi]]] % 12;
@@ -171,16 +150,6 @@ double ClassicPerlinNoise3D(double x, double y, double z)
 	int gi101 = permutation[xi + 1 + permutation[yi + permutation[zi + 1]]] % 12;
 	int gi110 = permutation[xi + 1 + permutation[yi + 1 + permutation[zi]]] % 12;
 	int gi111 = permutation[xi + 1 + permutation[yi + 1 + permutation[zi + 1]]] % 12;
-	//double* gis = new double[8];
-	//gis[0] = gi000;
-	//gis[1] = gi001;
-	//gis[2] = gi010;
-	//gis[3] = gi011;
-	//gis[4] = gi100;
-	//gis[5] = gi101;
-	//gis[6] = gi110;
-	//gis[7] = gi111;
-	//return gis;
 
 	// Calculate noise contributions from each of the eight corners
 	double n000 = Dot3(grad3[gi000], x, y, z);
@@ -191,17 +160,6 @@ double ClassicPerlinNoise3D(double x, double y, double z)
 	double n101 = Dot3(grad3[gi101], x - 1, y, z - 1);
 	double n110 = Dot3(grad3[gi110], x - 1, y - 1, z);
 	double n111 = Dot3(grad3[gi111], x - 1, y - 1, z - 1);
-	
-	double* ns = new double[8];
-	ns[0] = n000;
-	ns[1] = n001;
-	ns[2] = n010;
-	ns[3] = n011;
-	ns[4] = n100;
-	ns[5] = n101;
-	ns[6] = n110;
-	ns[7] = n111;
-	//return ns;
 
 	// Compute the fade curve value for each of x, y, z
 	double u = Fade(x);
@@ -734,21 +692,18 @@ double PerlinNoiseND(int nDim, ...)
 	{
 		unitGridCells[i] = FastFloor(input[i]);
 	}
-	//return unitGridCells;
 
 	// Get relative coordinates of point within that cell
 	for (int i = 0; i < nDim; i++)
 	{
 		input[i] = input[i] - unitGridCells[i];
 	}
-	//return input;
 
 	// Wrap the integer cells at 255 (smaller integer period can be introduced here)
 	for (int i = 0; i < nDim; i++)
 	{
 		unitGridCells[i] &= 255;
 	}
-	//return unitGridCells;
 
 	// Calculate a set of eight hashed gradient indices
 	int numberOfGradientIndices = 1 << nDim;
@@ -766,13 +721,6 @@ double PerlinNoiseND(int nDim, ...)
 		}
 		gradientIndices[i] %= numberOfEdges;
 	}
-	//double* gradientIndicesExamples = new double[numberOfGradientIndices];
-	//for (int i = 0; i < numberOfGradientIndices; i++)
-	//{
-	//	gradientIndicesExamples[i] = gradientIndices[i];
-	//}
-	//return gradientIndicesExamples;
-
 
 	// Calculate noise contributions from each of the eight corners
 	double* noiseContributions = new double[numberOfGradientIndices];
@@ -781,47 +729,32 @@ double PerlinNoiseND(int nDim, ...)
 	for (int i = 0; i < numberOfEdges; i++)
 	{
 		int* grad1 = new int[nDim - 1];
-		//for (int j = 0; j < (nDim - 1); j++)
-		//{
-		//	grad1[j] = CheckBitStatus(i, nDim - 2 - j) == 0 ? 1 : -1;
-		//}
-		grad1[0] = CheckBitStatus(i, 1) == 0 ? 1 : -1;
-		grad1[1] = CheckBitStatus(i, 0) == 0 ? 1 : -1;
-	
+		for (int j = 0; j < (nDim - 1); j++)
+		{
+			grad1[j] = CheckBitStatus(i, nDim - 2 - j) == 0 ? 1 : -1;
+		}
+
 		int k = 0;
 		int perm = i / (nDim + 1);
 		int* grad2 = new int[nDim];
-		//for (int j = 0; j < nDim; j++)
-		//{
-		//	grad2[j] = perm == j ? 0 : grad1[k++];
-		//}
-		grad2[0] = perm == 0 ? 0 : grad1[k++];
-		grad2[1] = perm == 1 ? 0 : grad1[k++];
-		grad2[2] = perm == 2 ? 0 : grad1[k++];
+		for (int j = 0; j < nDim; j++)
+		{
+			grad2[j] = perm == j ? 0 : grad1[k++];
+		}
 	
-		//for (int j = 0; j < nDim; j++)
-		//{
-		//	grad3[i * 3 + j] = grad2[j];
-		//}
-		grad3[i * 3 + 0] = grad2[0];
-		grad3[i * 3 + 1] = grad2[1];
-		grad3[i * 3 + 2] = grad2[2];
+		for (int j = 0; j < nDim; j++)
+		{
+			grad3[i * 3 + j] = grad2[j];
+		}
 	}
 	
 	int* scalar = new int[numberOfEdges * nDim];
 	for (int i = 0; i < numberOfEdges; i++)
 	{
-		//for (int j = 0; j < nDim; j++)
-		//{
-		//	scalar[i * 3 + j] = CheckBitStatus(i, nDim - 1 - j) ? -1 : 0;
-		//}
-	
-		int x = CheckBitStatus(i, 2) ? -1 : 0;
-		int y = CheckBitStatus(i, 1) ? -1 : 0;
-		int z = CheckBitStatus(i, 0) ? -1 : 0;
-		scalar[i * 3 + 0] = x;
-		scalar[i * 3 + 1] = y;
-		scalar[i * 3 + 2] = z;
+		for (int j = 0; j < nDim; j++)
+		{
+			scalar[i * 3 + j] = CheckBitStatus(i, nDim - 1 - j) ? -1 : 0;
+		}
 	}
 	
 	for (int i = 0; i < numberOfGradientIndices; i++)
@@ -841,7 +774,6 @@ double PerlinNoiseND(int nDim, ...)
 			(input[1] + scalar[i * 3 + 1]) * grad3[gradientIndices[i] * 3 + 1] +
 			(input[2] + scalar[i * 3 + 2]) * grad3[gradientIndices[i] * 3 + 2];
 	}
-	//return noiseContributions;
 
 	// Compute the fade curve value for each of x, y, z
 	double* curves = new double[nDim];
@@ -852,62 +784,13 @@ double PerlinNoiseND(int nDim, ...)
 
 	// Interpolate along x the contributions from each of the corners
 	int interpolations = numberOfGradientIndices / 2;
-	double* interpX = new double[interpolations];
-
-	for (int j = 0; j < interpolations; j++)
-	{
-		interpX[j] = Lerpd(noiseContributions[j], noiseContributions[j + interpolations], curves[0]);
-	}
-	interpolations /= 2;
-
-	for (int i = 1; i < nDim; i++)
+	for (int i = 0; i < nDim; i++)
 	{
 		for (int j = 0; j < interpolations; j++)
 		{
-			interpX[j] = Lerpd(interpX[j], interpX[j + interpolations], curves[i]);
+			noiseContributions[j] = Lerpd(noiseContributions[j], noiseContributions[j + interpolations], curves[i]);
 		}
 		interpolations /= 2;
 	}
-
-	return interpX[0];
-	//return noiseContributions;
-
-
-	// Calculate noise contributions from each of the eight corners
-	//double n000 = Dot3(grad3[gi000], x, y, z);
-	//double n001 = Dot3(grad3[gi001], x, y, z - 1);
-	//double n010 = Dot3(grad3[gi010], x, y - 1, z);
-	//double n011 = Dot3(grad3[gi011], x, y - 1, z - 1);
-	//double n100 = Dot3(grad3[gi100], x - 1, y, z);
-	//double n101 = Dot3(grad3[gi101], x - 1, y, z - 1);
-	//double n110 = Dot3(grad3[gi110], x - 1, y - 1, z);
-	//double n111 = Dot3(grad3[gi111], x - 1, y - 1, z - 1);
-	//
-	//// Compute the fade curve value for each of x, y, z
-	//double u = Fade(x);
-	//double v = Fade(y);
-	//double w = Fade(z);
-
-	//// Interpolate along x the contributions from each of the corners
-	//double nx00 = Lerpd(n000, n100, u);
-	//double nx01 = Lerpd(n001, n101, u);
-	//double nx10 = Lerpd(n010, n110, u);
-	//double nx11 = Lerpd(n011, n111, u);
-	//
-	//// Interpolate the four results along y
-	//double nxy0 = Lerpd(nx00, nx10, v);
-	//double nxy1 = Lerpd(nx01, nx11, v);
-	//
-	//// Interpolate the two last results along z
-	//double nxyz = Lerpd(nxy0, nxy1, w);
-	//
-	//return nxyz;
-	//
-	//////
-	//
-	//return noiseContributions;
-	//
-	//delete unitGridCells;
-	//delete input;
-	//return 0;
+	return noiseContributions[0];
 }
