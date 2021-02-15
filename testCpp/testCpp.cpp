@@ -11,21 +11,28 @@
 
 bool TestPerlinNDim()
 {
-	for (int i = 0; i < 100; i++)
-	{
-		double x = Randf();
-		double y = Randf();
-		double z = Randf();
+    for (int i = 0; i < 100000; i++)
+    {
+        double x = Randf()*100;
+        double y = Randf()*100;
+        double z = Randf()*100;
 
-        const double* result1 = ClassicPerlinNoise3D(x, y, z);
-        const double* result2 = PerlinNoiseND(3, x, y, z);
-        for (int j = 0; j < 8; j++)
-        {
-            if (result1[j] != result2[j])
-            {
-                return false;
-            }
-        }
+		//const double* result1 = ClassicPerlinNoise3D(x, y, z);
+		//const double* result2 = PerlinNoiseND(3, x, y, z);
+		//for (int j = 0; j < 8; j++)
+		//{
+		//	if (result1[j] != result2[j])
+		//	{
+		//		return false;
+		//	}
+		//}
+
+		double result1 = ClassicPerlinNoise3D(x, y, z);
+		double result2 = PerlinNoiseND(3, x, y, z);
+		if (result1 != result2)
+		{
+			return false;
+		}
     }
     return true;
 }
@@ -40,7 +47,7 @@ int main(int argc,char* argv[])
     std::cout << TestPerlinNDim()? 1:0;
 
 
-    system("pause");
+    //system("pause");
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
