@@ -684,7 +684,6 @@ double PerlinNoiseND(int nDim, ...)
 		input[i] = va_arg(list, double);
 	}
 	va_end(list);
-	//return input;
 
 	// Find unit grid cell containing point
 	int* unitGridCells = new int[nDim];
@@ -725,10 +724,10 @@ double PerlinNoiseND(int nDim, ...)
 	// Calculate noise contributions from each of the eight corners
 	double* noiseContributions = new double[numberOfGradientIndices];
 	
+	int* grad1 = new int[nDim - 1];
 	int* grad3 = new int[numberOfEdges * nDim];
 	for (int i = 0; i < numberOfEdges; i++)
-	{
-		int* grad1 = new int[nDim - 1];
+	{		
 		for (int j = 0; j < (nDim - 1); j++)
 		{
 			grad1[j] = CheckBitStatus(i, nDim - 2 - j) == 0 ? 1 : -1;
@@ -736,43 +735,20 @@ double PerlinNoiseND(int nDim, ...)
 
 		int k = 0;
 		int perm = i / (nDim + 1);
-		int* grad2 = new int[nDim];
 		for (int j = 0; j < nDim; j++)
 		{
-			grad2[j] = perm == j ? 0 : grad1[k++];
-		}
-	
-		for (int j = 0; j < nDim; j++)
-		{
-			grad3[i * 3 + j] = grad2[j];
-		}
-	}
-	
-	int* scalar = new int[numberOfEdges * nDim];
-	for (int i = 0; i < numberOfEdges; i++)
-	{
-		for (int j = 0; j < nDim; j++)
-		{
-			scalar[i * 3 + j] = CheckBitStatus(i, nDim - 1 - j) ? -1 : 0;
+			grad3[i * nDim + j] = perm == j ? 0 : grad1[k++];
 		}
 	}
 	
 	for (int i = 0; i < numberOfGradientIndices; i++)
 	{
-		int input0 = input[0];
-		int input1 = input[1];
-		int input2 = input[2];
-		int scalar0 = scalar[i * 3 + 0];
-		int scalar1 = scalar[i * 3 + 1];
-		int scalar2 = scalar[i * 3 + 2];
-		int gradientIndice = gradientIndices[i];
-		int grad0 = grad3[gradientIndice * 3 + 0];
-		int grad1 = grad3[gradientIndice * 3 + 1];
-		int grad2 = grad3[gradientIndice * 3 + 2];
-	
-		noiseContributions[i] = (input[0] + scalar[i * 3 + 0]) * grad3[gradientIndices[i] * 3 + 0] +
-			(input[1] + scalar[i * 3 + 1]) * grad3[gradientIndices[i] * 3 + 1] +
-			(input[2] + scalar[i * 3 + 2]) * grad3[gradientIndices[i] * 3 + 2];
+		noiseContributions[i] = 0;
+		for (int j = 0; j < nDim; j++)
+		{
+			int scalar = CheckBitStatus(i, nDim - 1 - j) ? -1 : 0;
+			noiseContributions[i] += (input[j] + scalar) * grad3[gradientIndices[i] * nDim + j];
+		}
 	}
 
 	// Compute the fade curve value for each of x, y, z
