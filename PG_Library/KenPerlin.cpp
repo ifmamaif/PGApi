@@ -692,7 +692,7 @@ double PerlinNoiseND(int nDim, ...)
 	//int numberOfGradientIndices = 1 << nDim;
 	int* gradientIndices = new int[NUMBER_OF_GRADIENT_INDICES];
 	// the number of edges is = (number_of_dimensions * (2^(number_of_dimensions - 1)))
-	int numberOfEdges = (int)(nDim * (1 << (nDim - 1)));
+	int numberOfEdges = (int)(nDim * (1 << N_DIM_MINUS_ONE));
 	for (int i = 0; i < NUMBER_OF_GRADIENT_INDICES; i++)
 	{
 		// each index will have the value = (permutation[x + 1_or_0(dependening_of_Index_important_bit) + permutation[y + 1_or_0 + permutation[z + 1_or_0 + ...]]] % number_Of_Indices)
@@ -710,11 +710,11 @@ double PerlinNoiseND(int nDim, ...)
 
 	// Calculate the gradient helper for noise contributions
 	// make an exception for nDim = 1;
-	int* grad1 = new int[nDim - 1];
+	int* grad1 = new int[N_DIM_MINUS_ONE];
 	int* grad3 = new int[numberOfEdges * nDim];
 	for (int i = 0; i < numberOfEdges; i++)
 	{		
-		for (int j = 0; j < (nDim - 1); j++)
+		for (int j = 0; j < N_DIM_MINUS_ONE; j++)
 		{
 			grad1[j] = CheckBitStatus(i, nDim - 2 - j) == 0 ? 1 : -1;
 		}
@@ -734,7 +734,7 @@ double PerlinNoiseND(int nDim, ...)
 		noiseContributions[i] = 0;
 		for (int j = 0; j < nDim; j++)
 		{
-			int scalar = CheckBitStatus(i, nDim - 1 - j) ? -1 : 0;
+			int scalar = CheckBitStatus(i, N_DIM_MINUS_ONE - j) ? -1 : 0;
 			noiseContributions[i] += (input[j] + scalar) * grad3[gradientIndices[i] * nDim + j];
 		}
 	}
