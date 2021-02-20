@@ -674,7 +674,7 @@ double PerlinNoiseND(int nDim, ...)
 		return 0;
 	}
 
-	// Get the input
+	// Get the input from the function with unknown number of parameters
 	double* input = new double[nDim];
 	va_list list;
 	va_start(list, nDim);
@@ -688,27 +688,34 @@ double PerlinNoiseND(int nDim, ...)
 	int* unitGridCells = new int[nDim];
 	for (int i = 0; i < nDim; i++)
 	{
+		// get the integer part from the input
 		unitGridCells[i] = FastFloor(input[i]);
 	}
 
 	// Get relative coordinates of point within that cell
 	for (int i = 0; i < nDim; i++)
 	{
+		// get the fractional part from the input
 		input[i] = input[i] - unitGridCells[i];
 	}
 
 	// Wrap the integer cells at 255 (smaller integer period can be introduced here)
 	for (int i = 0; i < nDim; i++)
 	{
+		// Because the values from the permutation table are between [0-255] (inclusive), we make sure that we don't overflow.
 		unitGridCells[i] &= 255;
 	}
 
 	// Calculate a set of eight hashed gradient indices
+	// the number of gradient indices is = (2^number_of_dimensions)
 	int numberOfGradientIndices = 1 << nDim;
 	int* gradientIndices = new int[numberOfGradientIndices];
+	// the number of edges is = (number_of_dimensions * (2^(number_of_dimensions - 1)))
 	int numberOfEdges = (int)(nDim * (1 << (nDim - 1)));
 	for (int i = 0; i < numberOfGradientIndices; i++)
 	{
+		// each index will have the value = (permutation[x + 1_or_0(dependening_of_Index_important_bit) + permutation[y + 1_or_0 + permutation[z + 1_or_0 + ...]]] % number_Of_Indices)
+		// x,y,z are the input from a point of 3rd Dimension.
 		gradientIndices[i] = 0;
 		for (int dim = 0; dim < nDim; dim++)
 		{
@@ -720,9 +727,8 @@ double PerlinNoiseND(int nDim, ...)
 		gradientIndices[i] %= numberOfEdges;
 	}
 
-	// Calculate noise contributions from each of the eight corners
-	double* noiseContributions = new double[numberOfGradientIndices];
-	
+	// Calculate the gradient helper for noise contributions
+	// make an exception for nDim = 1;
 	int* grad1 = new int[nDim - 1];
 	int* grad3 = new int[numberOfEdges * nDim];
 	for (int i = 0; i < numberOfEdges; i++)
@@ -740,6 +746,8 @@ double PerlinNoiseND(int nDim, ...)
 		}
 	}
 	
+	// Calculate noise contributions from each of the eight corners
+	double* noiseContributions = new double[numberOfGradientIndices];
 	for (int i = 0; i < numberOfGradientIndices; i++)
 	{
 		noiseContributions[i] = 0;
