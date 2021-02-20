@@ -16,7 +16,10 @@ extern "C"
 
 	EXPORT_API double& Get2DMapValue(double** buffer, int width, int height);
 
+	EXPORT_API double ClassicPerlinNoise1D(double x);
+	EXPORT_API double ClassicPerlinNoise2D(double x, double y);
 	EXPORT_API double ClassicPerlinNoise3D(double x, double y, double z);
 
 	EXPORT_API double PerlinNoiseND(int nDim, ...);
+	EXPORT_API double PerlinNoiseNDArray(int nDim, double* input);
 }

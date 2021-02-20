@@ -124,6 +124,74 @@ double OctavePerlin(double x, double y, double z, int octaves, double persistenc
 	return total / maxValue;
 }
 
+double ClassicPerlinNoise1D(double x)
+{
+	// Find unit grid cell containing point
+	int xi = FastFloor(x);
+
+	// Get relative xyz coordinates of point within that cell
+	x = x - xi;
+
+	// Wrap the integer cells at 255 (smaller integer period can be introduced here)
+	xi = xi & 255;
+
+	// Calculate a set of eight hashed gradient indices
+	int gi0 = permutation[xi] % 12;
+	int gi1 = permutation[xi + 1] % 12;
+
+	// Calculate noise contributions from each of the eight corners
+	double n0 = Dot(grad3[gi0][0], x);
+	double n1 = Dot(grad3[gi1][0], x - 1);
+
+	// Compute the fade curve value for each of x, y, z
+	double u = Fade(x);
+
+	// Interpolate along x the contributions from each of the corners
+	double nx = Lerpd(n0, n1, u);
+
+	return nx;
+}
+
+double ClassicPerlinNoise2D(double x, double y)
+{
+	// Find unit grid cell containing point
+	int xi = FastFloor(x);
+	int yi = FastFloor(y);
+
+	// Get relative xyz coordinates of point within that cell
+	x = x - xi;
+	y = y - yi;
+
+	// Wrap the integer cells at 255 (smaller integer period can be introduced here)
+	xi = xi & 255;
+	yi = yi & 255;
+
+	// Calculate a set of eight hashed gradient indices
+	int gi00 = permutation[xi + permutation[yi]] % 12;
+	int gi01 = permutation[xi + permutation[yi + 1]] % 12;
+	int gi10 = permutation[xi + 1 + permutation[yi]] % 12;
+	int gi11 = permutation[xi + 1 + permutation[yi+1]] % 12;
+
+	// Calculate noise contributions from each of the eight corners
+	double n00 = Dot2(grad3[gi00], x, y);
+	double n01 = Dot2(grad3[gi01], x, y - 1);
+	double n10 = Dot2(grad3[gi10], x - 1, y);
+	double n11 = Dot2(grad3[gi11], x - 1, y - 1);
+
+	// Compute the fade curve value for each of x, y, z
+	double u = Fade(x);
+	double v = Fade(y);
+
+	// Interpolate along x the contributions from each of the corners
+	double nx0 = Lerpd(n00, n10, u);
+	double nx1 = Lerpd(n01, n11, u);
+
+	// Interpolate the four results along y
+	double nxy = Lerpd(nx0, nx1, v);
+
+	return nxy;
+}
+
 double ClassicPerlinNoise3D(double x, double y, double z)
 {
 	// Find unit grid cell containing point
@@ -649,18 +717,8 @@ double PerlinNoiseND(int nDim, ...)
 		return 0;
 	}
 
-	// Constants that we will use along the function
-	const int N_DIM_MINUS_ONE = nDim - 1;
-	const int N_DIM_PLUS_ONE = nDim + 1;
-	const int NUMBER_OF_GRADIENT_INDICES = 1 << nDim;                       // the number of gradient indices is = (2^number_of_dimensions)
-	const int NUMBER_OF_EDGES = nDim * (1 << N_DIM_MINUS_ONE);              // the number of edges is = (number_of_dimensions * (2^(number_of_dimensions - 1)))
-
 	// Arrays
 	double* input = new double[nDim];                                       // Get the input from the function with unknown number of parameter
-	int* unitGridCells = new int[nDim];                                     // Find unit grid cell containing point
-	int* gradientIndices = new int[NUMBER_OF_GRADIENT_INDICES];             // Calculate a set of eight hashed gradient indices
-	int* grad3 = new int[NUMBER_OF_EDGES * nDim];                           // Calculate the gradient helper for noise contributions
-	double* noiseContributions = new double[NUMBER_OF_GRADIENT_INDICES];    // Calculate noise contributions from each of the eight corners
 	
 	// Get the input from the function with unknown number of parameters
 	va_list list;
@@ -671,6 +729,32 @@ double PerlinNoiseND(int nDim, ...)
 	}
 	va_end(list);
 
+	double result = PerlinNoiseNDArray(nDim, input);
+
+	delete[] input;
+
+	return result;
+}
+
+double PerlinNoiseNDArray(int nDim, double* input)
+{
+	if (nDim < 1)
+	{
+		return 0;
+	}
+
+	// Constants that we will use along the function
+	const int N_DIM_MINUS_ONE = nDim - 1;
+	const int N_DIM_PLUS_ONE = nDim + 1;
+	const int NUMBER_OF_GRADIENT_INDICES = 1 << nDim;                       // the number of gradient indices is = (2^number_of_dimensions)
+	const int NUMBER_OF_EDGES = nDim * (1 << N_DIM_MINUS_ONE);              // the number of edges is = (number_of_dimensions * (2^(number_of_dimensions - 1)))
+
+	// Arrays
+	int* unitGridCells = new int[nDim];                                     // Find unit grid cell containing point
+	int* gradientIndices = new int[NUMBER_OF_GRADIENT_INDICES];             // Calculate a set of eight hashed gradient indices
+	int* grad3 = new int[NUMBER_OF_EDGES * nDim];                           // Calculate the gradient helper for noise contributions
+	double* noiseContributions = new double[NUMBER_OF_GRADIENT_INDICES];    // Calculate noise contributions from each of the eight corners
+	
 	// Find unit grid cell containing point
 	for (int i = 0; i < nDim; i++)
 	{
@@ -703,26 +787,41 @@ double PerlinNoiseND(int nDim, ...)
 			gradientIndices[i] = permutation[(unitGridCells[(N_DIM_MINUS_ONE - dim)]) +
 				CheckBitStatus(i, dim) +
 				gradientIndices[i]];
-	
+
 		}
 		gradientIndices[i] %= NUMBER_OF_EDGES;
+		//
+		//noiseContributions[i] = gradientIndices[i];
 	}
 
 	// Calculate the gradient helper for noise contributions
 	// make an exception for nDim = 1;
-	for (int i = 0; i < NUMBER_OF_EDGES; i++)
+	switch (nDim)
 	{
-		int k = 0;
-		int perm = i / N_DIM_PLUS_ONE;
-		for (int j = 0; j < nDim; j++)
+	case 1:
+		grad3[0] = 0;
+		break;
+	case 2:
+		break;
+	default:
+		for (int i = 0; i < NUMBER_OF_EDGES; i++)
 		{
-			grad3[i * nDim + j] = perm == j ? 0 : CheckBitStatus(i, nDim - 2 - (k++)) == 0 ? 1 : -1;
+			int k = 0;
+			int perm = i / N_DIM_PLUS_ONE;
+			for (int j = 0; j < nDim; j++)
+			{
+				grad3[i * nDim + j] = perm == j
+					? 0
+					: CheckBitStatus(i, nDim - 2 - (k++)) == 0 ? 1 : -1;
+			}
 		}
+		break;
 	}
-	
-	// Calculate noise contributions from each of the eight corners
+
+	// Calculate noise contributions from each corner
 	for (int i = 0; i < NUMBER_OF_GRADIENT_INDICES; i++)
 	{
+		// Here we do a DOT PRODUCT for each corner
 		noiseContributions[i] = 0;
 		for (int j = 0; j < nDim; j++)
 		{
@@ -750,7 +849,6 @@ double PerlinNoiseND(int nDim, ...)
 	}
 	double result = noiseContributions[0];
 
-	delete[] input;
 	delete[] unitGridCells;
 	delete[] gradientIndices;
 	delete[] grad3;

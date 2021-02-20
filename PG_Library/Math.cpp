@@ -61,6 +61,11 @@ int FastFloor(double d)
     return d > 0 ? (int)d : (int)d - 1;
 }
 
+double Dot(double x, double y)
+{
+    return x * y;
+}
+
 double Dot2(const int g[], double x, double y)
 {
 	return g[0] * x + g[1] * y;
