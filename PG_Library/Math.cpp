@@ -89,10 +89,20 @@ double DotN(int nDim, const int g[]...)
     return result;
 }
 
+double DotArray(int nDim, const int g[], const double x[])
+{
+	double result = 0;
+	for (int i = 0; i < nDim; i++)
+	{
+		result = result + (g[i] * x[i]);
+	}
+	return result;
+}
+
 int CheckBitStatus(int number, int bitPosition)
 {
     int bitChecker = 1 << bitPosition;
     int si = number & bitChecker;
-
-    return (number & (1 << bitPosition)) > 0 ? 1 : 0;
+    int result = (number & (1 << bitPosition)) > 0 ? 1 : 0;
+    return result;
 }
