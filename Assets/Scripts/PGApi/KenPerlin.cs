@@ -5,7 +5,7 @@ namespace PGApi
 	public static class Perlin
 	{
 		[DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
-		private static extern double PerlinNoise2D(double x, double y);
+		private static extern double PerlinNoise2DUnity(double x, double y);
 
 		public static double[,] Generate2DMap(int width, int height, float scale, float offsetX, float offsetY)
 		{
@@ -16,7 +16,7 @@ namespace PGApi
 				{
 					double xCoord = (double)x / width * scale + offsetX;
 					double yCoord = (double)y / height * scale + offsetY;
-					noiseMap[x, y] = PerlinNoise2D(xCoord, yCoord);
+					noiseMap[x, y] = PerlinNoise2DUnity(xCoord, yCoord);
 				}
 			}
 			return noiseMap;

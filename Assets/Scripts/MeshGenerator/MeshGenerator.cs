@@ -19,7 +19,7 @@ public class MeshGenerator : GenericBehaviour
     public GameObject parent;
 
     [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
-    private static extern double PerlinNoise2D(double x, double y);
+    private static extern double PerlinNoise2DUnity(double x, double y);
 
     // Start is called before the first frame update
     public override void Start()
@@ -54,9 +54,9 @@ public class MeshGenerator : GenericBehaviour
         {
             for (int x = 0; x <= xSize; x++)
             {
-                float y = (float)PerlinNoise2D(xOffSet + (x * .3f), zOffSet + (z * .3f)) * 2f;
+                float y = (float)PerlinNoise2DUnity(xOffSet + (x * .3f), zOffSet + (z * .3f)) * 2f;
                 vertices[i] = new Vector3(x, y, z);
-                float colorValue = (float)PerlinNoise2D(xOffSet + x * .3f, zOffSet + z * .3f);
+                float colorValue = (float)PerlinNoise2DUnity(xOffSet + x * .3f, zOffSet + z * .3f);
                 colors[i] = Color.Lerp(Color.red, Color.green, colorValue);
                 i++;
             }
