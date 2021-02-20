@@ -457,11 +457,11 @@ double SimplexNoise3D(double xin, double yin, double zin)
 
 	if (x0 >= y0) 
 	{
-		if (y0 >= z0)
+		if (y0 >= z0)			// x0 >= y0 >= z0
 		{
 			i1 = 1; j1 = 0; k1 = 0; i2 = 1; j2 = 1; k2 = 0;
 		} // X Y Z order
-		else if (x0 >= z0)
+		else if (x0 >= z0)		// x0 >= y0, z0
 		{
 			i1 = 1; 
 			j1 = 0;
@@ -470,7 +470,7 @@ double SimplexNoise3D(double xin, double yin, double zin)
 			j2 = 0; 
 			k2 = 1;
 		} // X Z Y order
-		else 
+		else // x0 < z0			// x0 >= y0, x0<z0
 		{
 			i1 = 0;
 			j1 = 0;
@@ -482,7 +482,7 @@ double SimplexNoise3D(double xin, double yin, double zin)
 	}
 	else
 	{ // x0<y0
-		if (y0 < z0)
+		if (y0 < z0)			// x0 < y0 < z0
 		{
 			i1 = 0;
 			j1 = 0;
@@ -491,7 +491,7 @@ double SimplexNoise3D(double xin, double yin, double zin)
 			j2 = 1;
 			k2 = 1;
 		} // Z Y X order
-		else if (x0 < z0)
+		else if (x0 < z0)		// x0 < y0,z0
 		{
 			i1 = 0;
 			j1 = 1;
@@ -500,7 +500,7 @@ double SimplexNoise3D(double xin, double yin, double zin)
 			j2 = 1;
 			k2 = 1;
 		} // Y Z X order
-		else
+		else					// x0<y0, x0>=z0
 		{
 			i1 = 0;
 			j1 = 1;
