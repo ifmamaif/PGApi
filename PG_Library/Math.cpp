@@ -76,18 +76,18 @@ double Dot4(const int g[], double x, double y, double z, double w)
 	return g[0] * x + g[1] * y + g[2] * z + g[3] * w;
 }
 
-//double DotN(int nDim, ...)
-//{
-//    double result = 0;
-//
-//	va_list list;
-//	va_start(list, nDim);
-//	for (int i = 0; i < nDim; i++)
-//	{
-//        result = result+  (va_arg(list, double));
-//	}
-//	va_end(list);
-//}
+double DotN(int nDim, const int g[]...)
+{
+    double result = 0;
+	va_list list;
+	va_start(list, nDim);
+	for (int i = 0; i < nDim; i++)
+	{
+        result = result + (g[i] * (va_arg(list, double)));
+	}
+	va_end(list);
+    return result;
+}
 
 int CheckBitStatus(int number, int bitPosition)
 {
