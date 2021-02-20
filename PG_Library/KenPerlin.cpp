@@ -652,11 +652,20 @@ double PerlinNoiseND(int nDim, ...)
 	// Constants that we will use along the function
 	const int N_DIM_MINUS_ONE = nDim - 1;
 	const int N_DIM_PLUS_ONE = nDim + 1;
-	const int NUMBER_OF_GRADIENT_INDICES = 1 << nDim;                        // the number of gradient indices is = (2^number_of_dimensions)    
-	const int NUMBER_OF_EDGES = nDim * (1 << N_DIM_MINUS_ONE);                // the number of edges is = (number_of_dimensions * (2^(number_of_dimensions - 1)))
+	const int NUMBER_OF_GRADIENT_INDICES = 1 << nDim;                       // the number of gradient indices is = (2^number_of_dimensions)    
+	const int NUMBER_OF_EDGES = nDim * (1 << N_DIM_MINUS_ONE);              // the number of edges is = (number_of_dimensions * (2^(number_of_dimensions - 1)))
+
+	// Variables and arrays
+	double* input = new double[nDim];                                       // Get the input from the function with unknown number of parameters	
+	int* unitGridCells = new int[nDim];                                     // Find unit grid cell containing point
+	int* gradientIndices = new int[NUMBER_OF_GRADIENT_INDICES];             // Calculate a set of eight hashed gradient indices		
+	int* grad1 = new int[N_DIM_MINUS_ONE];                                  // Calculate the gradient helper for noise contributions
+	int* grad3 = new int[NUMBER_OF_EDGES * nDim];                           // Calculate the gradient helper for noise contributions
+	double* noiseContributions = new double[NUMBER_OF_GRADIENT_INDICES];    // Calculate noise contributions from each of the eight corners
+	double* curves = new double[nDim];                                      // Compute the fade curve value for each of x, y, z
+	int interpolations = NUMBER_OF_GRADIENT_INDICES / 2;                    // Interpolate along x the contributions from each of the corners
 
 	// Get the input from the function with unknown number of parameters
-	double* input = new double[nDim];
 	va_list list;
 	va_start(list, nDim);
 	for (int i = 0; i < nDim; i++)
@@ -666,7 +675,6 @@ double PerlinNoiseND(int nDim, ...)
 	va_end(list);
 
 	// Find unit grid cell containing point
-	int* unitGridCells = new int[nDim];
 	for (int i = 0; i < nDim; i++)
 	{
 		// get the integer part from the input
@@ -688,7 +696,6 @@ double PerlinNoiseND(int nDim, ...)
 	}
 
 	// Calculate a set of eight hashed gradient indices	
-	int* gradientIndices = new int[NUMBER_OF_GRADIENT_INDICES];
 	for (int i = 0; i < NUMBER_OF_GRADIENT_INDICES; i++)
 	{
 		// each index will have the value = (permutation[x + 1_or_0(dependening_of_Index_important_bit) + permutation[y + 1_or_0 + permutation[z + 1_or_0 + ...]]] % number_Of_Indices)
@@ -706,8 +713,6 @@ double PerlinNoiseND(int nDim, ...)
 
 	// Calculate the gradient helper for noise contributions
 	// make an exception for nDim = 1;
-	int* grad1 = new int[N_DIM_MINUS_ONE];
-	int* grad3 = new int[NUMBER_OF_EDGES * nDim];
 	for (int i = 0; i < NUMBER_OF_EDGES; i++)
 	{		
 		for (int j = 0; j < N_DIM_MINUS_ONE; j++)
@@ -724,7 +729,6 @@ double PerlinNoiseND(int nDim, ...)
 	}
 	
 	// Calculate noise contributions from each of the eight corners
-	double* noiseContributions = new double[NUMBER_OF_GRADIENT_INDICES];
 	for (int i = 0; i < NUMBER_OF_GRADIENT_INDICES; i++)
 	{
 		noiseContributions[i] = 0;
@@ -736,14 +740,12 @@ double PerlinNoiseND(int nDim, ...)
 	}
 
 	// Compute the fade curve value for each of x, y, z
-	double* curves = new double[nDim];
 	for (int i = 0; i < nDim; i++)
 	{
 		curves[i] = Fade(input[i]);
 	}
 
 	// Interpolate along x the contributions from each of the corners
-	int interpolations = NUMBER_OF_GRADIENT_INDICES / 2;
 	for (int i = 0; i < nDim; i++)
 	{
 		for (int j = 0; j < interpolations; j++)
