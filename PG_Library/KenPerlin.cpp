@@ -692,7 +692,6 @@ double PerlinNoiseND(int nDim, ...)
 	//int numberOfGradientIndices = 1 << nDim;
 	int* gradientIndices = new int[NUMBER_OF_GRADIENT_INDICES];
 	// the number of edges is = (number_of_dimensions * (2^(number_of_dimensions - 1)))
-	int numberOfEdges = (int)(nDim * (1 << N_DIM_MINUS_ONE));
 	for (int i = 0; i < NUMBER_OF_GRADIENT_INDICES; i++)
 	{
 		// each index will have the value = (permutation[x + 1_or_0(dependening_of_Index_important_bit) + permutation[y + 1_or_0 + permutation[z + 1_or_0 + ...]]] % number_Of_Indices)
@@ -705,14 +704,14 @@ double PerlinNoiseND(int nDim, ...)
 				gradientIndices[i]];
 	
 		}
-		gradientIndices[i] %= numberOfEdges;
+		gradientIndices[i] %= NUMBER_OF_EDGES;
 	}
 
 	// Calculate the gradient helper for noise contributions
 	// make an exception for nDim = 1;
 	int* grad1 = new int[N_DIM_MINUS_ONE];
-	int* grad3 = new int[numberOfEdges * nDim];
-	for (int i = 0; i < numberOfEdges; i++)
+	int* grad3 = new int[NUMBER_OF_EDGES * nDim];
+	for (int i = 0; i < NUMBER_OF_EDGES; i++)
 	{		
 		for (int j = 0; j < N_DIM_MINUS_ONE; j++)
 		{
