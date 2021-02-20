@@ -9,7 +9,7 @@
 
 #include <time.h>
 
-bool TestPerlinNDim()
+int TestPerlinNDim()
 {
     for (int i = 0; i < 100000; i++)
     {
@@ -17,24 +17,15 @@ bool TestPerlinNDim()
         double y = Randf()*100;
         double z = Randf()*100;
 
-		//const double* result1 = ClassicPerlinNoise3D(x, y, z);
-		//const double* result2 = PerlinNoiseND(3, x, y, z);
-		//for (int j = 0; j < 8; j++)
-		//{
-		//	if (result1[j] != result2[j])
-		//	{
-		//		return false;
-		//	}
-		//}
 
 		double result1 = ClassicPerlinNoise3D(x, y, z);
 		double result2 = PerlinNoiseND(3, x, y, z);
 		if (result1 != result2)
 		{
-			return false;
+			return 0;
 		}
     }
-    return true;
+    return 1;
 }
 
 
@@ -44,7 +35,7 @@ int main(int argc,char* argv[])
     //auto** da = GenerateMazeWorm(4, 4, 32);
     //ShowMazeWorm(da, 8, 8);
 
-    std::cout << TestPerlinNDim()? 1:0;
+    std::cout << TestPerlinNDim();
 
 
     //system("pause");
