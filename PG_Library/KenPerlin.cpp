@@ -696,7 +696,7 @@ double PerlinNoiseND(int nDim, ...)
 		gradientIndices[i] = 0;
 		for (int dim = 0; dim < nDim; dim++)
 		{
-			gradientIndices[i] = permutation[unitGridCells[2 - dim] +
+			gradientIndices[i] = permutation[unitGridCells[N_DIM_MINUS_ONE - dim] +
 				CheckBitStatus(i, dim) +
 				gradientIndices[i]];
 	
