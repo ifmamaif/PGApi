@@ -649,6 +649,12 @@ double PerlinNoiseND(int nDim, ...)
 		return 0;
 	}
 
+	// Constants that we will use along the function
+	const int N_DIM_MINUS_ONE = nDim - 1;
+	const int N_DIM_PLUS_ONE = nDim + 1;
+	const int NUMBER_OF_GRADIENT_INDICES = 1 << nDim;                        // the number of gradient indices is = (2^number_of_dimensions)    
+	const int NUMBER_OF_EDGES = nDim * (1 << N_DIM_MINUS_ONE);                // the number of edges is = (number_of_dimensions * (2^(number_of_dimensions - 1)))
+
 	// Get the input from the function with unknown number of parameters
 	double* input = new double[nDim];
 	va_list list;
@@ -683,11 +689,11 @@ double PerlinNoiseND(int nDim, ...)
 
 	// Calculate a set of eight hashed gradient indices
 	// the number of gradient indices is = (2^number_of_dimensions)
-	int numberOfGradientIndices = 1 << nDim;
-	int* gradientIndices = new int[numberOfGradientIndices];
+	//int numberOfGradientIndices = 1 << nDim;
+	int* gradientIndices = new int[NUMBER_OF_GRADIENT_INDICES];
 	// the number of edges is = (number_of_dimensions * (2^(number_of_dimensions - 1)))
 	int numberOfEdges = (int)(nDim * (1 << (nDim - 1)));
-	for (int i = 0; i < numberOfGradientIndices; i++)
+	for (int i = 0; i < NUMBER_OF_GRADIENT_INDICES; i++)
 	{
 		// each index will have the value = (permutation[x + 1_or_0(dependening_of_Index_important_bit) + permutation[y + 1_or_0 + permutation[z + 1_or_0 + ...]]] % number_Of_Indices)
 		// x,y,z are the input from a point of 3rd Dimension.
@@ -722,8 +728,8 @@ double PerlinNoiseND(int nDim, ...)
 	}
 	
 	// Calculate noise contributions from each of the eight corners
-	double* noiseContributions = new double[numberOfGradientIndices];
-	for (int i = 0; i < numberOfGradientIndices; i++)
+	double* noiseContributions = new double[NUMBER_OF_GRADIENT_INDICES];
+	for (int i = 0; i < NUMBER_OF_GRADIENT_INDICES; i++)
 	{
 		noiseContributions[i] = 0;
 		for (int j = 0; j < nDim; j++)
@@ -741,7 +747,7 @@ double PerlinNoiseND(int nDim, ...)
 	}
 
 	// Interpolate along x the contributions from each of the corners
-	int interpolations = numberOfGradientIndices / 2;
+	int interpolations = NUMBER_OF_GRADIENT_INDICES / 2;
 	for (int i = 0; i < nDim; i++)
 	{
 		for (int j = 0; j < interpolations; j++)
