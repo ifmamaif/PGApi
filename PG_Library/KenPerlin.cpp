@@ -659,7 +659,6 @@ double PerlinNoiseND(int nDim, ...)
 	double* input = new double[nDim];                                       // Get the input from the function with unknown number of parameter
 	int* unitGridCells = new int[nDim];                                     // Find unit grid cell containing point
 	int* gradientIndices = new int[NUMBER_OF_GRADIENT_INDICES];             // Calculate a set of eight hashed gradient indices
-	int* grad1 = new int[N_DIM_MINUS_ONE];                                  // Calculate the gradient helper for noise contributions
 	int* grad3 = new int[NUMBER_OF_EDGES * nDim];                           // Calculate the gradient helper for noise contributions
 	double* noiseContributions = new double[NUMBER_OF_GRADIENT_INDICES];    // Calculate noise contributions from each of the eight corners
 	
@@ -701,7 +700,7 @@ double PerlinNoiseND(int nDim, ...)
 		gradientIndices[i] = 0;
 		for (int dim = 0; dim < nDim; dim++)
 		{
-			gradientIndices[i] = permutation[unitGridCells[(N_DIM_MINUS_ONE - dim)] +
+			gradientIndices[i] = permutation[(unitGridCells[(N_DIM_MINUS_ONE - dim)]) +
 				CheckBitStatus(i, dim) +
 				gradientIndices[i]];
 	
@@ -712,17 +711,12 @@ double PerlinNoiseND(int nDim, ...)
 	// Calculate the gradient helper for noise contributions
 	// make an exception for nDim = 1;
 	for (int i = 0; i < NUMBER_OF_EDGES; i++)
-	{		
-		for (int j = 0; j < N_DIM_MINUS_ONE; j++)
-		{
-			grad1[j] = CheckBitStatus(i, nDim - 2 - j) == 0 ? 1 : -1;
-		}
-
+	{
 		int k = 0;
 		int perm = i / N_DIM_PLUS_ONE;
 		for (int j = 0; j < nDim; j++)
 		{
-			grad3[i * nDim + j] = perm == j ? 0 : grad1[k++];
+			grad3[i * nDim + j] = perm == j ? 0 : CheckBitStatus(i, nDim - 2 - (k++)) == 0 ? 1 : -1;
 		}
 	}
 	
@@ -759,7 +753,6 @@ double PerlinNoiseND(int nDim, ...)
 	delete[] input;
 	delete[] unitGridCells;
 	delete[] gradientIndices;
-	delete[] grad1;
 	delete[] grad3;
 	delete[] noiseContributions;
 
