@@ -754,5 +754,14 @@ double PerlinNoiseND(int nDim, ...)
 		}
 		interpolations /= 2;
 	}
-	return noiseContributions[0];
-}
+	double result = noiseContributions[0];
+
+	delete[] input;
+	delete[] unitGridCells;
+	delete[] gradientIndices;
+	delete[] grad1;
+	delete[] grad3;
+	delete[] noiseContributions;
+	delete[] curves;
+
+	return result;
