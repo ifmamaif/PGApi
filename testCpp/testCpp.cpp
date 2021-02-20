@@ -17,7 +17,6 @@ int TestPerlinNDim()
         double y = Randf()*100;
         double z = Randf()*100;
 
-
 		double result1 = ClassicPerlinNoise3D(x, y, z);
 		double result2 = PerlinNoiseND(3, x, y, z);
 		if (result1 != result2)
