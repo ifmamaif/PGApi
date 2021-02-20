@@ -687,11 +687,8 @@ double PerlinNoiseND(int nDim, ...)
 		unitGridCells[i] &= 255;
 	}
 
-	// Calculate a set of eight hashed gradient indices
-	// the number of gradient indices is = (2^number_of_dimensions)
-	//int numberOfGradientIndices = 1 << nDim;
+	// Calculate a set of eight hashed gradient indices	
 	int* gradientIndices = new int[NUMBER_OF_GRADIENT_INDICES];
-	// the number of edges is = (number_of_dimensions * (2^(number_of_dimensions - 1)))
 	for (int i = 0; i < NUMBER_OF_GRADIENT_INDICES; i++)
 	{
 		// each index will have the value = (permutation[x + 1_or_0(dependening_of_Index_important_bit) + permutation[y + 1_or_0 + permutation[z + 1_or_0 + ...]]] % number_Of_Indices)
@@ -719,7 +716,7 @@ double PerlinNoiseND(int nDim, ...)
 		}
 
 		int k = 0;
-		int perm = i / (nDim + 1);
+		int perm = i / N_DIM_PLUS_ONE;
 		for (int j = 0; j < nDim; j++)
 		{
 			grad3[i * nDim + j] = perm == j ? 0 : grad1[k++];
