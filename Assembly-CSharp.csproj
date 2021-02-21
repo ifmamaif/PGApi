@@ -65,16 +65,15 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\BasicScripts\GenericBehaviour.cs" />
     <Compile Include="Assets\Scripts\Demos\Atestat.cs" />
+    <Compile Include="Assets\Scripts\Demos\LevelGeneration.cs" />
+    <Compile Include="Assets\Scripts\Demos\MDS.cs" />
+    <Compile Include="Assets\Scripts\Demos\MeshGenerator.cs" />
     <Compile Include="Assets\Scripts\Demos\PerlinNoisePreview.cs" />
     <Compile Include="Assets\Scripts\MainScene.cs" />
-    <Compile Include="Assets\Scripts\Mds\MDS.cs" />
-    <Compile Include="Assets\Scripts\MeshGenerator\MeshGenerator.cs" />
     <Compile Include="Assets\Scripts\PGApi\Cell.cs" />
     <Compile Include="Assets\Scripts\PGApi\KenPerlin.cs" />
     <Compile Include="Assets\Scripts\PGApi\MazeDumb.cs" />
     <Compile Include="Assets\Scripts\PGApi\PGApi.cs" />
-    <Compile Include="Assets\Scripts\RoomGenerator\LevelGeneration.cs" />
-    <Compile Include="Assets\Scripts\RoomGenerator\MapSpriteSelector.cs" />
     <Reference Include="UnityEngine">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.13f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>

@@ -1,6 +1,4 @@
 ﻿using UnityEngine;  //	GameObject , Color
-using System.Runtime.InteropServices;
-using System;
 
 public class MDS : GenericBehaviour
 {

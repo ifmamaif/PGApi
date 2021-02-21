@@ -1,5 +1,4 @@
-﻿
-namespace PGApi
+﻿namespace PGApi
 {
     public class Cell
     {

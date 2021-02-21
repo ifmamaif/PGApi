@@ -1,12 +1,10 @@
-﻿
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
 
 namespace PGApi
 {
     public static class PGApi
     {
-
         [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr Generate2DMap(int width, int height, float scale, float offsetX, float offsetY);
 
@@ -24,6 +22,18 @@ namespace PGApi
 
         [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
         public static extern int RandBetween(int minInclusive, int maxExclusive);
+
+        [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
+        public static extern bool OutSidei(int x1, int y1, int x2, int y2);
+
+        [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int RoundToInt(float f);
+
+        [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
+        public static extern float Lerpf(float a0, float a1, float weight);
+
+        [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
+        public static extern float Randf();
 
     }
 }

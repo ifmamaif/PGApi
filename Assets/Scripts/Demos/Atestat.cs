@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;  //  GameObject , Color
-using System.Runtime.InteropServices;
 
 public class Atestat : GenericBehaviour
 {
