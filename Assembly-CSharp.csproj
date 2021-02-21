@@ -72,6 +72,7 @@
     <Compile Include="Assets\Scripts\PGApi\Cell.cs" />
     <Compile Include="Assets\Scripts\PGApi\KenPerlin.cs" />
     <Compile Include="Assets\Scripts\PGApi\MazeDumb.cs" />
+    <Compile Include="Assets\Scripts\PGApi\PGApi.cs" />
     <Compile Include="Assets\Scripts\RoomGenerator\LevelGeneration.cs" />
     <Compile Include="Assets\Scripts\RoomGenerator\MapSpriteSelector.cs" />
     <Reference Include="UnityEngine">

@@ -5,9 +5,6 @@ using UnityEngine;
 
 public static class MazeDumb
 {
-	[DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
-	private static extern int RandBetween(int minInclusive, int maxExclusive);
-
 	public static int[,] Generate(int width, int height)
 	{
 		int[,] result = new int[height, width];
@@ -17,7 +14,7 @@ public static class MazeDumb
 		{
 			for (int j = 0; j < width; j++)
 			{
-				result[i, j] = (RandBetween(1, 101) < 66) ? 1 : 0;
+				result[i, j] = (PGApi.PGApi.RandBetween(1, 101) < 66) ? 1 : 0;
 			}
 		}
 		result[playerPos.y, playerPos.x] = 1;

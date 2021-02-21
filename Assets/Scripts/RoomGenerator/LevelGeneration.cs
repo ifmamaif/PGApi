@@ -36,7 +36,7 @@ public class LevelGeneration : GenericBehaviour
             roomWhiteObj = (UnityEngine.GameObject)Resources.Load(PATH_SPRITE, typeof(GameObject));
         }
 
-        IntPtr bufferMaze = PGApi.Perlin.GenerateMazeWorm(WORLD_SIZE.x, WORLD_SIZE.y, NUMBER_OF_ROOMS);
+        IntPtr bufferMaze = PGApi.PGApi.GenerateMazeWorm(WORLD_SIZE.x, WORLD_SIZE.y, NUMBER_OF_ROOMS);
         DrawMap(bufferMaze); //instantiates objects to make up a map
         //DeleteMazeWorm(bufferMaze, WORLD_SIZE.x * 2, WORLD_SIZE.y * 2);
     }
@@ -46,7 +46,7 @@ public class LevelGeneration : GenericBehaviour
         for (int i = 0; i < WORLD_SIZE.x * 2; i++)
             for (int j = 0; j < WORLD_SIZE.y * 2; j++)
             {
-                var room = PGApi.Perlin.GetValueMazeWorm(bufferMaze,i, j);
+                var room = PGApi.PGApi.GetValueMazeWorm(bufferMaze,i, j);
                 if (room == NO_DOORS)
                 {
                     continue; //skip where there is no room

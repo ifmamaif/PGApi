@@ -5,21 +5,6 @@ namespace PGApi
 {
 	public static class Perlin
 	{
-        [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr Generate2DMap(int width, int height, float scale, float offsetX, float offsetY);
-
-        [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr GenerateMazeWorm(int worldSizeX, int worldSizeY, int numberOfRooms);
-
-        [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
-		public static extern void DeleteMazeWorm(IntPtr buffer, int x, int y);
-
-        [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
-		public static extern int GetValueMazeWorm(IntPtr buffer, int x, int y);
-
-        [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
-		public static extern double PerlinNoise2DUnity(double x, double y);
-
         public static double[,] Generate2DMapUnity(int width, int height, float scale, float offsetX, float offsetY)
 		{
 			double[,] noiseMap = new double[width, height];
@@ -29,7 +14,7 @@ namespace PGApi
 				{
 					double xCoord = (double)x / width * scale + offsetX;
 					double yCoord = (double)y / height * scale + offsetY;
-					noiseMap[x, y] = PerlinNoise2DUnity(xCoord, yCoord);
+					noiseMap[x, y] = PGApi.PerlinNoise2DUnity(xCoord, yCoord);
 				}
 			}
 			return noiseMap;
