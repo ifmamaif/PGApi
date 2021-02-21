@@ -12,15 +12,6 @@ public class LevelGeneration : GenericBehaviour
     private const int NUMBER_OF_ROOMS = 32;
     private const string PATH_SPRITE = "Prefabs/MapSprite";
 
-    [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
-    private static extern IntPtr GenerateMazeWorm(int worldSizeX, int worldSizeY, int numberOfRooms);
-
-    [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
-    private static extern void DeleteMazeWorm(IntPtr buffer, int x, int y);
-
-    [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
-    private static extern int GetValueMazeWorm(IntPtr buffer, int x, int y);
-
     private const char NO_DOORS = (char)0;
     private const char DOOR_Possible = (char)1;
     private const char DOOR_BOTTOM = (char)2;
@@ -45,7 +36,7 @@ public class LevelGeneration : GenericBehaviour
             roomWhiteObj = (UnityEngine.GameObject)Resources.Load(PATH_SPRITE, typeof(GameObject));
         }
 
-        IntPtr bufferMaze = GenerateMazeWorm(WORLD_SIZE.x, WORLD_SIZE.y, NUMBER_OF_ROOMS);
+        IntPtr bufferMaze = PGApi.Perlin.GenerateMazeWorm(WORLD_SIZE.x, WORLD_SIZE.y, NUMBER_OF_ROOMS);
         DrawMap(bufferMaze); //instantiates objects to make up a map
         //DeleteMazeWorm(bufferMaze, WORLD_SIZE.x * 2, WORLD_SIZE.y * 2);
     }
@@ -55,7 +46,7 @@ public class LevelGeneration : GenericBehaviour
         for (int i = 0; i < WORLD_SIZE.x * 2; i++)
             for (int j = 0; j < WORLD_SIZE.y * 2; j++)
             {
-                var room = GetValueMazeWorm(bufferMaze,i, j);
+                var room = PGApi.Perlin.GetValueMazeWorm(bufferMaze,i, j);
                 if (room == NO_DOORS)
                 {
                     continue; //skip where there is no room

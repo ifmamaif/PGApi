@@ -1,13 +1,26 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 
 namespace PGApi
 {
 	public static class Perlin
 	{
-		[DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
-		private static extern double PerlinNoise2DUnity(double x, double y);
+        [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr Generate2DMap(int width, int height, float scale, float offsetX, float offsetY);
 
-		public static double[,] Generate2DMap(int width, int height, float scale, float offsetX, float offsetY)
+        [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr GenerateMazeWorm(int worldSizeX, int worldSizeY, int numberOfRooms);
+
+        [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
+		public static extern void DeleteMazeWorm(IntPtr buffer, int x, int y);
+
+        [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
+		public static extern int GetValueMazeWorm(IntPtr buffer, int x, int y);
+
+        [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
+		public static extern double PerlinNoise2DUnity(double x, double y);
+
+        public static double[,] Generate2DMapUnity(int width, int height, float scale, float offsetX, float offsetY)
 		{
 			double[,] noiseMap = new double[width, height];
 			for (int y = 0; y < height; y++)

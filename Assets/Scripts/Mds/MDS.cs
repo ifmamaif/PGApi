@@ -15,12 +15,6 @@ public class MDS : GenericBehaviour
 	public float perlinOffsetX = 0f;
 	public float perlinOffsetY = 0f;
 
-	[DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
-	private static extern IntPtr Generate2DMap(int width, int height, float scale, float offsetX, float offsetY);
-
-	[DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
-	private static extern double PerlinNoise2DUnity(double x, double y);
-
 	[System.Serializable]
 	public struct TerrainType
 	{
@@ -172,7 +166,7 @@ public class MDS : GenericBehaviour
 	public Color[] GeneratecolorMap()
 	{
 		double[,] noiseMap = usePGApi ?
-			PGApi.Perlin.Generate2DMap(perlinWidth, perlinHeight, perlinScale, perlinOffsetX, perlinOffsetY) :
+			PGApi.Perlin.Generate2DMapUnity(perlinWidth, perlinHeight, perlinScale, perlinOffsetX, perlinOffsetY) :
 			GenerateNoiseMap();
 
 		Color[] colorMap = new Color[perlinWidth * perlinHeight];
@@ -210,8 +204,7 @@ public class MDS : GenericBehaviour
 
 	public static Color HexToColor(string hex)
 	{
-		Color myColor = new Color();
-		ColorUtility.TryParseHtmlString(hex, out myColor);
+		ColorUtility.TryParseHtmlString(hex, out Color myColor);
 		return myColor;
 	}
 
