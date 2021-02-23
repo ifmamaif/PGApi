@@ -9,6 +9,8 @@ public class Atestat : GenericBehaviour
 	private GameObject[,] m_TerrainTexture = null;
 	private const float TEXTURE_SIZE = 0.64f;
 
+	public override void Constructor() { }
+
 	public override void Generate()
 	{
 		int[,] m_TerrainValue = MazeDumb.Generate(m_Width, m_Height);

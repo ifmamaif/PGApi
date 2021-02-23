@@ -17,7 +17,7 @@ public class LevelGeneration : GenericBehaviour
     private const char DOOR_TOP = (char)8;
     private const char DOOR_RIGHT = (char)16;
 
-    public override void Start()
+    public override void Constructor()
     {
         roomWhiteObj = (GameObject)Resources.Load(PATH_SPRITE, typeof(GameObject));
         Generate();
@@ -34,8 +34,8 @@ public class LevelGeneration : GenericBehaviour
             roomWhiteObj = (UnityEngine.GameObject)Resources.Load(PATH_SPRITE, typeof(GameObject));
         }
 
-        IntPtr bufferMaze = PGApi.PGApi.GenerateMazeWorm(WORLD_SIZE.x, WORLD_SIZE.y, NUMBER_OF_ROOMS);
-        DrawMap(bufferMaze); //instantiates objects to make up a map
+        //IntPtr bufferMaze = PGApi.PGApi.GenerateMazeWorm(WORLD_SIZE.x, WORLD_SIZE.y, NUMBER_OF_ROOMS);
+        //DrawMap(bufferMaze); //instantiates objects to make up a map
         //DeleteMazeWorm(bufferMaze, WORLD_SIZE.x * 2, WORLD_SIZE.y * 2);
     }
 

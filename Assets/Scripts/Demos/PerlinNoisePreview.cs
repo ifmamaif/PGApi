@@ -12,7 +12,7 @@ public class PerlinNoisePreview : GenericBehaviour
     private GameObject randomObject;
     
     // Start is called before the first frame update
-    public new void Start()
+    public override void Constructor()
     {
         perlinObject = GameObject.CreatePrimitive(PrimitiveType.Quad);
         randomObject = GameObject.CreatePrimitive(PrimitiveType.Quad);
@@ -33,7 +33,7 @@ public class PerlinNoisePreview : GenericBehaviour
         GenerateTextureRandom();
     }
 
-    public new void Generate()
+    public override void Generate()
     {
         Renderer renderer = perlinObject.GetComponent<MeshRenderer>();
         Texture2D texture = new Texture2D(width, height);

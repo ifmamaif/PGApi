@@ -18,7 +18,7 @@ public class MeshGenerator : GenericBehaviour
     public GameObject parent;
 
     // Start is called before the first frame update
-    public override void Start()
+    public override void Constructor()
     {
         if (terrain != null)
         {

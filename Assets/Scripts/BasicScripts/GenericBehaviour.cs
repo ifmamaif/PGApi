@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-public class GenericBehaviour : MonoBehaviour
+public abstract class GenericBehaviour : MonoBehaviour
 {
-    public virtual void Start() { }
+    public abstract void Constructor();
 
-    public virtual void Generate() { }
+    public abstract void Generate();
 }

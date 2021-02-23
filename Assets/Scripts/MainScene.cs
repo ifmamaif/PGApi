@@ -93,6 +93,8 @@ public class MainScene : MonoBehaviour
         demo_Level = NewDemo<PerlinNoisePreview>("Perlin Preview");
         demo_Level.transform.localScale = new Vector3(88, 88, 1);
 
+        NewDemo<Heart>("Hearth Preview");
+
         ActivateDemo(listOfDemos[0].Key);
     }
 
@@ -126,7 +128,7 @@ public class MainScene : MonoBehaviour
         var newComponentScript = newObject.AddComponent<T>();
 
         listOfDemos.Add(new KeyValuePair<GameObject, ResetLevelFunction>(newObject, () => { newComponentScript.Generate(); }));
-        newComponentScript.Start();
+        newComponentScript.Constructor();
 
         return newObject;
     }

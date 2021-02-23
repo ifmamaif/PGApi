@@ -32,7 +32,7 @@ public class MDS : GenericBehaviour
 
 
 	// Use this for initialization
-	public override void Start()
+	public override void Constructor()
 	{
 		perlinWidth = 90;
 		perlinHeight = 90;

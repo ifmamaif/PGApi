@@ -18,6 +18,9 @@ namespace PGApi
         public static extern int GetValueMazeWorm(IntPtr buffer, int x, int y);
 
         [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
+        public static extern double PerlinNoiseUnity(double x);
+
+        [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
         public static extern double PerlinNoise2DUnity(double x, double y);
 
         [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
