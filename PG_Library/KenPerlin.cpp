@@ -330,25 +330,16 @@ static const int simplex[64][4] =
 	{2,1,0,3},{0,0,0,0},{0,0,0,0},{0,0,0,0},{3,1,0,2},{0,0,0,0},{3,2,0,1},{3,2,1,0}
 };
 
-// Calculate the contribution from the three corners
-double ContributionFromCorner3(const int gradient[], double x, double y)
+double ContributionFromCorners(const int nInput, const int gradient[], ...)
 {
-	double t = 0.5 - x * x - y * y;
-
-	if (t < 0)
-	{
-		return 0.0;
-	}
-
-	t *= t;
-	return t * t * Dot2(gradient, x, y);
-}
-
-// Calculate the contribution from the four corners
-double ContributionFromCorner4(const int gradient[], double x, double y, double z)
-{
+	double* input = new double[nInput];
+	VA_LIST_GET(nInput, double, input);
 	// The scalar should be 0.5, not 0.6, else the noise is not continuous at simplex boundaries.
-	double t = 0.5 - x * x - y * y - z * z;
+	double t = 0.5;
+	for (int i = 0; i < nInput; i++)
+	{
+		t -= input[i] * input[i];
+	}
 
 	if (t < 0)
 	{
@@ -356,22 +347,9 @@ double ContributionFromCorner4(const int gradient[], double x, double y, double 
 	}
 
 	t *= t;
-	return t * t * Dot3(gradient, x, y, z);
-}
-
-// Calculate the contribution from the five corners
-double ContributionFromCorner5(const int gradient[], double x, double y, double z, double w)
-{
-	// The scalar should be 0.5, not 0.6, else the noise is not continuous at simplex boundaries.
-	double t = 0.5 - x * x - y * y - z * z - w * w;
-
-	if (t < 0)
-	{
-		return 0.0;
-	}
-
-	t *= t;
-	return t * t * Dot4(gradient, x, y, z, w);
+	double result = t * t * DotArray(nInput, gradient, input);
+	delete[] input;
+	return result;
 }
 
 // 2D simplex noise
@@ -431,9 +409,9 @@ double SimplexNoise2D(double xin, double yin)
 	// Noise contributions from the three corners
 	double n0, n1, n2;
 	// Calculate the contribution from the three corners
-	n0 = ContributionFromCorner3(grad4[gi0], x0, y0);
-	n1 = ContributionFromCorner3(grad4[gi1], x1, y1);
-	n2 = ContributionFromCorner3(grad4[gi2], x2, y2);
+	n0 = ContributionFromCorners(2,grad4[gi0], x0, y0);
+	n1 = ContributionFromCorners(2,grad4[gi1], x1, y1);
+	n2 = ContributionFromCorners(2,grad4[gi2], x2, y2);
 
 	// Add contributions from each corner to get the const noise value.
 	// The result is scaled to return values in the interval [-1,1].
@@ -533,10 +511,10 @@ double SimplexNoise3D(double xin, double yin, double zin)
 	// Noise contributions from the four corners
 	double n0, n1, n2, n3;
 	// Calculate the contribution from the four corners	
-	n0 = ContributionFromCorner4(grad3[gi0], x0, y0, z0);
-	n1 = ContributionFromCorner4(grad3[gi1], x1, y1, z1);
-	n2 = ContributionFromCorner4(grad3[gi2], x2, y2, z2);
-	n3 = ContributionFromCorner4(grad3[gi3], x3, y3, z3);
+	n0 = ContributionFromCorners(3,g_GRAD3[gi0], x0, y0, z0);
+	n1 = ContributionFromCorners(3,g_GRAD3[gi1], x1, y1, z1);
+	n2 = ContributionFromCorners(3,g_GRAD3[gi2], x2, y2, z2);
+	n3 = ContributionFromCorners(3,g_GRAD3[gi3], x3, y3, z3);
 
 	// Add contributions from each corner to get the const noise value.
 	// The result is scaled to stay just inside [-1,1]
@@ -647,11 +625,11 @@ double SimplexNoise4D(double x, double y, double z, double w) {
 	// Noise contributions from the five corners
 	double n0, n1, n2, n3, n4; 
 	// Calculate the contribution from the five corners
-	n0 = ContributionFromCorner5(grad4[gi0], x0, y0, z0, w0);
-	n1 = ContributionFromCorner5(grad4[gi1], x1, y1, z1, w1);
-	n2 = ContributionFromCorner5(grad4[gi2], x2, y2, z2, w2);
-	n3 = ContributionFromCorner5(grad4[gi3], x3, y3, z3, w3);
-	n4 = ContributionFromCorner5(grad4[gi4], x4, y4, z4, w4);
+	n0 = ContributionFromCorners(4, grad4[gi0], x0, y0, z0, w0);
+	n1 = ContributionFromCorners(4, grad4[gi1], x1, y1, z1, w1);
+	n2 = ContributionFromCorners(4, grad4[gi2], x2, y2, z2, w2);
+	n3 = ContributionFromCorners(4, grad4[gi3], x3, y3, z3, w3);
+	n4 = ContributionFromCorners(4, grad4[gi4], x4, y4, z4, w4);
 
 	// Sum up and scale the result to cover the range [-1,1]
 	return 27.0 * (n0 + n1 + n2 + n3 + n4);
