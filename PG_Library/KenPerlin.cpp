@@ -2,61 +2,10 @@
 #include "KenPerlin.h"
 
 #include "Math.h"
+#include "Constants.h"
+#include "Allocation.h"
 
 
-// Hash lookup table as defined by Ken Perlin.  This is a randomly
-// arranged array of all numbers from 0-255 inclusive.
-// Doubled permutation to avoid overflow
-static const int permutation[] =
-{
-	// first 256 values
-	151,	160,	137,	91,		90,		15,		131,	13,		201,	95,		96,		53,		194,	233,	7,		225,
-	140,	36,		103,	30,		69,		142,	8,		99,		37,		240,	21,		10,		23,		190,	6,		148,
-	247,	120,	234,	75,		0,		26,		197,	62,		94,		252,	219,	203,	117,	35,		11,		32,
-	57,		177,	33,		88,		237,	149,	56,		87,		174,	20,		125,	136,	171,	168,	68,		175,
-	74,		165,	71,		134,	139,	48,		27,		166,	77,		146,	158,	231,	83,		111,	229,	122,
-	60,		211,	133,	230,	220,	105,	92,		41,		55,		46,		245,	40,		244,	102,	143,	54,
-	65,		25,		63,		161,	1,		216,	80,		73,		209,	76,		132,	187,	208,	89,		18,		169,
-	200,	196,	135,	130,	116,	188,	159,	86,		164,	100,	109,	198,	173,	186,	3,		64,
-	52,		217,	226,	250,	124,	123,	5,		202,	38,		147,	118,	126,	255,	82,		85,		212,
-	207,	206,	59,		227,	47,		16,		58,		17,		182,	189,	28,		42,		223,	183,	170,	213,
-	119,	248,	152,	2,		44,		154,	163,	70,		221,	153,	101,	155,	167,	43,		172,	9,
-	129,	22,		39,		253,	19,		98,		108,	110,	79,		113,	224,	232,	178,	185,	112,	104,
-	218,	246,	97,		228,	251,	34,		242,	193,	238,	210,	144,	12,		191,	179,	162,	241,
-	81,		51,		145,	235,	249,	14,		239,	107,	49,		192,	214,	31,		181,	199,	106,	157,
-	184,	84,		204,	176,	115,	121,	50,		45,		127,	4,		150,	254,	138,	236,	205,	93,
-	222,	114,	67,		29,		24,		72,		243,	141,	128,	195,	78,		66,		215,	61,		156,	180,
-   // To remove the need for index wrapping, double the permutation table length
-   // duplicate 256 values
-	151,	160,	137,	91,		90,		15,		131,	13,		201,	95,		96,		53,		194,	233,	7,		225,
-	140,	36,		103,	30,		69,		142,	8,		99,		37,		240,	21,		10,		23,		190,	6,		148,
-	247,	120,	234,	75,		0,		26,		197,	62,		94,		252,	219,	203,	117,	35,		11,		32,
-	57,		177,	33,		88,		237,	149,	56,		87,		174,	20,		125,	136,	171,	168,	68,		175,
-	74,		165,	71,		134,	139,	48,		27,		166,	77,		146,	158,	231,	83,		111,	229,	122,
-	60,		211,	133,	230,	220,	105,	92,		41,		55,		46,		245,	40,		244,	102,	143,	54,
-	65,		25,		63,		161,	1,		216,	80,		73,		209,	76,		132,	187,	208,	89,		18,		169,
-	200,	196,	135,	130,	116,	188,	159,	86,		164,	100,	109,	198,	173,	186,	3,		64,
-	52,		217,	226,	250,	124,	123,	5,		202,	38,		147,	118,	126,	255,	82,		85,		212,
-	207,	206,	59,		227,	47,		16,		58,		17,		182,	189,	28,		42,		223,	183,	170,	213,
-	119,	248,	152,	2,		44,		154,	163,	70,		221,	153,	101,	155,	167,	43,		172,	9,
-	129,	22,		39,		253,	19,		98,		108,	110,	79,		113,	224,	232,	178,	185,	112,	104,
-	218,	246,	97,		228,	251,	34,		242,	193,	238,	210,	144,	12,		191,	179,	162,	241,
-	81,		51,		145,	235,	249,	14,		239,	107,	49,		192,	214,	31,		181,	199,	106,	157,
-	184,	84,		204,	176,	115,	121,	50,		45,		127,	4,		150,	254,	138,	236,	205,	93,
-	222,	114,	67,		29,		24,		72,		243,	141,	128,	195,	78,		66,		215,	61,		156,	180,
-};
-
-static const int grad3[12][3] =
-//{
-//	{1,1,0},{-1,1,0},{1,-1,0},{-1,-1,0},
-//	{1,0,1},{-1,0,1},{1,0,-1},{-1,0,-1},
-//	{0,1,1},{0,-1,1},{0,1,-1},{0,-1,-1}
-//};
-{
-	{ 0,1,1}, { 0,1,-1 }, {0,-1,1 }, { 0,-1,-1 },
-	{ 1,0,1 }, { 1,0,-1 }, { -1,0,1 }, { -1,0,-1 },
-	{ 1,1,0 }, { 1,-1,0 }, { -1,1,0 }, { -1,-1,0 }
-};
 
 static const int grad4[32][4] = 
 {
@@ -134,12 +83,12 @@ double ClassicPerlinNoise1D(double x)
 	xi = xi & 255;
 
 	// Calculate a set of eight hashed gradient indices
-	int gi0 = permutation[xi] % 12;
-	int gi1 = permutation[xi + 1] % 12;
+	int gi0 = g_HASH_TABLE_KEN_PERLIN[xi] % 12;
+	int gi1 = g_HASH_TABLE_KEN_PERLIN[xi + 1] % 12;
 
 	// Calculate noise contributions from each of the eight corners
-	double n0 = Dot(grad3[gi0][0], x);
-	double n1 = Dot(grad3[gi1][0], x - 1);
+	double n0 = Dot(g_GRAD3[gi0][0], x);
+	double n1 = Dot(g_GRAD3[gi1][0], x - 1);
 
 	// Compute the fade curve value for each of x, y, z
 	double u = Fade(x);
@@ -165,16 +114,16 @@ double ClassicPerlinNoise2D(double x, double y)
 	yi = yi & 255;
 
 	// Calculate a set of eight hashed gradient indices
-	int gi00 = permutation[xi + permutation[yi]] % 12;
-	int gi01 = permutation[xi + permutation[yi + 1]] % 12;
-	int gi10 = permutation[xi + 1 + permutation[yi]] % 12;
-	int gi11 = permutation[xi + 1 + permutation[yi+1]] % 12;
+	int gi00 = g_HASH_TABLE_KEN_PERLIN[xi + g_HASH_TABLE_KEN_PERLIN[yi]] % 12;
+	int gi01 = g_HASH_TABLE_KEN_PERLIN[xi + g_HASH_TABLE_KEN_PERLIN[yi + 1]] % 12;
+	int gi10 = g_HASH_TABLE_KEN_PERLIN[xi + 1 + g_HASH_TABLE_KEN_PERLIN[yi]] % 12;
+	int gi11 = g_HASH_TABLE_KEN_PERLIN[xi + 1 + g_HASH_TABLE_KEN_PERLIN[yi+1]] % 12;
 
 	// Calculate noise contributions from each of the eight corners
-	double n00 = Dot2(grad3[gi00], x, y);
-	double n01 = Dot2(grad3[gi01], x, y - 1);
-	double n10 = Dot2(grad3[gi10], x - 1, y);
-	double n11 = Dot2(grad3[gi11], x - 1, y - 1);
+	double n00 = DotN(2,g_GRAD3[gi00], x, y);
+	double n01 = DotN(2,g_GRAD3[gi01], x, y - 1);
+	double n10 = DotN(2,g_GRAD3[gi10], x - 1, y);
+	double n11 = DotN(2,g_GRAD3[gi11], x - 1, y - 1);
 
 	// Compute the fade curve value for each of x, y, z
 	double u = Fade(x);
@@ -208,24 +157,24 @@ double ClassicPerlinNoise3D(double x, double y, double z)
 	zi = zi & 255;
 
 	// Calculate a set of eight hashed gradient indices
-	int gi000 = permutation[xi + permutation[yi + permutation[zi]]] % 12;
-	int gi001 = permutation[xi + permutation[yi + permutation[zi + 1]]] % 12;
-	int gi010 = permutation[xi + permutation[yi + 1 + permutation[zi]]] % 12;
-	int gi011 = permutation[xi + permutation[yi + 1 + permutation[zi + 1]]] % 12;
-	int gi100 = permutation[xi + 1 + permutation[yi + permutation[zi]]] % 12;
-	int gi101 = permutation[xi + 1 + permutation[yi + permutation[zi + 1]]] % 12;
-	int gi110 = permutation[xi + 1 + permutation[yi + 1 + permutation[zi]]] % 12;
-	int gi111 = permutation[xi + 1 + permutation[yi + 1 + permutation[zi + 1]]] % 12;
+	int gi000 = g_HASH_TABLE_KEN_PERLIN[xi + g_HASH_TABLE_KEN_PERLIN[yi + g_HASH_TABLE_KEN_PERLIN[zi]]] % 12;
+	int gi001 = g_HASH_TABLE_KEN_PERLIN[xi + g_HASH_TABLE_KEN_PERLIN[yi + g_HASH_TABLE_KEN_PERLIN[zi + 1]]] % 12;
+	int gi010 = g_HASH_TABLE_KEN_PERLIN[xi + g_HASH_TABLE_KEN_PERLIN[yi + 1 + g_HASH_TABLE_KEN_PERLIN[zi]]] % 12;
+	int gi011 = g_HASH_TABLE_KEN_PERLIN[xi + g_HASH_TABLE_KEN_PERLIN[yi + 1 + g_HASH_TABLE_KEN_PERLIN[zi + 1]]] % 12;
+	int gi100 = g_HASH_TABLE_KEN_PERLIN[xi + 1 + g_HASH_TABLE_KEN_PERLIN[yi + g_HASH_TABLE_KEN_PERLIN[zi]]] % 12;
+	int gi101 = g_HASH_TABLE_KEN_PERLIN[xi + 1 + g_HASH_TABLE_KEN_PERLIN[yi + g_HASH_TABLE_KEN_PERLIN[zi + 1]]] % 12;
+	int gi110 = g_HASH_TABLE_KEN_PERLIN[xi + 1 + g_HASH_TABLE_KEN_PERLIN[yi + 1 + g_HASH_TABLE_KEN_PERLIN[zi]]] % 12;
+	int gi111 = g_HASH_TABLE_KEN_PERLIN[xi + 1 + g_HASH_TABLE_KEN_PERLIN[yi + 1 + g_HASH_TABLE_KEN_PERLIN[zi + 1]]] % 12;
 
 	// Calculate noise contributions from each of the eight corners
-	double n000 = Dot3(grad3[gi000], x, y, z);
-	double n001 = Dot3(grad3[gi001], x, y, z - 1);
-	double n010 = Dot3(grad3[gi010], x, y - 1, z);
-	double n011 = Dot3(grad3[gi011], x, y - 1, z - 1);
-	double n100 = Dot3(grad3[gi100], x - 1, y, z);
-	double n101 = Dot3(grad3[gi101], x - 1, y, z - 1);
-	double n110 = Dot3(grad3[gi110], x - 1, y - 1, z);
-	double n111 = Dot3(grad3[gi111], x - 1, y - 1, z - 1);
+	double n000 = DotN(3,g_GRAD3[gi000], x, y, z);
+	double n001 = DotN(3,g_GRAD3[gi001], x, y, z - 1);
+	double n010 = DotN(3,g_GRAD3[gi010], x, y - 1, z);
+	double n011 = DotN(3,g_GRAD3[gi011], x, y - 1, z - 1);
+	double n100 = DotN(3,g_GRAD3[gi100], x - 1, y, z);
+	double n101 = DotN(3,g_GRAD3[gi101], x - 1, y, z - 1);
+	double n110 = DotN(3,g_GRAD3[gi110], x - 1, y - 1, z);
+	double n111 = DotN(3,g_GRAD3[gi111], x - 1, y - 1, z - 1);
 
 	// Compute the fade curve value for each of x, y, z
 	double u = Fade(x);
@@ -260,14 +209,14 @@ double PerlinNoise3DUnity(double x, double y, double z)
 	const double v = Fade(yf);
 	const double w = Fade(zf);
 
-	int aaa = permutation[permutation[permutation[xi] + yi] + zi];
-	int aba = permutation[permutation[permutation[xi] + yi + 1] + zi];
-	int aab = permutation[permutation[permutation[xi] + yi] + zi + 1];
-	int abb = permutation[permutation[permutation[xi] + yi + 1] + zi + 1];
-	int baa = permutation[permutation[permutation[xi + 1] + yi] + zi];
-	int bba = permutation[permutation[permutation[xi + 1] + yi + 1] + zi];
-	int bab = permutation[permutation[permutation[xi + 1] + yi] + zi + 1];
-	int bbb = permutation[permutation[permutation[xi + 1] + yi + 1] + zi + 1];
+	int aaa = g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[xi] + yi] + zi];
+	int aba = g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[xi] + yi + 1] + zi];
+	int aab = g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[xi] + yi] + zi + 1];
+	int abb = g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[xi] + yi + 1] + zi + 1];
+	int baa = g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[xi + 1] + yi] + zi];
+	int bba = g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[xi + 1] + yi + 1] + zi];
+	int bab = g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[xi + 1] + yi] + zi + 1];
+	int bbb = g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[xi + 1] + yi + 1] + zi + 1];
 
 	double x1, x2, y1, y2;
 	x1 = Lerpd(Gradient(aaa, xf, yf, zf),					// The gradient function calculates the dot product between a pseudo random
@@ -297,10 +246,10 @@ double PerlinNoise2DUnity(double x, double y)
 	const double u = Fade(xf);
 	const double v = Fade(yf);
 
-	const int aaa = permutation[permutation[permutation[xi] + yi]];
-	const int aba = permutation[permutation[permutation[xi] + yi + 1]];
-	const int baa = permutation[permutation[permutation[xi + 1] + yi]];
-	const int bba = permutation[permutation[permutation[xi + 1] + yi + 1]];
+	const int aaa = g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[xi] + yi]];
+	const int aba = g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[xi] + yi + 1]];
+	const int baa = g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[xi + 1] + yi]];
+	const int bba = g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[xi + 1] + yi + 1]];
 
 	double x1, x2;
 	x1 = Lerpd(Gradient(aaa, xf, yf, 0),
@@ -318,8 +267,8 @@ double PerlinNoiseUnity(double x)
 	const int xi = (int)x & 255;
 	const double xf = x - (int)x;
 
-	const int aaa = permutation[permutation[permutation[xi]]];
-	const int baa = permutation[permutation[permutation[xi + 1]]];
+	const int aaa = g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[xi]]];
+	const int baa = g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[xi + 1]]];
 
 	return MutationValue(Lerpd(Gradient(aaa, xf, 0, 0),
 		Gradient(baa, xf - 1, 0, 0),
@@ -475,9 +424,9 @@ double SimplexNoise2D(double xin, double yin)
 	// Work out the hashed gradient indices of the three simplex corners
 	int ii = i & 255;
 	int jj = j & 255;
-	int gi0 = permutation[ii + permutation[jj]] % 12;
-	int gi1 = permutation[ii + i1 + permutation[jj + j1]] % 12;
-	int gi2 = permutation[ii + 1 + permutation[jj + 1]] % 12;
+	int gi0 = g_HASH_TABLE_KEN_PERLIN[ii + g_HASH_TABLE_KEN_PERLIN[jj]] % 12;
+	int gi1 = g_HASH_TABLE_KEN_PERLIN[ii + i1 + g_HASH_TABLE_KEN_PERLIN[jj + j1]] % 12;
+	int gi2 = g_HASH_TABLE_KEN_PERLIN[ii + 1 + g_HASH_TABLE_KEN_PERLIN[jj + 1]] % 12;
 
 	// Noise contributions from the three corners
 	double n0, n1, n2;
@@ -576,10 +525,10 @@ double SimplexNoise3D(double xin, double yin, double zin)
 	int ii = i & 255;
 	int jj = j & 255;
 	int kk = k & 255;
-	int gi0 = permutation[ii + permutation[jj + permutation[kk]]] % 12;
-	int gi1 = permutation[ii + i1 + permutation[jj + j1 + permutation[kk + k1]]] % 12;
-	int gi2 = permutation[ii + i2 + permutation[jj + j2 + permutation[kk + k2]]] % 12;
-	int gi3 = permutation[ii + 1 + permutation[jj + 1 + permutation[kk + 1]]] % 12;
+	int gi0 = g_HASH_TABLE_KEN_PERLIN[ii + g_HASH_TABLE_KEN_PERLIN[jj + g_HASH_TABLE_KEN_PERLIN[kk]]] % 12;
+	int gi1 = g_HASH_TABLE_KEN_PERLIN[ii + i1 + g_HASH_TABLE_KEN_PERLIN[jj + j1 + g_HASH_TABLE_KEN_PERLIN[kk + k1]]] % 12;
+	int gi2 = g_HASH_TABLE_KEN_PERLIN[ii + i2 + g_HASH_TABLE_KEN_PERLIN[jj + j2 + g_HASH_TABLE_KEN_PERLIN[kk + k2]]] % 12;
+	int gi3 = g_HASH_TABLE_KEN_PERLIN[ii + 1 + g_HASH_TABLE_KEN_PERLIN[jj + 1 + g_HASH_TABLE_KEN_PERLIN[kk + 1]]] % 12;
 
 	// Noise contributions from the four corners
 	double n0, n1, n2, n3;
@@ -689,11 +638,11 @@ double SimplexNoise4D(double x, double y, double z, double w) {
 	const int jj = j & 255;
 	const int kk = k & 255;
 	const int ll = l & 255;
-	const int gi0 = permutation[ii + permutation[jj + permutation[kk + permutation[ll]]]] % 32;
-	const int gi1 = permutation[ii + i1 + permutation[jj + j1 + permutation[kk + k1 + permutation[ll + l1]]]] % 32;
-	const int gi2 = permutation[ii + i2 + permutation[jj + j2 + permutation[kk + k2 + permutation[ll + l2]]]] % 32;
-	const int gi3 = permutation[ii + i3 + permutation[jj + j3 + permutation[kk + k3 + permutation[ll + l3]]]] % 32;
-	const int gi4 = permutation[ii + 1 + permutation[jj + 1 + permutation[kk + 1 + permutation[ll + 1]]]] % 32;
+	const int gi0 = g_HASH_TABLE_KEN_PERLIN[ii + g_HASH_TABLE_KEN_PERLIN[jj + g_HASH_TABLE_KEN_PERLIN[kk + g_HASH_TABLE_KEN_PERLIN[ll]]]] % 32;
+	const int gi1 = g_HASH_TABLE_KEN_PERLIN[ii + i1 + g_HASH_TABLE_KEN_PERLIN[jj + j1 + g_HASH_TABLE_KEN_PERLIN[kk + k1 + g_HASH_TABLE_KEN_PERLIN[ll + l1]]]] % 32;
+	const int gi2 = g_HASH_TABLE_KEN_PERLIN[ii + i2 + g_HASH_TABLE_KEN_PERLIN[jj + j2 + g_HASH_TABLE_KEN_PERLIN[kk + k2 + g_HASH_TABLE_KEN_PERLIN[ll + l2]]]] % 32;
+	const int gi3 = g_HASH_TABLE_KEN_PERLIN[ii + i3 + g_HASH_TABLE_KEN_PERLIN[jj + j3 + g_HASH_TABLE_KEN_PERLIN[kk + k3 + g_HASH_TABLE_KEN_PERLIN[ll + l3]]]] % 32;
+	const int gi4 = g_HASH_TABLE_KEN_PERLIN[ii + 1 + g_HASH_TABLE_KEN_PERLIN[jj + 1 + g_HASH_TABLE_KEN_PERLIN[kk + 1 + g_HASH_TABLE_KEN_PERLIN[ll + 1]]]] % 32;
 
 	// Noise contributions from the five corners
 	double n0, n1, n2, n3, n4; 
@@ -782,7 +731,7 @@ double PerlinNoiseNDArray(int nDim, double* input)
 		gradientIndices[i] = 0;
 		for (int dim = 0; dim < nDim; dim++)
 		{
-			gradientIndices[i] = permutation[(unitGridCells[(N_DIM_MINUS_ONE - dim)]) +
+			gradientIndices[i] = g_HASH_TABLE_KEN_PERLIN[(unitGridCells[(N_DIM_MINUS_ONE - dim)]) +
 				CheckBitStatus(i, dim) +
 				gradientIndices[i]];
 
