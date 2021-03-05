@@ -19,9 +19,9 @@ static const int grad4[32][4] =
 	{-1,1,1,0}	, {-1,1,-1,0}, {-1,-1,1,0}, {-1,-1,-1,0}
 };
 
-double Gradient(int hash, double x, double y, double z)
+double GradientUnity(int hash, double x, double y, double z)
 {
-	int h = hash & 15;                                          // Take the hashed value and take the first 4 bits of it (15 == 0b1111)
+	int h = hash & 15  /* 0b1111 */;                            // Take the hashed value and take the first 4 bits of it (15 == 0b1111)
 	double u = h < 8 /* 0b1000 */ ? x : y;                      // If the most significant bit (MSB) of the hash is 0 then set u = x.  Otherwise y.
 
 	double v;                                                   // In Ken Perlin's original implementation this was another conditional operator (?:).  I
@@ -219,18 +219,18 @@ double PerlinNoise3DUnity(double x, double y, double z)
 	int bbb = g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[xi + 1] + yi + 1] + zi + 1];
 
 	double x1, x2, y1, y2;
-	x1 = Lerpd(Gradient(aaa, xf, yf, zf),					// The gradient function calculates the dot product between a pseudo random
-		      Gradient(baa, xf - 1, yf, zf),				// gradient vector and the vector from the input coordinate to the 8
+	x1 = Lerpd(GradientUnity(aaa, xf, yf, zf),					// The gradient function calculates the dot product between a pseudo random
+		      GradientUnity(baa, xf - 1, yf, zf),				// gradient vector and the vector from the input coordinate to the 8
 		      u);											// surrounding points in its unit cube.
-	x2 = Lerpd(Gradient(aba, xf, yf - 1, zf),				// This is all then lerped together as a sort of weighted average based on the faded (u,v,w)
-		      Gradient(bba, xf - 1, yf - 1, zf),			// values we made earlier.
+	x2 = Lerpd(GradientUnity(aba, xf, yf - 1, zf),				// This is all then lerped together as a sort of weighted average based on the faded (u,v,w)
+		      GradientUnity(bba, xf - 1, yf - 1, zf),			// values we made earlier.
 		      u);
 	y1 = Lerpd(x1, x2, v);
-	x1 = Lerpd(Gradient(aab, xf, yf, zf - 1),
-			  Gradient(bab, xf - 1, yf, zf - 1),
+	x1 = Lerpd(GradientUnity(aab, xf, yf, zf - 1),
+			  GradientUnity(bab, xf - 1, yf, zf - 1),
 			  u);
-	x2 = Lerpd(Gradient(abb, xf, yf - 1, zf - 1),
-			  Gradient(bbb, xf - 1, yf - 1, zf - 1),
+	x2 = Lerpd(GradientUnity(abb, xf, yf - 1, zf - 1),
+			  GradientUnity(bbb, xf - 1, yf - 1, zf - 1),
 			  u);
 	y2 = Lerpd(x1, x2, v);
 
@@ -252,11 +252,11 @@ double PerlinNoise2DUnity(double x, double y)
 	const int bba = g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[xi + 1] + yi + 1]];
 
 	double x1, x2;
-	x1 = Lerpd(Gradient(aaa, xf, yf, 0),
-		Gradient(baa, xf - 1, yf, 0),
+	x1 = Lerpd(GradientUnity(aaa, xf, yf, 0),
+		GradientUnity(baa, xf - 1, yf, 0),
 		u);
-	x2 = Lerpd(Gradient(aba, xf, yf - 1, 0),
-		Gradient(bba, xf - 1, yf - 1, 0),
+	x2 = Lerpd(GradientUnity(aba, xf, yf - 1, 0),
+		GradientUnity(bba, xf - 1, yf - 1, 0),
 		u);
 
 	return MutationValue(Lerpd(x1, x2, v));
@@ -270,8 +270,8 @@ double PerlinNoiseUnity(double x)
 	const int aaa = g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[xi]]];
 	const int baa = g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[xi + 1]]];
 
-	return MutationValue(Lerpd(Gradient(aaa, xf, 0, 0),
-		Gradient(baa, xf - 1, 0, 0),
+	return MutationValue(Lerpd(GradientUnity(aaa, xf, 0, 0),
+		GradientUnity(baa, xf - 1, 0, 0),
 		Fade(xf)));
 }
 
