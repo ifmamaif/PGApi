@@ -665,13 +665,14 @@ double PerlinNoiseNDArray(int nDim, double* input)
 	// Constants that we will use along the function
 	const int N_DIM_MINUS_ONE = nDim - 1;
 	const int N_DIM_PLUS_ONE = nDim + 1;
-	const int NUMBER_OF_GRADIENT_INDICES = 1 << nDim;                       // the number of gradient indices is = (2^number_of_dimensions)
-	const int NUMBER_OF_EDGES = nDim * (1 << N_DIM_MINUS_ONE);              // the number of edges is = (number_of_dimensions * (2^(number_of_dimensions - 1)))
+	const int NUMBER_OF_GRADIENT_INDICES = 1 << nDim;						// the number of gradient indices is = (2^number_of_dimensions)
+	const int NUMBER_OF_EDGES = (nDim > 3)
+		? (nDim * (1 << N_DIM_MINUS_ONE))									// the number of edges is = (number_of_dimensions * (2^(number_of_dimensions - 1)))
+		: 12;																// special case when nDim is 3 or lower.
 
 	// Arrays
 	int* unitGridCells = new int[nDim];                                     // Find unit grid cell containing point
 	int* gradientIndices = new int[NUMBER_OF_GRADIENT_INDICES];             // Calculate a set of eight hashed gradient indices
-	int* grad3 = new int[NUMBER_OF_EDGES * nDim];                           // Calculate the gradient helper for noise contributions
 	double* noiseContributions = new double[NUMBER_OF_GRADIENT_INDICES];    // Calculate noise contributions from each of the eight corners
 	
 	// Find unit grid cell containing point
@@ -713,39 +714,40 @@ double PerlinNoiseNDArray(int nDim, double* input)
 		//noiseContributions[i] = gradientIndices[i];
 	}
 
-	// Calculate the gradient helper for noise contributions
-	// make an exception for nDim = 1;
-	switch (nDim)
+	
+	if (nDim < 4)
 	{
-	case 1:
-		grad3[0] = 0;
-		break;
-	case 2:
-		break;
-	default:
-		for (int i = 0; i < NUMBER_OF_EDGES; i++)
+		// skip gradient helper because we have a hardcoded one for this
+		// and
+		// Calculate noise contributions from each corner
+		for (int i = 0; i < NUMBER_OF_GRADIENT_INDICES; i++)
 		{
+			// Here we do a DOT PRODUCT for each corner
+			noiseContributions[i] = 0;
+			for (int j = 0; j < nDim; j++)
+			{
+				int scalar = CheckBitStatus(i, N_DIM_MINUS_ONE - j) ? -1 : 0;
+				noiseContributions[i] += (input[j] + scalar) * g_GRAD3[gradientIndices[i]][j];
+			}
+		}
+	}
+	else
+	{
+		// Calculate noise contributions from each corner
+		for (int i = 0; i < NUMBER_OF_GRADIENT_INDICES; i++)
+		{
+			// Here we do a DOT PRODUCT for each corner
+			noiseContributions[i] = 0;
 			int k = 0;
 			int perm = i / N_DIM_PLUS_ONE;
 			for (int j = 0; j < nDim; j++)
 			{
-				grad3[i * nDim + j] = perm == j
+				int dot = perm == j
 					? 0
 					: CheckBitStatus(i, nDim - 2 - (k++)) == 0 ? 1 : -1;
+				int scalar = CheckBitStatus(i, N_DIM_MINUS_ONE - j) ? -1 : 0;
+				noiseContributions[i] += (input[j] + scalar) * dot;
 			}
-		}
-		break;
-	}
-
-	// Calculate noise contributions from each corner
-	for (int i = 0; i < NUMBER_OF_GRADIENT_INDICES; i++)
-	{
-		// Here we do a DOT PRODUCT for each corner
-		noiseContributions[i] = 0;
-		for (int j = 0; j < nDim; j++)
-		{
-			int scalar = CheckBitStatus(i, N_DIM_MINUS_ONE - j) ? -1 : 0;
-			noiseContributions[i] += (input[j] + scalar) * grad3[gradientIndices[i] * nDim + j];
 		}
 	}
 
@@ -770,11 +772,12 @@ double PerlinNoiseNDArray(int nDim, double* input)
 
 	delete[] unitGridCells;
 	delete[] gradientIndices;
-	delete[] grad3;
 	delete[] noiseContributions;
 
 	return result;
 }
+
+
 double* ClassicPerlinNoise1D_Test_Input(double x)
 {
 	double* result = new double[1];
