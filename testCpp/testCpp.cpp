@@ -31,9 +31,6 @@ int TestPerlinNDim()
 
 int main(int argc,char* argv[])
 {
-    //auto** da = GenerateMazeWorm(4, 4, 32);
-    //ShowMazeWorm(da, 8, 8);
-
     std::cout << TestPerlinNDim();
 
 

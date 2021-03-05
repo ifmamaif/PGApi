@@ -3,8 +3,6 @@
 
 #include "Math.h"
 
-#include <math.h>
-#include <cstdarg>
 
 // Hash lookup table as defined by Ken Perlin.  This is a randomly
 // arranged array of all numbers from 0-255 inclusive.
