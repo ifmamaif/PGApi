@@ -668,13 +668,7 @@ double PerlinNoiseND(int nDim, ...)
 	double* input = new double[nDim];                                       // Get the input from the function with unknown number of parameter
 	
 	// Get the input from the function with unknown number of parameters
-	va_list list;
-	va_start(list, nDim);
-	for (int i = 0; i < nDim; i++)
-	{
-		input[i] = va_arg(list, double);
-	}
-	va_end(list);
+	VA_LIST_GET(nDim, double, input);
 
 	double result = PerlinNoiseNDArray(nDim, input);
 
