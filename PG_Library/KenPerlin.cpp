@@ -803,3 +803,424 @@ double PerlinNoiseNDArray(int nDim, double* input)
 
 	return result;
 }
+double* ClassicPerlinNoise1D_Test_Input(double x)
+{
+	double* result = new double[1];
+	result[0] = x;
+	return result;
+}
+
+double* PerlinNoiseND_Test_Input(int nDim, ...)
+{
+	if (nDim < 1)
+	{
+		return 0;
+	}
+
+	// Arrays
+	double* input = new double[nDim];                                       // Get the input from the function with unknown number of parameter
+
+	// Get the input from the function with unknown number of parameters
+	VA_LIST_GET(nDim, double, input);
+	return input;
+}
+
+int* ClassicPerlinNoise1D_Test_UnitGrid(double x)
+{
+	// Find unit grid cell containing point
+	int xi = FastFloor(x);
+	int* result = new int[1];
+	result[0] = xi;
+	return result;
+}
+
+
+int* PerlinNoiseND_Test_UnitGrid(int nDim, ...)
+{
+	if (nDim < 1)
+	{
+		return 0;
+	}
+
+	// Arrays
+	double* input = new double[nDim];                                       // Get the input from the function with unknown number of parameter
+
+	// Get the input from the function with unknown number of parameters
+	VA_LIST_GET(nDim, double, input);
+	// Constants that we will use along the function
+	const int N_DIM_MINUS_ONE = nDim - 1;
+	const int N_DIM_PLUS_ONE = nDim + 1;
+	const int NUMBER_OF_GRADIENT_INDICES = 1 << nDim;						// the number of gradient indices is = (2^number_of_dimensions)
+	const int NUMBER_OF_EDGES = (nDim > 3)
+		? (nDim * (1 << N_DIM_MINUS_ONE))									// the number of edges is = (number_of_dimensions * (2^(number_of_dimensions - 1)))
+		: 12;																// special case when nDim is 3 or lower.
+
+	// Arrays
+	int* unitGridCells = new int[nDim];                                     // Find unit grid cell containing point
+
+	for (int i = 0; i < nDim; i++)
+	{
+		// get the integer part from the input
+		unitGridCells[i] = FastFloor(input[i]);
+	}
+	return unitGridCells;
+}
+
+
+double* ClassicPerlinNoise1D_Test_Relative(double x)
+{
+	// Find unit grid cell containing point
+	int xi = FastFloor(x);
+
+	// Get relative xyz coordinates of point within that cell
+	x = x - xi;
+
+	double* result = new double[1];
+	result[0] = x;
+	return result;
+}
+
+double* PerlinNoiseND_Test_Relative(int nDim, ...)
+{
+	if (nDim < 1)
+	{
+		return 0;
+	}
+
+	// Arrays
+	double* input = new double[nDim];                                       // Get the input from the function with unknown number of parameter
+
+	// Get the input from the function with unknown number of parameters
+	VA_LIST_GET(nDim, double, input);
+	// Constants that we will use along the function
+	const int N_DIM_MINUS_ONE = nDim - 1;
+	const int N_DIM_PLUS_ONE = nDim + 1;
+	const int NUMBER_OF_GRADIENT_INDICES = 1 << nDim;						// the number of gradient indices is = (2^number_of_dimensions)
+	const int NUMBER_OF_EDGES = (nDim > 3)
+		? (nDim * (1 << N_DIM_MINUS_ONE))									// the number of edges is = (number_of_dimensions * (2^(number_of_dimensions - 1)))
+		: 12;																// special case when nDim is 3 or lower.
+
+	// Arrays
+	int* unitGridCells = new int[nDim];                                     // Find unit grid cell containing point
+	int* gradientIndices = new int[NUMBER_OF_GRADIENT_INDICES];             // Calculate a set of eight hashed gradient indices
+	int* grad3 = new int[NUMBER_OF_EDGES * nDim];                           // Calculate the gradient helper for noise contributions
+	double* noiseContributions = new double[NUMBER_OF_GRADIENT_INDICES];    // Calculate noise contributions from each of the eight corners
+
+	for (int i = 0; i < nDim; i++)
+	{
+		// get the integer part from the input
+		unitGridCells[i] = FastFloor(input[i]);
+	}
+
+	// Get relative coordinates of point within that cell
+	for (int i = 0; i < nDim; i++)
+	{
+		// get the fractional part from the input
+		input[i] = input[i] - unitGridCells[i];
+	}
+
+	return input;
+}
+
+
+int* ClassicPerlinNoise1D_Test_Wrap(double x)
+{
+	// Find unit grid cell containing point
+	int xi = FastFloor(x);
+
+	// Get relative xyz coordinates of point within that cell
+	x = x - xi;
+
+	// Wrap the integer cells at 255 (smaller integer period can be introduced here)
+	xi = xi & 255;
+
+	int* result = new int[1];
+	result[0] = xi;
+	return result;
+}
+
+int* PerlinNoiseND_Test_Wrap(int nDim, ...)
+{
+	if (nDim < 1)
+	{
+		return 0;
+	}
+
+	// Arrays
+	double* input = new double[nDim];                                       // Get the input from the function with unknown number of parameter
+
+	// Get the input from the function with unknown number of parameters
+	VA_LIST_GET(nDim, double, input);
+	// Constants that we will use along the function
+	const int N_DIM_MINUS_ONE = nDim - 1;
+	const int N_DIM_PLUS_ONE = nDim + 1;
+	const int NUMBER_OF_GRADIENT_INDICES = 1 << nDim;						// the number of gradient indices is = (2^number_of_dimensions)
+	const int NUMBER_OF_EDGES = (nDim > 3)
+		? (nDim * (1 << N_DIM_MINUS_ONE))									// the number of edges is = (number_of_dimensions * (2^(number_of_dimensions - 1)))
+		: 12;																// special case when nDim is 3 or lower.
+
+	// Arrays
+	int* unitGridCells = new int[nDim];                                     // Find unit grid cell containing point
+	int* gradientIndices = new int[NUMBER_OF_GRADIENT_INDICES];             // Calculate a set of eight hashed gradient indices
+	int* grad3 = new int[NUMBER_OF_EDGES * nDim];                           // Calculate the gradient helper for noise contributions
+	double* noiseContributions = new double[NUMBER_OF_GRADIENT_INDICES];    // Calculate noise contributions from each of the eight corners
+
+	for (int i = 0; i < nDim; i++)
+	{
+		// get the integer part from the input
+		unitGridCells[i] = FastFloor(input[i]);
+	}
+
+	// Get relative coordinates of point within that cell
+	for (int i = 0; i < nDim; i++)
+	{
+		// get the fractional part from the input
+		input[i] = input[i] - unitGridCells[i];
+	}
+
+	// Wrap the integer cells at 255 (smaller integer period can be introduced here)
+	for (int i = 0; i < nDim; i++)
+	{
+		// Because the values from the permutation table are between [0-255] (inclusive), we make sure that we don't overflow.
+		unitGridCells[i] &= 255;
+	}
+
+	return unitGridCells;
+}
+
+int* ClassicPerlinNoise1D_Test_Gradients(double x)
+{
+	// Find unit grid cell containing point
+	int xi = FastFloor(x);
+
+	// Get relative xyz coordinates of point within that cell
+	x = x - xi;
+
+	// Wrap the integer cells at 255 (smaller integer period can be introduced here)
+	xi = xi & 255;
+
+	// Calculate a set of eight hashed gradient indices
+	int gi0 = g_HASH_TABLE_KEN_PERLIN[xi] % 12;
+	int gi1 = g_HASH_TABLE_KEN_PERLIN[xi + 1] % 12;
+
+	int* gis = new int[2];
+	gis[0] = gi0;
+	gis[1] = gi1;
+	return gis;
+}
+
+int* PerlinNoiseNDArray_Test_Gradients(int nDim, ...)
+{
+	if (nDim < 1)
+	{
+		return 0;
+	}
+
+	double* input = new double[nDim];
+
+	VA_LIST_GET(nDim, double, input);
+
+	const int N_DIM_MINUS_ONE = nDim - 1;
+	const int NUMBER_OF_GRADIENT_INDICES = 1 << nDim;
+	const int NUMBER_OF_EDGES = (nDim > 3)
+		? (nDim * (1 << N_DIM_MINUS_ONE))
+		: 12;
+
+	int* unitGridCells = new int[nDim];
+	int* gradientIndices = new int[NUMBER_OF_GRADIENT_INDICES];
+	int* grad3 = new int[NUMBER_OF_EDGES * nDim];
+
+	for (int i = 0; i < nDim; i++)
+	{
+		unitGridCells[i] = FastFloor(input[i]);
+	}
+
+	for (int i = 0; i < nDim; i++)
+	{
+		input[i] = input[i] - unitGridCells[i];
+	}
+
+	for (int i = 0; i < nDim; i++)
+	{
+		unitGridCells[i] &= 255;
+	}
+
+	for (int i = 0; i < NUMBER_OF_GRADIENT_INDICES; i++)
+	{
+		gradientIndices[i] = 0;
+		for (int dim = 0; dim < nDim; dim++)
+		{
+			gradientIndices[i] = g_HASH_TABLE_KEN_PERLIN[(unitGridCells[(N_DIM_MINUS_ONE - dim)]) +
+				CheckBitStatus(i, dim) +
+				gradientIndices[i]];
+
+		}
+		gradientIndices[i] %= NUMBER_OF_EDGES;
+	}
+	return gradientIndices;
+}
+
+//double SimplexNoiseND(int nDim, ...)
+//{
+//	if (nDim < 1)
+//	{
+//		return 0; 
+//	}
+//
+//	// Get the input from the function with unknown number of parameters
+//	double* input = new double[nDim];
+//	VA_LIST_GET(nDim, double, input);
+//
+//	// The skewing and unskewing factors are hairy again for the N-D case
+//	// SKEWING
+//	const double SKEWING = (sqrt(nDim + 1) - 1) / nDim;
+//	// UNSKEWING
+//	const double UNSKEWING = (1 - 1 / (sqrt(nDim+1))) / nDim;
+//	
+//	// Factor for N-D skewing
+//	double s = 0;
+//	for (int i = 0; i < nDim; i++)
+//	{
+//		s += input[i];
+//	}
+//	s *= SKEWING; 
+//	// Skew the (x,y,z,...) space to determine which cell of the simplicities we are in
+//	int* cellSkewed = new int[nDim];
+//	for (int i = 0; i < nDim; i++)
+//	{
+//		cellSkewed[i] = FastFloor(input[i] + s);
+//	}
+//
+//	// Factor for N-D unskewing
+//	double t = 0;
+//	for (int i = 0; i < nDim; i++)
+//	{
+//		t += input[i];
+//	}
+//	t *= UNSKEWING;
+//	// Unskew the cell origin back to (x,y,z,...) space
+//	int* cellUnskewed = new int[nDim];
+//	for (int i = 0; i < nDim; i++)
+//	{
+//		cellUnskewed[i] = (int)(cellSkewed[i] - t);
+//	}
+//
+//	// The x,y,z,w distances from the cell origin
+//	for (int i=0;i<nDim;i++)
+//	{
+//		cellUnskewed[i] = (int)(input[i] - cellUnskewed[i]);
+//	}
+//
+//	// To find out which of the possible simplicities we're in, we need to
+//	// determine the magnitude ordering of x0, y0, z0 and ...
+//	// Pair-wise comparisons are performed between each possible pair
+//	// of coordinates, and the results are used to rank the numbers.
+//	int* magnitudes = new int[nDim];
+//	for (int i = 0; i < nDim; i++)
+//	{
+//		for (int j = i + 1; j < nDim; j++)
+//		{
+//			if (cellUnskewed[i] > cellUnskewed[j])
+//			{
+//				magnitudes[i]++;
+//			}
+//			else
+//			{
+//				magnitudes[j]++;
+//			}
+//		}
+//	}
+//
+//	// The integer offsets for the second,third,fourth,... simplex corner
+//	// [rankx, ranky, rankz, ....] is a N-vector
+//    // in some order. We use a thresholding to set the coordinates in turn.
+//	int** simplexCorners = new int* [nDim];
+//	for (int i = 0; i < nDim-1; i++)
+//	{
+//		simplexCorners[i] = new int[nDim];
+//		for (int j = 0; j < nDim; j++)
+//		{
+//			simplexCorners[i][j] = magnitudes[j] >= (3-i) ? 1 : 0;
+//		}
+//	}
+//	for (int j = 0; j < nDim; j++)
+//	{
+//		simplexCorners[nDim-1][j] = 1;
+//	}
+//
+//
+//	// The final corner has all coordinate offsets = 1, so no need to compute that.
+//	double** finalCorner = new double* [nDim];
+//	for (int i = 0; i < nDim; i++)
+//	{
+//		finalCorner[i] = new double[nDim];
+//		for (int j = 0; j < nDim; j++)
+//		{
+//			finalCorner[i][j] = cellUnskewed[j] - simplexCorners[i][j] + (i + 1) * UNSKEWING;
+//		}
+//	}
+//
+//	// Work out the hashed gradient indices of the five simplex corners
+//	for (int i = 0; i < nDim; i++)
+//	{
+//		cellSkewed[i] &= 255;
+//	}
+//
+//	int* gradients = new int[nDim + 1];
+//	gradients[0] = 0;
+//	for (int i = nDim - 1; i >= 0; i--)
+//	{
+//		gradients[0] += permutation[cellSkewed[i] + gradients[0]];
+//	}
+//	gradients[0] %= 32;
+//	for (int i = 0; i < nDim; i++)
+//	{
+//		gradients[i+1] = 0;
+//		for (int j = 0; j < nDim; j++)
+//		{
+//			gradients[i+1] += permutation[(int)(cellSkewed[i] + finalCorner[i] + gradients[i+1])];
+//		}
+//		gradients[i + 1] = 0;
+//	}
+//		
+//	// Calculate the contribution from the five corners
+//	double* contributions = new double[nDim + 1];
+//	// Noise contributions from the five corners
+//	double* noise = new double[nDim + 1];
+//
+//
+//	contributions[0] = 0.6;
+//	for (int j = 0; j < nDim; j++)
+//	{
+//		contributions[0] -= cellUnskewed[j] * cellUnskewed[j];
+//	}
+//	if (contributions[0] < 0)
+//	{
+//		noise[0] = 0;
+//	}
+//	else
+//	{
+//		contributions[0] *= contributions[0];
+//		noise[0] = contributions[0] * contributions[0] * DotN(nDim,gradients, cellUnskewed);
+//	}
+//	for (int i = 1; i < nDim + 1; i++)
+//	{
+//		contributions[i] = 0.6;
+//		for (int j = 0; j < nDim; j++)
+//		{
+//			contributions[i] -= cellUnskewed[j] * cellUnskewed[j];
+//		}
+//		if (contributions[i] < 0)
+//		{
+//			noise[i] = 0;
+//		}
+//		else
+//		{
+//			contributions[i] *= contributions[i];
+//			noise[i] = contributions[i] * contributions[i] * DotN(nDim, gradients, finalCorner[i]);
+//		}
+//	}
+//
+//	const double someConstant = 70;
+//	return someConstant * Sum(noise);
+//}
