@@ -12,7 +12,7 @@ int Absi(int value)
 
 float Absf(float value)
 {
-    return Macro_Abs(value);;
+    return Macro_Abs(value);
 }
 
 double Absd(double value)
@@ -66,21 +66,6 @@ double Dot(double x, double y)
     return x * y;
 }
 
-double Dot2(const int g[], double x, double y)
-{
-	return g[0] * x + g[1] * y;
-}
-
-double Dot3(const int g[], double x, double y, double z)
-{
-	return g[0] * x + g[1] * y + g[2] * z;
-}
-
-double Dot4(const int g[], double x, double y, double z, double w)
-{
-	return g[0] * x + g[1] * y + g[2] * z + g[3] * w;
-}
-
 double DotN(int nDim, const int g[]...)
 {
     double result = 0;
@@ -108,6 +93,6 @@ int CheckBitStatus(int number, int bitPosition)
 {
     int bitChecker = 1 << bitPosition;
     int si = number & bitChecker;
-    int result = (number & (1 << bitPosition)) > 0 ? 1 : 0;
+    int result = si > 0 ? 1 : 0;
     return result;
 }

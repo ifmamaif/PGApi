@@ -7,9 +7,6 @@ extern "C"
 	EXPORT_API int Absi(int value);
 	EXPORT_API float Absf(float value);
 	EXPORT_API double Absd(double value);
-
-	//float Floor(float f);
-
 	EXPORT_API int FastFloor(double d);
 
 	EXPORT_API int FloorToInt(float f);
@@ -25,9 +22,6 @@ extern "C"
 	EXPORT_API double Lerpd(double a0, double a1, double weight);
 
 	EXPORT_API double Dot(double x, double y);
-	EXPORT_API double Dot2(const int g[], double x, double y);
-	EXPORT_API double Dot3(const int g[], double x, double y, double z);
-	EXPORT_API double Dot4(const int g[], double x, double y, double z, double w);
 	EXPORT_API double DotN(int nDim, const int g[]...);
 	EXPORT_API double DotArray(int nDim, const int g[], const double x[]);
 
