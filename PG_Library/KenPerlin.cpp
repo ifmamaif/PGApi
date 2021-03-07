@@ -5,23 +5,11 @@
 #include "Constants.h"
 #include "Allocation.h"
 
-
-
-static const int grad4[32][4] = 
-{
-	{0,1,1,1}	, {0,1,1,-1}, {0,1,-1,1}, {0,1,-1,-1},
-	{0,-1,1,1}	, {0,-1,1,-1}, {0,-1,-1,1}, {0,-1,-1,-1},
-	{1,0,1,1}	, {1,0,1,-1}, {1,0,-1,1}, {1,0,-1,-1},
-	{-1,0,1,1}	, {-1,0,1,-1}, {-1,0,-1,1}, {-1,0,-1,-1},
-	{1,1,0,1}	, {1,1,0,-1}, {1,-1,0,1}, {1,-1,0,-1},
-	{-1,1,0,1}	, {-1,1,0,-1}, {-1,-1,0,1}, {-1,-1,0,-1},
-	{1,1,1,0}	, {1,1,-1,0}, {1,-1,1,0}, {1,-1,-1,0},
-	{-1,1,1,0}	, {-1,1,-1,0}, {-1,-1,1,0}, {-1,-1,-1,0}
-};
-
 double GradientUnity(int hash, double x, double y, double z)
 {
+	// CONVERT LO 4 BITS OF HASH CODE
 	int h = hash & 15  /* 0b1111 */;                            // Take the hashed value and take the first 4 bits of it (15 == 0b1111)
+	  // INTO 12 GRADIENT DIRECTIONS.
 	double u = h < 8 /* 0b1000 */ ? x : y;                      // If the most significant bit (MSB) of the hash is 0 then set u = x.  Otherwise y.
 
 	double v;                                                   // In Ken Perlin's original implementation this was another conditional operator (?:).  I
@@ -43,8 +31,82 @@ double Fade(double t)
 	// This eases coordinate values so that they will "ease" towards integral values. 
 	// This ends up smoothing the const output.
 	// 6*t^5 - 15*t^4 + 10*t^3
-	return t * t * t * (t * (t * 6 - 15) + 10);     
+	return t * t * t * (t * (t * 6 - 15) + 10);
 }
+
+
+//IMPLEMENTATION OF IMPROVED NOISE - COPYRIGHT 2002 KEN PERLIN.
+//This code implements the algorithm as described in a corresponding SIGGRAPH 2002 paper.
+double PerlinNoise_Improved(double x, double y, double z)
+{
+	int xi = FloorToIntd(x),
+		yi = FloorToIntd(y),
+		zi = FloorToIntd(z);
+
+	// FIND UNIT CUBE THAT CONTAINS POINT.
+	int X = xi & 255,
+		Y = yi & 255,
+		Z = zi & 255;
+
+	// FIND RELATIVE X,Y,Z OF POINT IN CUBE.
+	x -= xi;
+	y -= yi;
+	z -= zi;
+
+	// COMPUTE FADE CURVES FOR EACH OF X,Y,Z.
+	double u = Fade(x),
+		v = Fade(y),
+		w = Fade(z);
+
+	// HASH COORDINATES OF THE 8 CUBE CORNERS,
+	int A = g_HASH_TABLE_KEN_PERLIN[X] + Y;
+	int B = g_HASH_TABLE_KEN_PERLIN[X + 1] + Y;
+	int	AA = g_HASH_TABLE_KEN_PERLIN[A] + Z;
+	int	AB = g_HASH_TABLE_KEN_PERLIN[A + 1] + Z;
+	int	BA = g_HASH_TABLE_KEN_PERLIN[B] + Z;
+	int	BB = g_HASH_TABLE_KEN_PERLIN[B + 1] + Z;
+
+	// Calculate gradients of the cube 8 Corners
+	double g000 = GradientUnity(g_HASH_TABLE_KEN_PERLIN[AA], x, y, z);
+	double g001 = GradientUnity(g_HASH_TABLE_KEN_PERLIN[BA], x - 1, y, z);
+	double g002 = GradientUnity(g_HASH_TABLE_KEN_PERLIN[AB], x, y - 1, z);
+	double g003 = GradientUnity(g_HASH_TABLE_KEN_PERLIN[BB], x - 1, y - 1, z);
+	double g004 = GradientUnity(g_HASH_TABLE_KEN_PERLIN[AA + 1], x, y, z - 1);
+	double g005 = GradientUnity(g_HASH_TABLE_KEN_PERLIN[BA + 1], x - 1, y, z - 1);
+	double g006 = GradientUnity(g_HASH_TABLE_KEN_PERLIN[AB + 1], x, y - 1, z - 1);
+	double g007 = GradientUnity(g_HASH_TABLE_KEN_PERLIN[BB + 1], x - 1, y - 1, z - 1);
+
+	// AND ADD BLENDED RESULTS FROM  8 CORNERS OF CUBE
+	// Interpolations
+	// first
+	double l01 = Lerpd(g000, g001, u);
+	double l02 = Lerpd(g002, g003, u);
+	double l03 = Lerpd(g004, g005, u);
+	double l04 = Lerpd(g006, g007, u);
+
+	// second
+	double l11 = Lerpd(l01, l02, v);
+	double l12 = Lerpd(l03, l04, v);
+
+	// third
+	double l20 = Lerpd(l11, l12, w);
+
+	return l20;
+}
+
+static const int grad4[32][4] = 
+{
+	{0,1,1,1}	, {0,1,1,-1}, {0,1,-1,1}, {0,1,-1,-1},
+	{0,-1,1,1}	, {0,-1,1,-1}, {0,-1,-1,1}, {0,-1,-1,-1},
+	{1,0,1,1}	, {1,0,1,-1}, {1,0,-1,1}, {1,0,-1,-1},
+	{-1,0,1,1}	, {-1,0,1,-1}, {-1,0,-1,1}, {-1,0,-1,-1},
+	{1,1,0,1}	, {1,1,0,-1}, {1,-1,0,1}, {1,-1,0,-1},
+	{-1,1,0,1}	, {-1,1,0,-1}, {-1,-1,0,1}, {-1,-1,0,-1},
+	{1,1,1,0}	, {1,1,-1,0}, {1,-1,1,0}, {1,-1,-1,0},
+	{-1,1,1,0}	, {-1,1,-1,0}, {-1,-1,1,0}, {-1,-1,-1,0}
+};
+
+
 
 double MutationValue(double x)
 {
@@ -1034,6 +1096,8 @@ int* PerlinNoiseNDArray_Test_Gradients(int nDim, ...)
 	}
 	return gradientIndices;
 }
+
+
 
 //double SimplexNoiseND(int nDim, ...)
 //{

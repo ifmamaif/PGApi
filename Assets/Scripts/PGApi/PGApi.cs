@@ -38,5 +38,8 @@ namespace PGApi
         [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
         public static extern float Randf();
 
+        [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
+        public static extern double PerlinNoise_Improved(double x, double y, double z);
+
     }
 }

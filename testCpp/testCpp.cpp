@@ -11,6 +11,49 @@
 
 #include <time.h>
 
+void GetMinMaxPerlinNoise_Improved()
+{
+	//Minim - 0.878596,  -0.900608 ,  -0.837054 ,  -0.863498 ,  -0.837278
+	//Maxim 0.90416 , 0.898667 ,  0.959816 , 0.958262,0.927884
+	double min = 1;
+	double max = -1;
+
+	for (int i = 0; i < 20000000; i++)
+	{
+		double x = Randf()*1000;
+		double y = Randf()*1000;
+		double z = Randf()*1000;
+
+		double res = PerlinNoise_Improved(x, y, z);
+		if (res < min)
+		{
+			min = res;
+		}
+		if (res > max)
+		{
+			max = res;
+		}
+	}
+
+	double increment = 0;
+	for (int i = 0; i < 10001; i++)
+	{
+		double res = PerlinNoise_Improved(increment, increment, increment);
+		if (res < min)
+		{
+			min = res;
+		}
+		if (res > max)
+		{
+			max = res;
+		}
+		increment += 0.00001;
+	}
+
+	std::cout << "Minim " << min << std::endl;
+	std::cout << "Maxim " << max << std::endl;
+}
+
 int TestPerlinNDim()
 {
     for (int i = 0; i < 100000; i++)
@@ -117,8 +160,8 @@ int TestValueNoise()
 
 int main(int argc,char* argv[])
 {
-
-	std::cout << TestPerlinNDim() << std::endl;
+	GetMinMaxPerlinNoise_Improved();
+	//std::cout << TestPerlinNDim() << std::endl;
 	//std::cout << TestValueNoise() << std::endl;
 
     //system("pause");

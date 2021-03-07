@@ -94,6 +94,8 @@ public class MainScene : MonoBehaviour
         demo_Level.transform.localScale = new Vector3(88, 88, 1);
 
         NewDemo<Heart>("Hearth Preview");
+        demo_Level= NewDemo<PerlinTexture>("Perlin Textures");
+        demo_Level.transform.localScale = new Vector3(88, 88, 1);
 
         ActivateDemo(listOfDemos[0].Key);
     }

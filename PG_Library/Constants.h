@@ -3,6 +3,23 @@
 // Hash lookup table as defined by Ken Perlin.  This is a randomly
 // arranged array of all numbers from 0-255 inclusive.
 // Doubled permutation to avoid overflow
+/*
+ * Permutation table. This is just a random jumble of all numbers 0-255,
+ * repeated twice to avoid wrapping the index at 255 for each lookup.
+ * This needs to be exactly the same for all instances on all platforms,
+ * so it's easiest to just keep it as static explicit data.
+ * This also removes the need for any initialization of this class.
+ *
+ * Note that making this an int[] instead of a char[] might make the
+ * code run faster on platforms with a high penalty for unaligned single
+ * byte addressing. Intel x86 is generally single-byte-friendly, but
+ * some other CPUs are faster with 4-aligned reads.
+ * However, a char[] is smaller, which avoids cache trashing, and that
+ * is probably the most important aspect on most architectures.
+ * This array is accessed a *lot* by the noise functions.
+ * A vector-valued noise over 3D accesses it 96 times, and a
+ * float-valued 4D noise 64 times. We want this to fit in the cache!
+ */
 static const int g_HASH_TABLE_KEN_PERLIN[] =
 {
 	// first 256 values [0,255] (all values)

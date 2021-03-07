@@ -20,7 +20,7 @@ double Absd(double value)
     return Macro_Abs(value);
 }
 
-int FloorToInt(float f)
+int FloorToIntf(float f)
 {
     int integer_f = (int)f;
     if (Absf(f - integer_f) > EPSILON)
@@ -28,6 +28,16 @@ int FloorToInt(float f)
         return f < 0 ? integer_f + 1 : integer_f;
     }
     return integer_f;
+}
+
+int FloorToIntd(double f)
+{
+	int integer_d = (int)f;
+	if (Absd(f - integer_d) > EPSILON)
+	{
+		return f < 0 ? integer_d + 1 : integer_d;
+	}
+	return integer_d;
 }
 
 int RoundToInt(float f)

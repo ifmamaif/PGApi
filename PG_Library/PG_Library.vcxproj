@@ -170,6 +170,7 @@ xcopy "$(SolutionDir)x64\$(Configuration)\$(MSBuildProjectName).lib" "$(Solution
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Allocation.h" />
+    <ClInclude Include="Constants.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="KenPerlin.h" />
     <ClInclude Include="Math.h" />
@@ -179,6 +180,7 @@ xcopy "$(SolutionDir)x64\$(Configuration)\$(MSBuildProjectName).lib" "$(Solution
     <ClInclude Include="Queue.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="Utils.h" />
+    <ClInclude Include="ValueNoise.h" />
     <ClInclude Include="Vector2Int.h" />
   </ItemGroup>
   <ItemGroup>
@@ -196,6 +198,7 @@ xcopy "$(SolutionDir)x64\$(Configuration)\$(MSBuildProjectName).lib" "$(Solution
     <ClCompile Include="Queue.cpp" />
     <ClCompile Include="Random.cpp" />
     <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="ValueNoise.cpp" />
     <ClCompile Include="Vector2Int.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
