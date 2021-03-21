@@ -80,7 +80,7 @@ float ValueNoiseND(int nDim, ...)
 		return 0.0;
 	}
 
-	const int PERMUTATIONS = 2 << nDim-1;
+	const int PERMUTATIONS = 2 << (nDim - 1);
 	int interpolations = nDim;
 
 	float* input = new float[nDim];
