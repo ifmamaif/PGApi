@@ -87,7 +87,7 @@ public class Heart : GenericBehaviour
             xHearth = 16 * Mathf.Pow(Mathf.Sin(t), 3);
             yHearth = 13 * Mathf.Cos(t) - 5 * Mathf.Cos(2 * t) - 2 * Mathf.Cos(3 * t) - Mathf.Cos(4 * t);
 
-            double noise = PGApi.PGApi.PerlinNoiseUnity(phase);
+            double noise = PGApi.PGApi.PerlinNoise_Improved1D(phase);
 
             xHearth *= (float)noise;
             yHearth *= (float)noise;
@@ -108,7 +108,7 @@ public class Heart : GenericBehaviour
             for (float i = 0; i < Mathf.PI * 2; i += DistanceBetweenPoint)
             {
                 float t = i + phase;
-                float scale = (float)ScaleValue(PGApi.PGApi.PerlinNoiseUnity(t), 0, 1, 0.01f, scalePoints);
+                float scale = (float)ScaleValue(PGApi.PGApi.PerlinNoise_Improved1D(t), 0, 1, 0.01f, scalePoints);
                 points[j,k].transform.localScale = new Vector3(scale, scale, scale);
 
                 float transparancy = (t+j) % 1;
@@ -117,7 +117,7 @@ public class Heart : GenericBehaviour
                 xHearth = HearthX(t);
                 yHearth = HearthY(t);
 
-                double noise = ScaleValue(PGApi.PGApi.PerlinNoise2DUnity(
+                double noise = ScaleValue(PGApi.PGApi.PerlinNoise_Improved2D(
                     Mathf.Cos(i) + 1 + j/5,
                     Mathf.Sin(i) + 1 + j/5), 0, 1, 0.9f-j/20f, 1.1f-j/20f);
 

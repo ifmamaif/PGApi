@@ -175,10 +175,14 @@ xcopy "$(SolutionDir)x64\$(Configuration)\$(MSBuildProjectName).lib" "$(Solution
     <ClInclude Include="KenPerlin.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="MazeWorm.h" />
+    <ClInclude Include="Noise.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="PerlinNoiseImproved.h" />
+    <ClInclude Include="PerlinUtils.h" />
     <ClInclude Include="PreDefines.h" />
     <ClInclude Include="Queue.h" />
     <ClInclude Include="Random.h" />
+    <ClInclude Include="SimplexNoise.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="ValueNoise.h" />
     <ClInclude Include="Vector2Int.h" />
@@ -189,14 +193,18 @@ xcopy "$(SolutionDir)x64\$(Configuration)\$(MSBuildProjectName).lib" "$(Solution
     <ClCompile Include="KenPerlin.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="MazeWorm.cpp" />
+    <ClCompile Include="Noise.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="PerlinNoiseImproved.cpp" />
+    <ClCompile Include="PerlinUtils.cpp" />
     <ClCompile Include="Queue.cpp" />
     <ClCompile Include="Random.cpp" />
+    <ClCompile Include="SimplexNoise.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="ValueNoise.cpp" />
     <ClCompile Include="Vector2Int.cpp" />

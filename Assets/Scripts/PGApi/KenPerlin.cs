@@ -11,7 +11,7 @@
 				{
 					double xCoord = (double)x / width * scale + offsetX;
 					double yCoord = (double)y / height * scale + offsetY;
-					noiseMap[x, y] = PGApi.PerlinNoise2DUnity(xCoord, yCoord);
+					noiseMap[x, y] = PGApi.PerlinNoise_Improved2D(xCoord, yCoord);
 				}
 			}
 			return noiseMap;

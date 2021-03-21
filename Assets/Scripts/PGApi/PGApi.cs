@@ -18,10 +18,10 @@ namespace PGApi
         public static extern int GetValueMazeWorm(IntPtr buffer, int x, int y);
 
         [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
-        public static extern double PerlinNoiseUnity(double x);
+        public static extern double PerlinNoise_Improved1D(double x);
 
         [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
-        public static extern double PerlinNoise2DUnity(double x, double y);
+        public static extern double PerlinNoise_Improved2D(double x, double y);
 
         [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
         public static extern int RandBetween(int minInclusive, int maxExclusive);
@@ -39,7 +39,7 @@ namespace PGApi
         public static extern float Randf();
 
         [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
-        public static extern double PerlinNoise_Improved(double x, double y, double z);
+        public static extern double PerlinNoise_Improved3D(double x, double y, double z);
 
     }
 }

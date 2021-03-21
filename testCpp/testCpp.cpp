@@ -8,6 +8,8 @@
 #include "../PG_Library/KenPerlin.h"
 #include "../PG_Library/ValueNoise.h"
 #include "../PG_Library/Constants.h"
+#include "../PG_Library/PerlinNoiseImproved.h"
+#include "../PG_Library/SimplexNoise.h"
 
 #include <time.h>
 
@@ -24,7 +26,7 @@ void GetMinMaxPerlinNoise_Improved()
 		double y = Randf()*1000;
 		double z = Randf()*1000;
 
-		double res = PerlinNoise_Improved(x, y, z);
+		double res = PerlinNoise_Improved3D(x, y, z);
 		if (res < min)
 		{
 			min = res;
@@ -38,7 +40,7 @@ void GetMinMaxPerlinNoise_Improved()
 	double increment = 0;
 	for (int i = 0; i < 10001; i++)
 	{
-		double res = PerlinNoise_Improved(increment, increment, increment);
+		double res = PerlinNoise_Improved3D(increment, increment, increment);
 		if (res < min)
 		{
 			min = res;
