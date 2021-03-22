@@ -6,7 +6,7 @@
 
 extern "C"
 {
-	EXPORT_API double PerlinNoise_Improved1D(double x);
-	EXPORT_API double PerlinNoise_Improved2D(double x, double y);
-	EXPORT_API double PerlinNoise_Improved3D(double x, double y, double z);
+	EXPORT_API float PerlinNoise_Improved1D(float x);
+	EXPORT_API float PerlinNoise_Improved2D(float x, float y);
+	EXPORT_API float PerlinNoise_Improved3D(float x, float y, float z);
 }

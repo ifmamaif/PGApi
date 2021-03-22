@@ -17,7 +17,7 @@ public class MDS : GenericBehaviour
 	public struct TerrainType
 	{
 		public string name;
-		public double height;
+		public float height;
 		public Color colour;
 	}
 	public TerrainType[] regions;
@@ -163,7 +163,7 @@ public class MDS : GenericBehaviour
 
 	public Color[] GeneratecolorMap()
 	{
-		double[,] noiseMap = usePGApi ?
+		float[,] noiseMap = usePGApi ?
 			PGApi.Perlin.Generate2DMapUnity(perlinWidth, perlinHeight, perlinScale, perlinOffsetX, perlinOffsetY) :
 			GenerateNoiseMap();
 
@@ -185,9 +185,9 @@ public class MDS : GenericBehaviour
 		return colorMap;
 	}
 
-	public double[,] GenerateNoiseMap()
+	public float[,] GenerateNoiseMap()
 	{
-		double[,] noiseMap = new double[perlinWidth, perlinHeight];
+		float[,] noiseMap = new float[perlinWidth, perlinHeight];
 		for (int y = 0; y < perlinHeight; y++)
 		{
 			for (int x = 0; x < perlinWidth; x++)

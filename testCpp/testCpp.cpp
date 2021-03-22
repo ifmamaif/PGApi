@@ -17,16 +17,16 @@ void GetMinMaxPerlinNoise_Improved()
 {
 	//Minim - 0.878596,  -0.900608 ,  -0.837054 ,  -0.863498 ,  -0.837278
 	//Maxim 0.90416 , 0.898667 ,  0.959816 , 0.958262,0.927884
-	double min = 1;
-	double max = -1;
+	float min = 1;
+	float max = -1;
 
 	for (int i = 0; i < 20000000; i++)
 	{
-		double x = Randf()*1000;
-		double y = Randf()*1000;
-		double z = Randf()*1000;
+		float x = Randf()*1000;
+		float y = Randf()*1000;
+		float z = Randf()*1000;
 
-		double res = PerlinNoise_Improved3D(x, y, z);
+		float res = PerlinNoise_Improved3D(x, y, z);
 		if (res < min)
 		{
 			min = res;
@@ -37,10 +37,10 @@ void GetMinMaxPerlinNoise_Improved()
 		}
 	}
 
-	double increment = 0;
+	float increment = 0;
 	for (int i = 0; i < 10001; i++)
 	{
-		double res = PerlinNoise_Improved3D(increment, increment, increment);
+		float res = PerlinNoise_Improved3D(increment, increment, increment);
 		if (res < min)
 		{
 			min = res;
@@ -60,12 +60,12 @@ int TestPerlinNDim()
 {
     for (int i = 0; i < 100000; i++)
     {
-        double x = Randf()*100;
-        double y = Randf()*100;
-        double z = Randf()*100;
+        float x = Randf()*100;
+        float y = Randf()*100;
+        float z = Randf()*100;
 
-        double result1, result2;
-		double* results1, *results2;
+        float result1, result2;
+		float* results1, *results2;
 		int* resultsI1, * resultsI2;
 
 		results1 = ClassicPerlinNoise1D_Test_Input(x);

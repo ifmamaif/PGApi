@@ -4,6 +4,7 @@
 #include "Math.h"
 #include "Constants.h"
 #include "Allocation.h"
+#include "PerlinUtils.h"
 
 // ------------------------------------------------------------------------------------------------
 //   A Perlin Simplex Noise C++ Implementation (1D, 2D, 3D).
@@ -61,12 +62,12 @@ static const int grad4[32][4] =
 	{-1,1,1,0}	, {-1,1,-1,0}, {-1,-1,1,0}, {-1,-1,-1,0}
 };
 
-double ContributionFromCorners(const int nInput, const int gradient[], ...)
+float ContributionFromCorners(const int nInput, const int gradient[], ...)
 {
-	double* input = new double[nInput];
-	VA_LIST_GET(nInput, double, input);
+	float* input = new float[nInput];
+	VA_LIST_GET(nInput, float, input);
 	// The scalar should be 0.5, not 0.6, else the noise is not continuous at simplex boundaries.
-	double t = 0.5;
+	float t = 0.5;
 	for (int i = 0; i < nInput; i++)
 	{
 		t -= input[i] * input[i];
@@ -78,32 +79,10 @@ double ContributionFromCorners(const int nInput, const int gradient[], ...)
 	}
 
 	t *= t;
-	double result = t * t * DotArray(nInput, gradient, input);
+	float result = t * t * DotArray(nInput, gradient, input);
+	//float result = t * t * Gradient2D(nInput, gradient, input);
 	delete[] input;
 	return result;
-}
-
-// Helper function to compute gradients-dot-residual vectors (1D)
-//
-// note that these generate gradients of more than unit length.
-// To make a close match with the value range of classic Perlin noise,
-// the final noise values need to be rescaled to fit nicely within[-1, 1].
-// (The simplex noise functions as such also have different scaling.)
-// Note also that these noise functions are the most practical and useful
-// signed version of Perlin noise.
-static float grad(int hash, float x) {
-	const int h = hash & 15;		// Convert low 4 bits of hash code , 15 = 1111
-	float grad = 1.0f + (h & 7);    // Gradient value 1.0, 2.0, ..., 8.0
-	if ((h & 8) != 0) grad = -grad; // Set a random sign for the gradient
-//  float grad = gradients1D[h];    // NOTE : Test of Gradient look-up table instead of the above
-	return (grad * x);              // Multiply the gradient with the distance
-}
-
-static float grad(int hash, float x, float y) {
-	const int h = hash & 63;  // Convert low 3 bits of hash code
-	const float u = h < 4 ? x : y;  // into 8 simple gradient directions,
-	const float v = h < 4 ? y : x;
-	return ((h & 1) ? -u : u) + ((h & 2) ? -2.0f * v : 2.0f * v); // and compute the dot product with (x,y).
 }
 
 float SimplexNoise1D(float x) {
@@ -122,13 +101,13 @@ float SimplexNoise1D(float x) {
 	float t0 = 1.0f - x0 * x0;
 	//  if(t0 < 0.0f) t0 = 0.0f; // not possible
 	t0 *= t0;
-	n0 = t0 * t0 * grad(g_HASH_TABLE_KEN_PERLIN[i0], x0);
+	n0 = t0 * t0 * Gradient1D(g_HASH_TABLE_KEN_PERLIN[i0], x0);
 
 	// Calculate the contribution from the second corner
 	float t1 = 1.0f - x1 * x1;
 	//  if(t1 < 0.0f) t1 = 0.0f; // not possible
 	t1 *= t1;
-	n1 = t1 * t1 * grad(g_HASH_TABLE_KEN_PERLIN[i1], x1);
+	n1 = t1 * t1 * Gradient1D(g_HASH_TABLE_KEN_PERLIN[i1], x1);
 
 	// The maximum value of this noise is 8*(3/4)^4 = 2.53125
 	// A factor of 0.395 scales to fit exactly within [-1,1]
@@ -136,23 +115,23 @@ float SimplexNoise1D(float x) {
 }
 
 // 2D simplex noise
-double SimplexNoise2D(double xin, double yin)
+float SimplexNoise2D(float xin, float yin)
 {
 	// Skewing factors for 2D
-	const double F2 = 0.36602540378; // 0.5 * (sqrt(3.0) - 1.0);
+	const float F2 = 0.36602540378; // 0.5 * (sqrt(3.0) - 1.0);
 
 	// Skew the input space to determine which simplex cell we're in
-	double s = (xin + yin) * F2; // Hairy factor for 2D
+	float s = (xin + yin) * F2; // Hairy factor for 2D
 	int i = FastFloor(xin + s);
 	int j = FastFloor(yin + s);
 
 	// Unskewing factors for 2D
-	const double G2 = 0.2113248654; // (3.0 - sqrt(3.0)) / 6.0;
-	const double t = (i + j) * G2;
+	const float G2 = 0.2113248654; // (3.0 - sqrt(3.0)) / 6.0;
+	const float t = (i + j) * G2;
 
 	// Unskew the cell origin back to (x,y) space
-	double x0 = i - t;
-	double y0 = j - t;
+	float x0 = i - t;
+	float y0 = j - t;
 	// The x,y distances from the cell origin
 	x0 = xin - x0;
 	y0 = yin - y0;
@@ -179,11 +158,11 @@ double SimplexNoise2D(double xin, double yin)
 	// c = (3-sqrt(3))/6
 
 	// Offsets for middle corner in (x,y) unskewed coords
-	double x1 = x0 - i1 + G2;
-	double y1 = y0 - j1 + G2;
+	float x1 = x0 - i1 + G2;
+	float y1 = y0 - j1 + G2;
 	// Offsets for last corner in (x,y) unskewed coords
-	double x2 = x0 - 1.0 + 2.0 * G2;
-	double y2 = y0 - 1.0 + 2.0 * G2;
+	float x2 = x0 - 1.0 + 2.0 * G2;
+	float y2 = y0 - 1.0 + 2.0 * G2;
 
 	// Work out the hashed gradient indices of the three simplex corners
 	i = i & 255;
@@ -193,7 +172,7 @@ double SimplexNoise2D(double xin, double yin)
 	int gi2 = g_HASH_TABLE_KEN_PERLIN[i + 1 + g_HASH_TABLE_KEN_PERLIN[j + 1]] % 12;
 
 	// Noise contributions from the three corners
-	double n0, n1, n2;
+	float n0, n1, n2;
 	// Calculate the contribution from the three corners
 	n0 = ContributionFromCorners(2, grad4[gi0], x0, y0);
 	n1 = ContributionFromCorners(2, grad4[gi1], x1, y1);
@@ -205,24 +184,24 @@ double SimplexNoise2D(double xin, double yin)
 }
 
 // 3D simplex noise
-double SimplexNoise3D(double xin, double yin, double zin)
+float SimplexNoise3D(float xin, float yin, float zin)
 {
 	// Skew the input space to determine which simplex cell we're in
-	const double F3 = 1.0 / 3.0;
+	const float F3 = 1.0 / 3.0;
 	// Very nice and simple skew factor for 3D
-	double s = (xin + yin + zin) * F3;
+	float s = (xin + yin + zin) * F3;
 	int i = FastFloor(xin + s);
 	int j = FastFloor(yin + s);
 	int k = FastFloor(zin + s);
 
 	// Very nice and simple unskew factor, too
-	const double G3 = 1.0 / 6.0;
-	const double t = (i + j + k) * G3;
+	const float G3 = 1.0 / 6.0;
+	const float t = (i + j + k) * G3;
 
 	// Unskew the cell origin back to (x,y,z) space
-	double x0 = i - t;
-	double y0 = j - t;
-	double z0 = k - t;
+	float x0 = i - t;
+	float y0 = j - t;
+	float z0 = k - t;
 
 	// The x,y,z distances from the cell origin
 	x0 = xin - x0;
@@ -271,19 +250,19 @@ double SimplexNoise3D(double xin, double yin, double zin)
 	// c = 1/6.
 
 	// Offsets for second corner in (x,y,z) coordinates
-	double x1 = x0 - i1 + G3;
-	double y1 = y0 - j1 + G3;
-	double z1 = z0 - k1 + G3;
+	float x1 = x0 - i1 + G3;
+	float y1 = y0 - j1 + G3;
+	float z1 = z0 - k1 + G3;
 
 	// Offsets for third corner in (x,y,z) coordinates
-	double x2 = x0 - i2 + 2.0 * G3;
-	double y2 = y0 - j2 + 2.0 * G3;
-	double z2 = z0 - k2 + 2.0 * G3;
+	float x2 = x0 - i2 + 2.0 * G3;
+	float y2 = y0 - j2 + 2.0 * G3;
+	float z2 = z0 - k2 + 2.0 * G3;
 
 	// Offsets for last corner in (x,y,z) coordinates
-	double x3 = x0 - 1.0 + 3.0 * G3;
-	double y3 = y0 - 1.0 + 3.0 * G3;
-	double z3 = z0 - 1.0 + 3.0 * G3;
+	float x3 = x0 - 1.0 + 3.0 * G3;
+	float y3 = y0 - 1.0 + 3.0 * G3;
+	float z3 = z0 - 1.0 + 3.0 * G3;
 
 	// Work out the hashed gradient indices of the four simplex corners
 	i = i & 255;
@@ -295,7 +274,7 @@ double SimplexNoise3D(double xin, double yin, double zin)
 	int gi3 = g_HASH_TABLE_KEN_PERLIN[i + 1 + g_HASH_TABLE_KEN_PERLIN[j+ 1 + g_HASH_TABLE_KEN_PERLIN[k + 1]]] % 12;
 
 	// Noise contributions from the four corners
-	double n0, n1, n2, n3;
+	float n0, n1, n2, n3;
 	// Calculate the contribution from the four corners	
 	n0 = ContributionFromCorners(3, g_GRAD3[gi0], x0, y0, z0);
 	n1 = ContributionFromCorners(3, g_GRAD3[gi1], x1, y1, z1);
@@ -308,24 +287,24 @@ double SimplexNoise3D(double xin, double yin, double zin)
 }
 
 // 4D simplex noise
-double SimplexNoise4D(double x, double y, double z, double w) {
+float SimplexNoise4D(float x, float y, float z, float w) {
 
 	// The skewing and unskewing factors are hairy again for the 4D case
-	const double F4 = 0.30901699437; // (sqrt(5.0) - 1.0) / 4.0;
-	const double G4 = 0.13819660112; // (5.0 - sqrt(5.0)) / 20.0;	
+	const float F4 = 0.30901699437; // (sqrt(5.0) - 1.0) / 4.0;
+	const float G4 = 0.13819660112; // (5.0 - sqrt(5.0)) / 20.0;	
 
 	// Skew the (x,y,z,w) space to determine which cell of 24 simplicities we are in
-	const double s = (x + y + z + w) * F4; // Factor for 4D skewing
+	const float s = (x + y + z + w) * F4; // Factor for 4D skewing
 	int i = FastFloor(x + s);
 	int j = FastFloor(y + s);
 	int k = FastFloor(z + s);
 	int l = FastFloor(w + s);
 
-	const double t = (i + j + k + l) * G4; // Factor for 4D unskewing
-	double x0 = i - t; // Unskew the cell origin back to (x,y,z,w) space
-	double y0 = j - t;
-	double z0 = k - t;
-	double w0 = l - t;
+	const float t = (i + j + k + l) * G4; // Factor for 4D unskewing
+	float x0 = i - t; // Unskew the cell origin back to (x,y,z,w) space
+	float y0 = j - t;
+	float z0 = k - t;
+	float w0 = l - t;
 
 	x0 = x - x0; // The x,y,z,w distances from the cell origin
 	y0 = y - y0;
@@ -374,28 +353,28 @@ double SimplexNoise4D(double x, double y, double z, double w) {
 
 	// The fifth corner has all coordinate offsets = 1, so no need to look that up.
 	// Offsets for second corner in (x,y,z,w) coordinates
-	const double x1 = x0 - i1 + G4;
-	const double y1 = y0 - j1 + G4;
-	const double z1 = z0 - k1 + G4;
-	const double w1 = w0 - l1 + G4;
+	const float x1 = x0 - i1 + G4;
+	const float y1 = y0 - j1 + G4;
+	const float z1 = z0 - k1 + G4;
+	const float w1 = w0 - l1 + G4;
 
 	// Offsets for third corner in (x,y,z,w) coordinates
-	const double x2 = x0 - i2 + 2.0 * G4;
-	const double y2 = y0 - j2 + 2.0 * G4;
-	const double z2 = z0 - k2 + 2.0 * G4;
-	const double w2 = w0 - l2 + 2.0 * G4;
+	const float x2 = x0 - i2 + 2.0 * G4;
+	const float y2 = y0 - j2 + 2.0 * G4;
+	const float z2 = z0 - k2 + 2.0 * G4;
+	const float w2 = w0 - l2 + 2.0 * G4;
 
 	// Offsets for fourth corner in (x,y,z,w) coordinates
-	const double x3 = x0 - i3 + 3.0 * G4;
-	const double y3 = y0 - j3 + 3.0 * G4;
-	const double z3 = z0 - k3 + 3.0 * G4;
-	const double w3 = w0 - l3 + 3.0 * G4;
+	const float x3 = x0 - i3 + 3.0 * G4;
+	const float y3 = y0 - j3 + 3.0 * G4;
+	const float z3 = z0 - k3 + 3.0 * G4;
+	const float w3 = w0 - l3 + 3.0 * G4;
 
 	// Offsets for last corner in (x,y,z,w) coordinates
-	const double x4 = x0 - 1.0 + 4.0 * G4;
-	const double y4 = y0 - 1.0 + 4.0 * G4;
-	const double z4 = z0 - 1.0 + 4.0 * G4;
-	const double w4 = w0 - 1.0 + 4.0 * G4;
+	const float x4 = x0 - 1.0 + 4.0 * G4;
+	const float y4 = y0 - 1.0 + 4.0 * G4;
+	const float z4 = z0 - 1.0 + 4.0 * G4;
+	const float w4 = w0 - 1.0 + 4.0 * G4;
 
 	// Work out the hashed gradient indices of the five simplex corners
 	i = i & 255;
@@ -409,7 +388,7 @@ double SimplexNoise4D(double x, double y, double z, double w) {
 	const int gi4 = g_HASH_TABLE_KEN_PERLIN[i + 1 + g_HASH_TABLE_KEN_PERLIN[j + 1 + g_HASH_TABLE_KEN_PERLIN[k + 1 + g_HASH_TABLE_KEN_PERLIN[l + 1]]]] % 32;
 
 	// Noise contributions from the five corners
-	double n0, n1, n2, n3, n4;
+	float n0, n1, n2, n3, n4;
 	// Calculate the contribution from the five corners
 	n0 = ContributionFromCorners(4, grad4[gi0], x0, y0, z0, w0);
 	n1 = ContributionFromCorners(4, grad4[gi1], x1, y1, z1, w1);
@@ -422,7 +401,7 @@ double SimplexNoise4D(double x, double y, double z, double w) {
 }
 
 
-//double SimplexNoiseND(int nDim, ...)
+//float SimplexNoiseND(int nDim, ...)
 //{
 //	if (nDim < 1)
 //	{
@@ -430,17 +409,17 @@ double SimplexNoise4D(double x, double y, double z, double w) {
 //	}
 //
 //	// Get the input from the function with unknown number of parameters
-//	double* input = new double[nDim];
-//	VA_LIST_GET(nDim, double, input);
+//	float* input = new float[nDim];
+//	VA_LIST_GET(nDim, float, input);
 //
 //	// The skewing and unskewing factors are hairy again for the N-D case
 //	// SKEWING
-//	const double SKEWING = (sqrt(nDim + 1) - 1) / nDim;
+//	const float SKEWING = (sqrt(nDim + 1) - 1) / nDim;
 //	// UNSKEWING
-//	const double UNSKEWING = (1 - 1 / (sqrt(nDim+1))) / nDim;
+//	const float UNSKEWING = (1 - 1 / (sqrt(nDim+1))) / nDim;
 //	
 //	// Factor for N-D skewing
-//	double s = 0;
+//	float s = 0;
 //	for (int i = 0; i < nDim; i++)
 //	{
 //		s += input[i];
@@ -454,7 +433,7 @@ double SimplexNoise4D(double x, double y, double z, double w) {
 //	}
 //
 //	// Factor for N-D unskewing
-//	double t = 0;
+//	float t = 0;
 //	for (int i = 0; i < nDim; i++)
 //	{
 //		t += input[i];
@@ -512,10 +491,10 @@ double SimplexNoise4D(double x, double y, double z, double w) {
 //
 //
 //	// The final corner has all coordinate offsets = 1, so no need to compute that.
-//	double** finalCorner = new double* [nDim];
+//	float** finalCorner = new float* [nDim];
 //	for (int i = 0; i < nDim; i++)
 //	{
-//		finalCorner[i] = new double[nDim];
+//		finalCorner[i] = new float[nDim];
 //		for (int j = 0; j < nDim; j++)
 //		{
 //			finalCorner[i][j] = cellUnskewed[j] - simplexCorners[i][j] + (i + 1) * UNSKEWING;
@@ -546,9 +525,9 @@ double SimplexNoise4D(double x, double y, double z, double w) {
 //	}
 //		
 //	// Calculate the contribution from the five corners
-//	double* contributions = new double[nDim + 1];
+//	float* contributions = new float[nDim + 1];
 //	// Noise contributions from the five corners
-//	double* noise = new double[nDim + 1];
+//	float* noise = new float[nDim + 1];
 //
 //
 //	contributions[0] = 0.6;
@@ -583,6 +562,6 @@ double SimplexNoise4D(double x, double y, double z, double w) {
 //		}
 //	}
 //
-//	const double someConstant = 70;
+//	const float someConstant = 70;
 //	return someConstant * Sum(noise);
 //}

@@ -6,42 +6,42 @@
 #include <math.h>
 #include "PerlinNoiseImproved.h"
 
-double** Generate2DMap(int width, int height, float scale, float offsetX, float offsetY)
+float** Generate2DMap(int width, int height, float scale, float offsetX, float offsetY)
 {
-	//double** noiseMap = (double**)malloc(sizeof(double*)*width);
+	//float** noiseMap = (float**)malloc(sizeof(float*)*width);
 	//for (int i = 0; i < width; i++)
 	//{
-	//	noiseMap[i] = (double*)malloc(sizeof(double)*height);
+	//	noiseMap[i] = (float*)malloc(sizeof(float)*height);
 	//}
-	double** noiseMap = new double* [width];
+	float** noiseMap = new float* [width];
 	for (int i = 0; i < width; i++)
 	{
-		noiseMap[i] = new double[height];
+		noiseMap[i] = new float[height];
 	}
 
 	for (int x = 0; x < width; x++)
 	{
 		for (int y = 0; y < height; y++)
 		{
-			double xCoord = (double)x / width * scale + offsetX;
-			double yCoord = (double)y / height * scale + offsetY;
-			noiseMap[x][y] = (double)PerlinNoise_Improved3D(xCoord, yCoord, 0.f);
+			float xCoord = (float)x / width * scale + offsetX;
+			float yCoord = (float)y / height * scale + offsetY;
+			noiseMap[x][y] = (float)PerlinNoise_Improved3D(xCoord, yCoord, 0.f);
 		}
 	}
 	return noiseMap;
 }
 
-double& Get2DMapValue(double** buffer, int width, int height)
+float& Get2DMapValue(float** buffer, int width, int height)
 {
 	return buffer[width][height];
 }
 
-double OctavePerlin(double x, double y, double z, int octaves, double persistence)
+float OctavePerlin(float x, float y, float z, int octaves, float persistence)
 {
-	double total = 0;
-	double frequency = 1;
-	double amplitude = 1;
-	double maxValue = 0;                            // Used for normalizing result to 0.0 - 1.0
+	float total = 0;
+	float frequency = 1;
+	float amplitude = 1;
+	float maxValue = 0;                            // Used for normalizing result to 0.0 - 1.0
 	for (int i = 0; i < octaves; i++)
 	{
 		total += PerlinNoise_Improved3D(x * frequency, y * frequency, z * frequency) * amplitude;
@@ -55,11 +55,11 @@ double OctavePerlin(double x, double y, double z, int octaves, double persistenc
 	return total / maxValue;
 }
 
-double Turbulence(double x, double y, double z, int octaves, double amplitude, double magnification)
+float Turbulence(float x, float y, float z, int octaves, float amplitude, float magnification)
 {
 	// Noise with many frequencies present looks more natural 
 	// can get this by summing noise at different magnifications
-	double result = 0;
+	float result = 0;
 	for (int i = 0; i < octaves; i++)
 	{
 		result += amplitude * PerlinNoise_Improved3D(x, y, z);
@@ -70,7 +70,7 @@ double Turbulence(double x, double y, double z, int octaves, double amplitude, d
 	return result;
 }
 
-double Marbling(double x, double y, double z, double frequency, double amplitude)
+float Marbling(float x, float y, float z, float frequency, float amplitude)
 {
 	// f = marble pattern frequency
 	// a = marble noise amplitude

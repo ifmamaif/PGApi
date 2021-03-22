@@ -22,9 +22,9 @@ extern "C"
 	// weight should be in the range [0.0, 1.0]
 	EXPORT_API double Lerpd(double a0, double a1, double weight);
 
-	EXPORT_API double Dot(double x, double y);
-	EXPORT_API double DotN(int nDim, const int g[]...);
-	EXPORT_API double DotArray(int nDim, const int g[], const double x[]);
+	EXPORT_API float Dot(float x, float y);
+	EXPORT_API float DotN(int nDim, const int g[]...);
+	EXPORT_API float DotArray(int nDim, const int g[], const float x[]);
 
 	EXPORT_API int CheckBitStatus(int number, int bitPosition);
 }

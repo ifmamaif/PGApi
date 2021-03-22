@@ -5,8 +5,8 @@
 extern "C"
 {
 
-	EXPORT_API double SimplexNoise2D(double xin, double yin);
-	EXPORT_API double SimplexNoise3D(double xin, double yin, double zin);
-	EXPORT_API double SimplexNoise4D(double x, double y, double z, double w);
+	EXPORT_API float SimplexNoise2D(float xin, float yin);
+	EXPORT_API float SimplexNoise3D(float xin, float yin, float zin);
+	EXPORT_API float SimplexNoise4D(float x, float y, float z, float w);
 
 }

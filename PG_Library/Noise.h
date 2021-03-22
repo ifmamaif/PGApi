@@ -5,11 +5,11 @@
 extern "C"
 {
 
-	EXPORT_API double** Generate2DMap(int width, int height, float scale, float offsetX, float offsetY);
+	EXPORT_API float** Generate2DMap(int width, int height, float scale, float offsetX, float offsetY);
 
-	EXPORT_API double& Get2DMapValue(double** buffer, int width, int height);
+	EXPORT_API float& Get2DMapValue(float** buffer, int width, int height);
 
-	EXPORT_API double OctavePerlin(double x, double y, double z, int octaves, double persistence);
+	EXPORT_API float OctavePerlin(float x, float y, float z, int octaves, float persistence);
 
-	EXPORT_API double Turbulence(double x, double y, double z, int octaves, double amplitude,double magnification);
+	EXPORT_API float Turbulence(float x, float y, float z, int octaves, float amplitude,float magnification);
 }

@@ -57,7 +57,7 @@ class PerlinTexture : GenericBehaviour
         Renderer renderer = objects[0].GetComponent<MeshRenderer>();
         Texture2D texture = new Texture2D(width, height);
 
-        double[,] preColors = PGApi.Perlin.Generate2DMapUnity(width, height, scale, offsetx, offsety);
+        float[,] preColors = PGApi.Perlin.Generate2DMapUnity(width, height, scale, offsetx, offsety);
 
         for (int x = 0; x < width; x++)
             for (int y = 0; y < height; y++)
@@ -79,11 +79,11 @@ class PerlinTexture : GenericBehaviour
         for (int x = 0; x < width; x++)
             for (int y = 0; y < height; y++)
             {
-                double xd = (double)x / width * scale + offsetx;
-                double yd = (double)y / height * scale + offsety;
+                float xd = (float)x / width * scale + offsetx;
+                float yd = (float)y / height * scale + offsety;
 
 
-                double noise = PGApi.PGApi.PerlinNoise_Improved3D(xd, yd, 0);
+                float noise = PGApi.PGApi.PerlinNoise_Improved3D(xd, yd, 0);
                                
                 float rand = pink_constant / (float)noise;
                 //rand = rand == float.PositiveInfinity ? float.MaxValue : rand == float.NegativeInfinity ? float.MinValue : rand;
@@ -105,11 +105,11 @@ class PerlinTexture : GenericBehaviour
         for (int x = 0; x < width; x++)
             for (int y = 0; y < height; y++)
             {
-                double xd = (double)x / width * scale + offsetx;
-                double yd = (double)y / height * scale + offsety;
+                float xd = (float)x / width * scale + offsetx;
+                float yd = (float)y / height * scale + offsety;
 
 
-                double noise = PGApi.PGApi.PerlinNoise_Improved3D(xd, yd, 0);
+                float noise = PGApi.PGApi.PerlinNoise_Improved3D(xd, yd, 0);
                 noise = noise < 0 ? noise * -1 : noise;
 
                 float rand = (float)noise;// pink_constant / (float)noise;
@@ -132,11 +132,11 @@ class PerlinTexture : GenericBehaviour
         for (int x = 0; x < width; x++)
             for (int y = 0; y < height; y++)
             {
-                double xd = (double)x / width * scale + offsetx;
-                double yd = (double)y / height * scale + offsety;
+                float xd = (float)x / width * scale + offsetx;
+                float yd = (float)y / height * scale + offsety;
 
 
-                double noise = PGApi.PGApi.PerlinNoise_Improved3D(xd, yd, 0);
+                float noise = PGApi.PGApi.PerlinNoise_Improved3D(xd, yd, 0);
                 noise = noise < 0 ? noise * -1 : noise;
                 noise = Mathf.Lerp(0, Mathf.PI / 2, (float)noise);
 
@@ -158,11 +158,11 @@ class PerlinTexture : GenericBehaviour
         for (int x = 0; x < width; x++)
             for (int y = 0; y < height; y++)
             {
-                double xd = (double)x / width * scale + offsetx;
-                double yd = (double)y / height * scale + offsety;
+                float xd = (float)x / width * scale + offsetx;
+                float yd = (float)y / height * scale + offsety;
 
 
-                double noise = PGApi.PGApi.PerlinNoise_Improved3D(xd, yd, 0);
+                float noise = PGApi.PGApi.PerlinNoise_Improved3D(xd, yd, 0);
                 float rand = (float)(xd + noise);
                 rand = Mathf.Cos(rand);
                 Color color = new Color(rand, rand, rand);
@@ -181,11 +181,11 @@ class PerlinTexture : GenericBehaviour
         for (int x = 0; x < width; x++)
             for (int y = 0; y < height; y++)
             {
-                double xd = (double)x / width * scale + offsetx;
-                double yd = (double)y / height * scale + offsety;
+                float xd = (float)x / width * scale + offsetx;
+                float yd = (float)y / height * scale + offsety;
 
 
-                double noise = PGApi.PGApi.PerlinNoise_Improved3D(xd, yd, 0);
+                float noise = PGApi.PGApi.PerlinNoise_Improved3D(xd, yd, 0);
                 float rand = (float)(xd + noise);
                 rand = Mathf.Sin(rand);
                 Color color = new Color(rand, rand, rand);

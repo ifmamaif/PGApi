@@ -66,7 +66,7 @@ double Lerpd(double a0, double a1, double weight)
     return a0 + weight * (a1 - a0);
 }
 
-int FastFloor(double d)
+int FastFloor(float d)
 {
     return d > 0 ? (int)d : (int)d - 1;
 }

@@ -87,7 +87,7 @@ public class Heart : GenericBehaviour
             xHearth = 16 * Mathf.Pow(Mathf.Sin(t), 3);
             yHearth = 13 * Mathf.Cos(t) - 5 * Mathf.Cos(2 * t) - 2 * Mathf.Cos(3 * t) - Mathf.Cos(4 * t);
 
-            double noise = PGApi.PGApi.PerlinNoise_Improved1D(phase);
+            float noise = PGApi.PGApi.PerlinNoise_Improved1D(phase);
 
             xHearth *= (float)noise;
             yHearth *= (float)noise;
@@ -117,7 +117,7 @@ public class Heart : GenericBehaviour
                 xHearth = HearthX(t);
                 yHearth = HearthY(t);
 
-                double noise = ScaleValue(PGApi.PGApi.PerlinNoise_Improved2D(
+                float noise = ScaleValue(PGApi.PGApi.PerlinNoise_Improved2D(
                     Mathf.Cos(i) + 1 + j/5,
                     Mathf.Sin(i) + 1 + j/5), 0, 1, 0.9f-j/20f, 1.1f-j/20f);
 
@@ -132,14 +132,14 @@ public class Heart : GenericBehaviour
         phase += 0.001f;
     }
 
-    double ScaleValue(double value,
-              double originalMin, double originalMax,
-              double newMin, double newMax)
+    float ScaleValue(float value,
+              float originalMin, float originalMax,
+              float newMin, float newMax)
     {
         // scale original value to range 0...1
-        double normalizedValue = (value - originalMin)/ (originalMax - originalMin);
+        float normalizedValue = (value - originalMin)/ (originalMax - originalMin);
 
-        double lerpedValue = newMin + normalizedValue * (newMax - newMin);
+        float lerpedValue = newMin + normalizedValue * (newMax - newMin);
 
         // return new value in new range
         return lerpedValue;
