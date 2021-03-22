@@ -31,7 +31,7 @@ float ClassicPerlinNoise1D(float x)
 	float u = Fade(x);
 
 	// Interpolate along x the contributions from each of the corners
-	float nx = Lerpd(n0, n1, u);
+	float nx = Lerpf(n0, n1, u);
 
 	return nx;
 }
@@ -67,11 +67,11 @@ float ClassicPerlinNoise2D(float x, float y)
 	float v = Fade(y);
 
 	// Interpolate along x the contributions from each of the corners
-	float nx0 = Lerpd(n00, n10, u);
-	float nx1 = Lerpd(n01, n11, u);
+	float nx0 = Lerpf(n00, n10, u);
+	float nx1 = Lerpf(n01, n11, u);
 
 	// Interpolate the four results along y
-	float nxy = Lerpd(nx0, nx1, v);
+	float nxy = Lerpf(nx0, nx1, v);
 
 	return nxy;
 }
@@ -119,17 +119,17 @@ float ClassicPerlinNoise3D(float x, float y, float z)
 	float w = Fade(z);
 
 	// Interpolate along x the contributions from each of the corners
-	float nx00 = Lerpd(n000, n100, u);
-	float nx01 = Lerpd(n001, n101, u);
-	float nx10 = Lerpd(n010, n110, u);
-	float nx11 = Lerpd(n011, n111, u);
+	float nx00 = Lerpf(n000, n100, u);
+	float nx01 = Lerpf(n001, n101, u);
+	float nx10 = Lerpf(n010, n110, u);
+	float nx11 = Lerpf(n011, n111, u);
 
 	// Interpolate the four results along y
-	float nxy0 = Lerpd(nx00, nx10, v);
-	float nxy1 = Lerpd(nx01, nx11, v);
+	float nxy0 = Lerpf(nx00, nx10, v);
+	float nxy1 = Lerpf(nx01, nx11, v);
 
 	// Interpolate the two last results along z
-	float nxyz = Lerpd(nxy0, nxy1, w);
+	float nxyz = Lerpf(nxy0, nxy1, w);
 
 	return nxyz;
 }
@@ -265,7 +265,7 @@ float PerlinNoiseNDArray(int nDim, float* input)
 	{
 		for (int j = 0; j < interpolations; j++)
 		{
-			noiseContributions[j] = Lerpd(noiseContributions[j], noiseContributions[j + interpolations], curves[i]);
+			noiseContributions[j] = Lerpf(noiseContributions[j], noiseContributions[j + interpolations], curves[i]);
 		}
 		interpolations /= 2;
 	}

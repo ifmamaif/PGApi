@@ -68,17 +68,17 @@ float PerlinNoise_Improved3D(float x, float y, float z)
 	// AND ADD BLENDED RESULTS FROM  8 CORNERS OF CUBE
 	// Interpolations
 	// first
-	float l01 = Lerpd(g000, g001, u);
-	float l02 = Lerpd(g002, g003, u);
-	float l03 = Lerpd(g004, g005, u);
-	float l04 = Lerpd(g006, g007, u);
+	float l01 = Lerpf(g000, g001, u);
+	float l02 = Lerpf(g002, g003, u);
+	float l03 = Lerpf(g004, g005, u);
+	float l04 = Lerpf(g006, g007, u);
 
 	// second
-	float l11 = Lerpd(l01, l02, v);
-	float l12 = Lerpd(l03, l04, v);
+	float l11 = Lerpf(l01, l02, v);
+	float l12 = Lerpf(l03, l04, v);
 
 	// third
-	float l20 = Lerpd(l11, l12, w);
+	float l20 = Lerpf(l11, l12, w);
 
 	return l20;
 }
@@ -120,11 +120,11 @@ float PerlinNoise_Improved2D(float x, float y)
 	// AND ADD BLENDED RESULTS FROM  8 CORNERS OF CUBE
 	// Interpolations
 	// first
-	float l01 = Lerpd(g000, g001, u);
-	float l02 = Lerpd(g002, g003, u);
+	float l01 = Lerpf(g000, g001, u);
+	float l02 = Lerpf(g002, g003, u);
 
 	// second
-	float l11 = Lerpd(l01, l02, v);
+	float l11 = Lerpf(l01, l02, v);
 
 	return l11;
 }
@@ -155,7 +155,7 @@ float PerlinNoise_Improved1D(float x)
 
 	// AND ADD BLENDED RESULTS FROM  8 CORNERS OF CUBE
 	// Interpolations
-	float l01 = Lerpd(g000, g001, u);
+	float l01 = Lerpf(g000, g001, u);
 
 	return l01;
 }
