@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "PerlinUtils.h"
 
-float Fade(float t)
+float Fadef(float t)
 {
 	// Fade function as defined by Ken Perlin.  
 	// This eases coordinate values so that they will "ease" towards integral values. 

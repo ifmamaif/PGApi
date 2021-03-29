@@ -28,7 +28,7 @@ float ClassicPerlinNoise1D(float x)
 	float n1 = Dotf((float)g_GRAD3[gi1][0], x - 1);
 
 	// Compute the fade curve value for each of x, y, z
-	float u = Fade(x);
+	float u = Fadef(x);
 
 	// Interpolate along x the contributions from each of the corners
 	float nx = Lerpf(n0, n1, u);
@@ -63,8 +63,8 @@ float ClassicPerlinNoise2D(float x, float y)
 	float n11 = DotN(2,g_GRAD3[gi11], x - 1, y - 1);
 
 	// Compute the fade curve value for each of x, y, z
-	float u = Fade(x);
-	float v = Fade(y);
+	float u = Fadef(x);
+	float v = Fadef(y);
 
 	// Interpolate along x the contributions from each of the corners
 	float nx0 = Lerpf(n00, n10, u);
@@ -114,9 +114,9 @@ float ClassicPerlinNoise3D(float x, float y, float z)
 	float n111 = DotN(3,g_GRAD3[gi111], x - 1, y - 1, z - 1);
 
 	// Compute the fade curve value for each of x, y, z
-	float u = Fade(x);
-	float v = Fade(y);
-	float w = Fade(z);
+	float u = Fadef(x);
+	float v = Fadef(y);
+	float w = Fadef(z);
 
 	// Interpolate along x the contributions from each of the corners
 	float nx00 = Lerpf(n000, n100, u);
@@ -256,7 +256,7 @@ float PerlinNoiseNDArray(int nDim, float* input)
 	float* curves = input;
 	for (int i = 0; i < nDim; i++)
 	{
-		curves[i] = Fade(input[i]);
+		curves[i] = Fadef(input[i]);
 	}
 
 	// Interpolate along x the contributions from each of the corners

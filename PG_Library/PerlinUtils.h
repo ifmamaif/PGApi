@@ -1,7 +1,7 @@
 #pragma once
 
 
-float Fade(float t);
+float Fadef(float t);
 
 // Helper function to compute gradients-dot-residual vectors (1D)
 //

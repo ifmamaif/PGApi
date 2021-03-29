@@ -61,9 +61,9 @@ float PerlinNoise_Improved3D(float x, float y, float z)
 	float g007 = Gradient3D(bbb, x - 1, y - 1, z - 1);
 
 	// COMPUTE FADE CURVES FOR EACH OF X,Y,Z.
-	float u = Fade(x),
-		v = Fade(y),
-		w = Fade(z);
+	float u = Fadef(x),
+		v = Fadef(y),
+		w = Fadef(z);
 
 	// AND ADD BLENDED RESULTS FROM  8 CORNERS OF CUBE
 	// Interpolations
@@ -114,8 +114,8 @@ float PerlinNoise_Improved2D(float x, float y)
 	float g003 = Gradient2D(g_HASH_TABLE_KEN_PERLIN[BB], x - 1, y - 1);	// top right
 
 	// COMPUTE FADE CURVES FOR EACH OF X,Y,Z.
-	float u = Fade(x),
-		v = Fade(y);
+	float u = Fadef(x),
+		v = Fadef(y);
 
 	// AND ADD BLENDED RESULTS FROM  8 CORNERS OF CUBE
 	// Interpolations
@@ -151,7 +151,7 @@ float PerlinNoise_Improved1D(float x)
 	float g001 = Gradient1D(g_HASH_TABLE_KEN_PERLIN[BA], x - 1);
 
 	// COMPUTE FADE CURVES FOR EACH OF X,Y,Z.
-	float u = Fade(x);
+	float u = Fadef(x);
 
 	// AND ADD BLENDED RESULTS FROM  8 CORNERS OF CUBE
 	// Interpolations
