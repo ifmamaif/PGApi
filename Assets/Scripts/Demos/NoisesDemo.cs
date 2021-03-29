@@ -42,6 +42,8 @@ class NoisesDemo : GenericBehaviour
         GeneratePerlinNoiseClasic3D();
         GeneratePerlinNoiseImproved2D();
         GeneratePerlinNoiseImproved3D();
+        GenerateSimplexNoise2D();
+        GenerateSimplexNoise3D();
     }
     void GeneratePerlinNoiseClasic2D()
     {
