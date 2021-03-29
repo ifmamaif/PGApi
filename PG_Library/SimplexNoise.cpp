@@ -27,13 +27,13 @@
 
 // ------------------------------------------------------------------------------------------------
 // Simplex noise
-// • Simplex noise has a lower computational complexity and requires fewer multiplications.
-// • Simplex noise scales to higher dimensions(4D, 5D and up) with much less computational
+// ï¿½ Simplex noise has a lower computational complexity and requires fewer multiplications.
+// ï¿½ Simplex noise scales to higher dimensions(4D, 5D and up) with much less computational
 //		cost, the complexity is for dimensions instead of the of classic Noise.
-// • Simplex noise has no noticeable directional artifacts.
-// • Simplex noise has a well - defined and continuous gradient everywhere that can be computed
+// ï¿½ Simplex noise has no noticeable directional artifacts.
+// ï¿½ Simplex noise has a well - defined and continuous gradient everywhere that can be computed
 //		quite cheaply.
-// • Simplex noise is easy to implement in hardware.
+// ï¿½ Simplex noise is easy to implement in hardware.
 // ------------------------------------------------------------------------------------------------
 
 // A lookup table to traverse the simplex around a given point in 4D.
@@ -91,7 +91,7 @@ float SimplexNoise1D(float x) {
 	// No need to skew the input space in 1D
 
 	// Corners coordinates (nearest integer values):
-	int i0 = FastFloor(x);
+	int i0 = FastFloorf(x);
 	int i1 = i0 + 1;
 	// Distances to corners (between 0 and 1):
 	float x0 = x - i0;
@@ -122,8 +122,8 @@ float SimplexNoise2D(float xin, float yin)
 
 	// Skew the input space to determine which simplex cell we're in
 	float s = (xin + yin) * F2; // Hairy factor for 2D
-	int i = FastFloor(xin + s);
-	int j = FastFloor(yin + s);
+	int i = FastFloorf(xin + s);
+	int j = FastFloorf(yin + s);
 
 	// Unskewing factors for 2D
 	const float G2 = 0.2113248654; // (3.0 - sqrt(3.0)) / 6.0;
@@ -190,9 +190,9 @@ float SimplexNoise3D(float xin, float yin, float zin)
 	const float F3 = 1.0 / 3.0;
 	// Very nice and simple skew factor for 3D
 	float s = (xin + yin + zin) * F3;
-	int i = FastFloor(xin + s);
-	int j = FastFloor(yin + s);
-	int k = FastFloor(zin + s);
+	int i = FastFloorf(xin + s);
+	int j = FastFloorf(yin + s);
+	int k = FastFloorf(zin + s);
 
 	// Very nice and simple unskew factor, too
 	const float G3 = 1.0 / 6.0;
@@ -296,9 +296,9 @@ float SimplexNoise4D(float x, float y, float z, float w) {
 	// Skew the (x,y,z,w) space to determine which cell of 24 simplicities we are in
 	const float s = (x + y + z + w) * F4; // Factor for 4D skewing
 	int i = FastFloor(x + s);
-	int j = FastFloor(y + s);
-	int k = FastFloor(z + s);
-	int l = FastFloor(w + s);
+	int j = FastFloorf(y + s);
+	int k = FastFloorf(z + s);
+	int l = FastFloorf(w + s);
 
 	const float t = (i + j + k + l) * G4; // Factor for 4D unskewing
 	float x0 = i - t; // Unskew the cell origin back to (x,y,z,w) space
@@ -429,7 +429,7 @@ float SimplexNoise4D(float x, float y, float z, float w) {
 //	int* cellSkewed = new int[nDim];
 //	for (int i = 0; i < nDim; i++)
 //	{
-//		cellSkewed[i] = FastFloor(input[i] + s);
+//		cellSkewed[i] = FastFloorf(input[i] + s);
 //	}
 //
 //	// Factor for N-D unskewing

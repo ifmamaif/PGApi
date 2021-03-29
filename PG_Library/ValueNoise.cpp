@@ -12,7 +12,7 @@ float smoothstep(const float& t)
 
 float ValueNoise(const float x)
 {
-	int xInteger = FastFloor(x);
+	int xInteger = FastFloorf(x);
 
 	float interpolation = x - xInteger;
 
@@ -24,7 +24,7 @@ float ValueNoise(const float x)
 
 float ValueNoise1D(const float x)
 {
-	const int xInteger = FastFloor(x);
+	const int xInteger = FastFloorf(x);
 
 	const float tx = x - xInteger;
 
@@ -44,8 +44,8 @@ float ValueNoise1D(const float x)
 
 float ValueNoise2D(const float x, const float y) 
 {
-	int xInteger = FastFloor(x);
-	int yInteger = FastFloor(y);
+	int xInteger = FastFloorf(x);
+	int yInteger = FastFloorf(y);
 
 	float tx = x - xInteger;
 	float ty = y - yInteger;
@@ -92,11 +92,11 @@ float ValueNoiseND(int nDim, ...)
 	int* inputInteger = new int[nDim];
 	for (int i = 0; i < nDim; i++)
 	{
-		inputInteger[i] = FastFloor(input[i]);
+		inputInteger[i] = FastFloorf(input[i]);
 		inputFloats[i] = input[i] - inputInteger[i];
 		inputInteger[i] = inputInteger[i] & 255;
 	}
-	//inputInteger[0] = FastFloor(input[0]);
+	//inputInteger[0] = FastFloorf(input[0]);
 	//inputFloats[0] = input[0] - inputInteger[0];
 	//inputInteger[0] = inputInteger[0] & 255;
 

@@ -7,7 +7,7 @@ extern "C"
 	EXPORT_API int Absi(int value);
 	EXPORT_API float Absf(float value);
 	EXPORT_API double Absd(double value);
-	EXPORT_API int FastFloor(double d);
+	EXPORT_API int FastFloorf(float d);
 
 	EXPORT_API int FloorToIntf(float f);
 	EXPORT_API int FloorToIntd(double f);
