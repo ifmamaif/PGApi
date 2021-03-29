@@ -86,14 +86,17 @@ float Dotf(float x, float y)
 	return x * y;
 }
 
-float DotN(int nDim, const int g[]...)
+//Parameters of functions that correspond to ... are promoted before passing to your variadic function. char and short are promoted to int, float is promoted to double, etc.
+float DotN(int nDim, const int g[], ... )
 {
     float result = 0;
 	va_list list;
-	va_start(list, nDim);
+	va_start(list, g);
 	for (int i = 0; i < nDim; i++)
 	{
-        result = result + (g[i] * (va_arg(list, float)));
+        float elem = (float)va_arg(list, double);
+
+        result = result + (g[i] * (elem));
 	}
 	va_end(list);
     return result;

@@ -25,7 +25,7 @@ extern "C"
 
 	EXPORT_API int Doti(int x, int y);
 	EXPORT_API float Dotf(float x, float y);
-	EXPORT_API float DotN(int nDim, const int g[]...);
+	EXPORT_API float DotN(int nDim, const int g[], ...);
 	EXPORT_API float DotArray(int nDim, const int g[], const float x[]);
 
 	EXPORT_API int CheckBitStatus(int number, int bitPosition);

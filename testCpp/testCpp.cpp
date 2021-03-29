@@ -1,4 +1,4 @@
-﻿// testCpp.cpp : This file contains the 'main' function. Program execution begins and ends there.
+// testCpp.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
 #include <iostream>
@@ -13,20 +13,20 @@
 
 #include <time.h>
 
-void GetMinMaxPerlinNoise_Improved()
+void GetMinMaxPerlinNoise_Improved(float (*f)(float,float,float))
 {
 	//Minim - 0.878596,  -0.900608 ,  -0.837054 ,  -0.863498 ,  -0.837278
 	//Maxim 0.90416 , 0.898667 ,  0.959816 , 0.958262,0.927884
 	float min = 1;
 	float max = -1;
 
-	for (int i = 0; i < 20000000; i++)
+	for (int i = 0; i < 10000; i++)
 	{
 		float x = Randf()*1000;
 		float y = Randf()*1000;
 		float z = Randf()*1000;
 
-		float res = PerlinNoise_Improved3D(x, y, z);
+		float res = f(x, y, z);
 		if (res < min)
 		{
 			min = res;
