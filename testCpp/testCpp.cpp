@@ -1,4 +1,4 @@
-// testCpp.cpp : This file contains the 'main' function. Program execution begins and ends there.
+﻿// testCpp.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
 #include <iostream>
@@ -40,7 +40,7 @@ void GetMinMaxPerlinNoise_Improved(float (*f)(float,float,float))
 	float increment = 0;
 	for (int i = 0; i < 10001; i++)
 	{
-		float res = PerlinNoise_Improved3D(increment, increment, increment);
+		float res = f(increment, increment, increment);
 		if (res < min)
 		{
 			min = res;
@@ -162,7 +162,9 @@ int TestValueNoise()
 
 int main(int argc,char* argv[])
 {
-	GetMinMaxPerlinNoise_Improved();
+	GetMinMaxPerlinNoise_Improved(ClassicPerlinNoise3D);
+	GetMinMaxPerlinNoise_Improved(PerlinNoise_Improved3D);
+	GetMinMaxPerlinNoise_Improved(SimplexNoise3D);
 	//std::cout << TestPerlinNDim() << std::endl;
 	//std::cout << TestValueNoise() << std::endl;
 
