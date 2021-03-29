@@ -24,8 +24,8 @@ float ClassicPerlinNoise1D(float x)
 	int gi1 = g_HASH_TABLE_KEN_PERLIN[xi + 1] % 12;
 
 	// Calculate noise contributions from each of the eight corners
-	float n0 = Dot(g_GRAD3[gi0][0], x);
-	float n1 = Dot(g_GRAD3[gi1][0], x - 1);
+	float n0 = Dotf((float)g_GRAD3[gi0][0], x);
+	float n1 = Dotf((float)g_GRAD3[gi1][0], x - 1);
 
 	// Compute the fade curve value for each of x, y, z
 	float u = Fade(x);
