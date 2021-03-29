@@ -9,7 +9,7 @@
 float MutationValue(float x)
 {
 	//return (x + 1) / 2;					     	// For convenience we bound it to 0 - 1 (theoretical min/max before is -1 - 1)
-	return (x + 0.7) / 1.5;                         // Magic value to obtain [-0.2,1.13] 
+	return (x + 0.7f) / 1.5f;                         // Magic value to obtain [-0.2,1.13] 
 }
 
 //IMPLEMENTATION OF IMPROVED NOISE - COPYRIGHT 2002 KEN PERLIN.
