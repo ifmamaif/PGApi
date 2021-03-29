@@ -27,13 +27,13 @@
 
 // ------------------------------------------------------------------------------------------------
 // Simplex noise
-// ï¿½ Simplex noise has a lower computational complexity and requires fewer multiplications.
-// ï¿½ Simplex noise scales to higher dimensions(4D, 5D and up) with much less computational
+// • Simplex noise has a lower computational complexity and requires fewer multiplications.
+// • Simplex noise scales to higher dimensions(4D, 5D and up) with much less computational
 //		cost, the complexity is for dimensions instead of the of classic Noise.
-// ï¿½ Simplex noise has no noticeable directional artifacts.
-// ï¿½ Simplex noise has a well - defined and continuous gradient everywhere that can be computed
+// • Simplex noise has no noticeable directional artifacts.
+// • Simplex noise has a well - defined and continuous gradient everywhere that can be computed
 //		quite cheaply.
-// ï¿½ Simplex noise is easy to implement in hardware.
+// • Simplex noise is easy to implement in hardware.
 // ------------------------------------------------------------------------------------------------
 
 // A lookup table to traverse the simplex around a given point in 4D.
