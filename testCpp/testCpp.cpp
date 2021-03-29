@@ -49,7 +49,7 @@ void GetMinMaxPerlinNoise_Improved()
 		{
 			max = res;
 		}
-		increment += 0.00001;
+		increment += 0.00001f;
 	}
 
 	std::cout << "Minim " << min << std::endl;

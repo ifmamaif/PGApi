@@ -91,7 +91,7 @@ float SimplexNoise1D(float x) {
 	// No need to skew the input space in 1D
 
 	// Corners coordinates (nearest integer values):
-	int i0 = FastFloor(x);
+	int i0 = FastFloorf(x);
 	int i1 = i0 + 1;
 	// Distances to corners (between 0 and 1):
 	float x0 = x - i0;
@@ -118,15 +118,15 @@ float SimplexNoise1D(float x) {
 float SimplexNoise2D(float xin, float yin)
 {
 	// Skewing factors for 2D
-	const float F2 = 0.36602540378; // 0.5 * (sqrt(3.0) - 1.0);
+	const float F2 = 0.36602540378f; // 0.5 * (sqrt(3.0) - 1.0);
 
 	// Skew the input space to determine which simplex cell we're in
 	float s = (xin + yin) * F2; // Hairy factor for 2D
-	int i = FastFloor(xin + s);
-	int j = FastFloor(yin + s);
+	int i = FastFloorf(xin + s);
+	int j = FastFloorf(yin + s);
 
 	// Unskewing factors for 2D
-	const float G2 = 0.2113248654; // (3.0 - sqrt(3.0)) / 6.0;
+	const float G2 = 0.2113248654f; // (3.0 - sqrt(3.0)) / 6.0;
 	const float t = (i + j) * G2;
 
 	// Unskew the cell origin back to (x,y) space
@@ -161,8 +161,8 @@ float SimplexNoise2D(float xin, float yin)
 	float x1 = x0 - i1 + G2;
 	float y1 = y0 - j1 + G2;
 	// Offsets for last corner in (x,y) unskewed coords
-	float x2 = x0 - 1.0 + 2.0 * G2;
-	float y2 = y0 - 1.0 + 2.0 * G2;
+	float x2 = x0 - 1.0f + 2.0f * G2;
+	float y2 = y0 - 1.0f + 2.0f * G2;
 
 	// Work out the hashed gradient indices of the three simplex corners
 	i = i & 255;
@@ -180,22 +180,22 @@ float SimplexNoise2D(float xin, float yin)
 
 	// Add contributions from each corner to get the const noise value.
 	// The result is scaled to return values in the interval [-1,1].
-	return 70.0 * (n0 + n1 + n2);
+	return 70.0f * (n0 + n1 + n2);
 }
 
 // 3D simplex noise
 float SimplexNoise3D(float xin, float yin, float zin)
 {
 	// Skew the input space to determine which simplex cell we're in
-	const float F3 = 1.0 / 3.0;
+	const float F3 = 1.0f / 3.0f;
 	// Very nice and simple skew factor for 3D
 	float s = (xin + yin + zin) * F3;
-	int i = FastFloor(xin + s);
-	int j = FastFloor(yin + s);
-	int k = FastFloor(zin + s);
+	int i = FastFloorf(xin + s);
+	int j = FastFloorf(yin + s);
+	int k = FastFloorf(zin + s);
 
 	// Very nice and simple unskew factor, too
-	const float G3 = 1.0 / 6.0;
+	const float G3 = 1.0f / 6.0f;
 	const float t = (i + j + k) * G3;
 
 	// Unskew the cell origin back to (x,y,z) space
@@ -255,14 +255,14 @@ float SimplexNoise3D(float xin, float yin, float zin)
 	float z1 = z0 - k1 + G3;
 
 	// Offsets for third corner in (x,y,z) coordinates
-	float x2 = x0 - i2 + 2.0 * G3;
-	float y2 = y0 - j2 + 2.0 * G3;
-	float z2 = z0 - k2 + 2.0 * G3;
+	float x2 = x0 - i2 + 2.0f * G3;
+	float y2 = y0 - j2 + 2.0f * G3;
+	float z2 = z0 - k2 + 2.0f * G3;
 
 	// Offsets for last corner in (x,y,z) coordinates
-	float x3 = x0 - 1.0 + 3.0 * G3;
-	float y3 = y0 - 1.0 + 3.0 * G3;
-	float z3 = z0 - 1.0 + 3.0 * G3;
+	float x3 = x0 - 1.0f + 3.0f * G3;
+	float y3 = y0 - 1.0f + 3.0f * G3;
+	float z3 = z0 - 1.0f + 3.0f * G3;
 
 	// Work out the hashed gradient indices of the four simplex corners
 	i = i & 255;
@@ -283,22 +283,22 @@ float SimplexNoise3D(float xin, float yin, float zin)
 
 	// Add contributions from each corner to get the const noise value.
 	// The result is scaled to stay just inside [-1,1]
-	return 32.0 * (n0 + n1 + n2 + n3);
+	return 32.0f * (n0 + n1 + n2 + n3);
 }
 
 // 4D simplex noise
 float SimplexNoise4D(float x, float y, float z, float w) {
 
 	// The skewing and unskewing factors are hairy again for the 4D case
-	const float F4 = 0.30901699437; // (sqrt(5.0) - 1.0) / 4.0;
-	const float G4 = 0.13819660112; // (5.0 - sqrt(5.0)) / 20.0;	
+	const float F4 = 0.30901699437f; // (sqrt(5.0) - 1.0) / 4.0;
+	const float G4 = 0.13819660112f; // (5.0 - sqrt(5.0)) / 20.0;	
 
 	// Skew the (x,y,z,w) space to determine which cell of 24 simplicities we are in
 	const float s = (x + y + z + w) * F4; // Factor for 4D skewing
-	int i = FastFloor(x + s);
-	int j = FastFloor(y + s);
-	int k = FastFloor(z + s);
-	int l = FastFloor(w + s);
+	int i = FastFloorf(x + s);
+	int j = FastFloorf(y + s);
+	int k = FastFloorf(z + s);
+	int l = FastFloorf(w + s);
 
 	const float t = (i + j + k + l) * G4; // Factor for 4D unskewing
 	float x0 = i - t; // Unskew the cell origin back to (x,y,z,w) space
@@ -359,22 +359,22 @@ float SimplexNoise4D(float x, float y, float z, float w) {
 	const float w1 = w0 - l1 + G4;
 
 	// Offsets for third corner in (x,y,z,w) coordinates
-	const float x2 = x0 - i2 + 2.0 * G4;
-	const float y2 = y0 - j2 + 2.0 * G4;
-	const float z2 = z0 - k2 + 2.0 * G4;
-	const float w2 = w0 - l2 + 2.0 * G4;
+	const float x2 = x0 - i2 + 2.0f * G4;
+	const float y2 = y0 - j2 + 2.0f * G4;
+	const float z2 = z0 - k2 + 2.0f * G4;
+	const float w2 = w0 - l2 + 2.0f * G4;
 
 	// Offsets for fourth corner in (x,y,z,w) coordinates
-	const float x3 = x0 - i3 + 3.0 * G4;
-	const float y3 = y0 - j3 + 3.0 * G4;
-	const float z3 = z0 - k3 + 3.0 * G4;
-	const float w3 = w0 - l3 + 3.0 * G4;
+	const float x3 = x0 - i3 + 3.0f * G4;
+	const float y3 = y0 - j3 + 3.0f * G4;
+	const float z3 = z0 - k3 + 3.0f * G4;
+	const float w3 = w0 - l3 + 3.0f * G4;
 
 	// Offsets for last corner in (x,y,z,w) coordinates
-	const float x4 = x0 - 1.0 + 4.0 * G4;
-	const float y4 = y0 - 1.0 + 4.0 * G4;
-	const float z4 = z0 - 1.0 + 4.0 * G4;
-	const float w4 = w0 - 1.0 + 4.0 * G4;
+	const float x4 = x0 - 1.0f + 4.0f * G4;
+	const float y4 = y0 - 1.0f + 4.0f * G4;
+	const float z4 = z0 - 1.0f + 4.0f * G4;
+	const float w4 = w0 - 1.0f + 4.0f * G4;
 
 	// Work out the hashed gradient indices of the five simplex corners
 	i = i & 255;
@@ -397,7 +397,7 @@ float SimplexNoise4D(float x, float y, float z, float w) {
 	n4 = ContributionFromCorners(4, grad4[gi4], x4, y4, z4, w4);
 
 	// Sum up and scale the result to cover the range [-1,1]
-	return 27.0 * (n0 + n1 + n2 + n3 + n4);
+	return 27.0f * (n0 + n1 + n2 + n3 + n4);
 }
 
 
@@ -429,7 +429,7 @@ float SimplexNoise4D(float x, float y, float z, float w) {
 //	int* cellSkewed = new int[nDim];
 //	for (int i = 0; i < nDim; i++)
 //	{
-//		cellSkewed[i] = FastFloor(input[i] + s);
+//		cellSkewed[i] = FastFloorf(input[i] + s);
 //	}
 //
 //	// Factor for N-D unskewing

@@ -66,32 +66,42 @@ double Lerpd(double a0, double a1, double weight)
     return a0 + weight * (a1 - a0);
 }
 
-int FastFloor(float d)
+int FastFloorf(float d)
 {
     return d > 0 ? (int)d : (int)d - 1;
 }
 
-double Dot(double x, double y)
+int FastFloord(double d)
+{
+	return d > 0 ? (int)d : (int)d - 1;
+}
+
+int Doti(int x, int y)
 {
     return x * y;
 }
 
-double DotN(int nDim, const int g[]...)
+float Dotf(float x, float y)
 {
-    double result = 0;
+	return x * y;
+}
+
+float DotN(int nDim, const int g[]...)
+{
+    float result = 0;
 	va_list list;
 	va_start(list, nDim);
 	for (int i = 0; i < nDim; i++)
 	{
-        result = result + (g[i] * (va_arg(list, double)));
+        result = result + (g[i] * (va_arg(list, float)));
 	}
 	va_end(list);
     return result;
 }
 
-double DotArray(int nDim, const int g[], const double x[])
+float DotArray(int nDim, const int g[], const float x[])
 {
-	double result = 0;
+    float result = 0;
 	for (int i = 0; i < nDim; i++)
 	{
 		result = result + (g[i] * x[i]);

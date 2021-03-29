@@ -11,7 +11,7 @@
 float ClassicPerlinNoise1D(float x)
 {
 	// Find unit grid cell containing point
-	int xi = FastFloor(x);
+	int xi = FastFloorf(x);
 
 	// Get relative xyz coordinates of point within that cell
 	x = x - xi;
@@ -24,8 +24,8 @@ float ClassicPerlinNoise1D(float x)
 	int gi1 = g_HASH_TABLE_KEN_PERLIN[xi + 1] % 12;
 
 	// Calculate noise contributions from each of the eight corners
-	float n0 = Dot(g_GRAD3[gi0][0], x);
-	float n1 = Dot(g_GRAD3[gi1][0], x - 1);
+	float n0 = Dotf((float)g_GRAD3[gi0][0], x);
+	float n1 = Dotf((float)g_GRAD3[gi1][0], x - 1);
 
 	// Compute the fade curve value for each of x, y, z
 	float u = Fade(x);
@@ -39,8 +39,8 @@ float ClassicPerlinNoise1D(float x)
 float ClassicPerlinNoise2D(float x, float y)
 {
 	// Find unit grid cell containing point
-	int xi = FastFloor(x);
-	int yi = FastFloor(y);
+	int xi = FastFloorf(x);
+	int yi = FastFloorf(y);
 
 	// Get relative xyz coordinates of point within that cell
 	x = x - xi;
@@ -79,9 +79,9 @@ float ClassicPerlinNoise2D(float x, float y)
 float ClassicPerlinNoise3D(float x, float y, float z)
 {
 	// Find unit grid cell containing point
-	int xi = FastFloor(x);
-	int yi = FastFloor(y);
-	int zi = FastFloor(z);
+	int xi = FastFloorf(x);
+	int yi = FastFloorf(y);
+	int zi = FastFloorf(z);
 
 	// Get relative xyz coordinates of point within that cell
 	x = x - xi;
@@ -180,7 +180,7 @@ float PerlinNoiseNDArray(int nDim, float* input)
 	for (int i = 0; i < nDim; i++)
 	{
 		// get the integer part from the input
-		unitGridCells[i] = FastFloor(input[i]);
+		unitGridCells[i] = FastFloorf(input[i]);
 	}
 
 	// Get relative coordinates of point within that cell
@@ -304,7 +304,7 @@ float* PerlinNoiseND_Test_Input(int nDim, ...)
 int* ClassicPerlinNoise1D_Test_UnitGrid(float x)
 {
 	// Find unit grid cell containing point
-	int xi = FastFloor(x);
+	int xi = FastFloorf(x);
 	int* result = new int[1];
 	result[0] = xi;
 	return result;
@@ -337,7 +337,7 @@ int* PerlinNoiseND_Test_UnitGrid(int nDim, ...)
 	for (int i = 0; i < nDim; i++)
 	{
 		// get the integer part from the input
-		unitGridCells[i] = FastFloor(input[i]);
+		unitGridCells[i] = FastFloorf(input[i]);
 	}
 	return unitGridCells;
 }
@@ -346,7 +346,7 @@ int* PerlinNoiseND_Test_UnitGrid(int nDim, ...)
 float* ClassicPerlinNoise1D_Test_Relative(float x)
 {
 	// Find unit grid cell containing point
-	int xi = FastFloor(x);
+	int xi = FastFloorf(x);
 
 	// Get relative xyz coordinates of point within that cell
 	x = x - xi;
@@ -385,7 +385,7 @@ float* PerlinNoiseND_Test_Relative(int nDim, ...)
 	for (int i = 0; i < nDim; i++)
 	{
 		// get the integer part from the input
-		unitGridCells[i] = FastFloor(input[i]);
+		unitGridCells[i] = FastFloorf(input[i]);
 	}
 
 	// Get relative coordinates of point within that cell
@@ -402,7 +402,7 @@ float* PerlinNoiseND_Test_Relative(int nDim, ...)
 int* ClassicPerlinNoise1D_Test_Wrap(float x)
 {
 	// Find unit grid cell containing point
-	int xi = FastFloor(x);
+	int xi = FastFloorf(x);
 
 	// Get relative xyz coordinates of point within that cell
 	x = x - xi;
@@ -444,7 +444,7 @@ int* PerlinNoiseND_Test_Wrap(int nDim, ...)
 	for (int i = 0; i < nDim; i++)
 	{
 		// get the integer part from the input
-		unitGridCells[i] = FastFloor(input[i]);
+		unitGridCells[i] = FastFloorf(input[i]);
 	}
 
 	// Get relative coordinates of point within that cell
@@ -467,7 +467,7 @@ int* PerlinNoiseND_Test_Wrap(int nDim, ...)
 int* ClassicPerlinNoise1D_Test_Gradients(float x)
 {
 	// Find unit grid cell containing point
-	int xi = FastFloor(x);
+	int xi = FastFloorf(x);
 
 	// Get relative xyz coordinates of point within that cell
 	x = x - xi;
@@ -508,7 +508,7 @@ int* PerlinNoiseNDArray_Test_Gradients(int nDim, ...)
 
 	for (int i = 0; i < nDim; i++)
 	{
-		unitGridCells[i] = FastFloor(input[i]);
+		unitGridCells[i] = FastFloorf(input[i]);
 	}
 
 	for (int i = 0; i < nDim; i++)
