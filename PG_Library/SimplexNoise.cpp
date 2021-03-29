@@ -295,7 +295,7 @@ float SimplexNoise4D(float x, float y, float z, float w) {
 
 	// Skew the (x,y,z,w) space to determine which cell of 24 simplicities we are in
 	const float s = (x + y + z + w) * F4; // Factor for 4D skewing
-	int i = FastFloor(x + s);
+	int i = FastFloorf(x + s);
 	int j = FastFloorf(y + s);
 	int k = FastFloorf(z + s);
 	int l = FastFloorf(w + s);
