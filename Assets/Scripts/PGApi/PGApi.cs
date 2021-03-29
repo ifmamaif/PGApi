@@ -41,5 +41,19 @@ namespace PGApi
         [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
         public static extern float PerlinNoise_Improved3D(float x, float y, float z);
 
+        [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
+        public static extern float ClassicPerlinNoise1D(float x);
+
+        [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
+        public static extern float ClassicPerlinNoise2D(float x, float y);
+
+        [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
+        public static extern float ClassicPerlinNoise3D(float x, float y, float z);
+
+        [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
+        public static extern float SimplexNoise2D(float x, float y);
+
+        [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
+        public static extern float SimplexNoise3D(float x, float y, float z);
     }
 }

@@ -60,41 +60,43 @@ public class MainScene : MonoBehaviour
         text.font = null;
         text.color = Color.white;
 
-        GameObject changeGenerator = new GameObject("Change Generator");
-        changeGenerator.transform.SetParent(m_UI.transform);
-        changeGenerator.transform.localPosition = new Vector3(-108, -44, 0);
+        //GameObject changeGenerator = new GameObject("Change Generator");
+        //changeGenerator.transform.SetParent(m_UI.transform);
+        //changeGenerator.transform.localPosition = new Vector3(-108, -44, 0);
+        //
+        //text = changeGenerator.AddComponent<TextMesh>();
+        //text.text = "Press 1\nPress 2\nPress 3\nPress 4\nPress 0";
+        //text.offsetZ = 0;
+        //text.characterSize = 8;
+        //text.lineSpacing = 1;
+        //text.anchor = TextAnchor.MiddleLeft;
+        //text.alignment = TextAlignment.Center;
+        //text.tabSize = 4;
+        //text.fontSize = 0;
+        //text.fontStyle = FontStyle.Normal;
+        //text.richText = true;
+        //text.font = null;
+        //text.color = Color.black;
 
-        text = changeGenerator.AddComponent<TextMesh>();
-        text.text = "Press 1\nPress 2\nPress 3\nPress 4\nPress 0";
-        text.offsetZ = 0;
-        text.characterSize = 8;
-        text.lineSpacing = 1;
-        text.anchor = TextAnchor.MiddleLeft;
-        text.alignment = TextAlignment.Center;
-        text.tabSize = 4;
-        text.fontSize = 0;
-        text.fontStyle = FontStyle.Normal;
-        text.richText = true;
-        text.font = null;
-        text.color = Color.black;
+        NewDemo<LevelGeneration>("Room Generator");                         // 0
 
-        NewDemo<LevelGeneration>("Room Generator");
-
-        GameObject demo_Level = NewDemo<Atestat>("Atestat");
+        GameObject demo_Level = NewDemo<Atestat>("Atestat");                // 1
         demo_Level.transform.localScale = new Vector3(6.6f, 6.6f, 1);
 
-        demo_Level = NewDemo<MeshGenerator>("Mesh Generator");
+        demo_Level = NewDemo<MeshGenerator>("Mesh Generator");              // 2
         demo_Level.transform.localPosition = new Vector3(-60, -38, 5);
         demo_Level.transform.localEulerAngles = new Vector3(-30f, -1, -5);
         demo_Level.transform.localScale = new Vector3(7, 7, 7);
 
-        NewDemo<MDS>("MDS");
+        NewDemo<MDS>("MDS");                                                // 3
 
-        demo_Level = NewDemo<PerlinNoisePreview>("Perlin Preview");
+        demo_Level = NewDemo<PerlinNoisePreview>("Perlin Preview");         // 4
         demo_Level.transform.localScale = new Vector3(88, 88, 1);
 
-        NewDemo<Heart>("Hearth Preview");
-        demo_Level= NewDemo<PerlinTexture>("Perlin Textures");
+        NewDemo<Heart>("Hearth Preview");                                   // 5
+        NewDemo<NoisesDemo>("Perlin Noises");                               // 6
+        NewDemo<MarbleTexture>("Marble Texture");                           // 6
+        demo_Level = NewDemo<PerlinTexture>("Perlin Textures");             // 7
         demo_Level.transform.localScale = new Vector3(1, 1, 1);
 
         ActivateDemo(listOfDemos[0].Key);

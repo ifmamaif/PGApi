@@ -43,13 +43,68 @@ class PerlinTexture : GenericBehaviour
     {
         GenerateNormalNoise();
         //GenerateTextureRandom();
-        GenerateTextureRandomPos();
+        GenerateSumNoise();
+        //GenerateTextureRandomPos();
         //GenerateTextureSin();
 
-        da();
+        //GenerateSumNoiseAbs();
+        GenerateTextureSin();
 
         GenerateTextureCosX();
         //GenerateTextureSinX();
+    }
+
+    public void GenerateSumNoise()
+    {
+        Renderer renderer = objects[1].GetComponent<MeshRenderer>();
+        Texture2D texture = new Texture2D(width, height);
+
+        for (int x = 0; x < width; x++)
+            for (int y = 0; y < height; y++)
+            {
+                float xd = (float)x / width * scale + offsetx;
+                float yd = (float)y / height * scale + offsety;
+                float noise=0;
+                for (int z=0;z<4;z++)
+                {
+                    float pow2 = Mathf.Pow(2,z);
+                    noise += PGApi.PGApi.PerlinNoise_Improved2D(pow2* xd, pow2*yd) / pow2;
+                    
+                }
+
+                Color color = new Color(noise, noise, noise);
+                texture.SetPixel(x, y, color);
+            }
+
+        texture.Apply();
+        renderer.material.mainTexture = texture;
+    }
+
+    public void GenerateSumNoiseAbs()
+    {
+        Renderer renderer = objects[2].GetComponent<MeshRenderer>();
+        Texture2D texture = new Texture2D(width, height);
+
+        for (int x = 0; x < width; x++)
+            for (int y = 0; y < height; y++)
+            {
+                float xd = (float)x / width * scale + offsetx;
+                float yd = (float)y / height * scale + offsety;
+                float noise = 0;
+                for (int z = 0; z < 4; z++)
+                {
+                    float pow2 = Mathf.Pow(2, z);
+                    var n = PGApi.PGApi.PerlinNoise_Improved2D(pow2 * xd, pow2 * yd) / pow2;
+                    if (n < 0) n = 0 - n;
+                    noise += n;
+                }
+
+                Color color = new Color(noise, noise, noise);
+                texture.SetPixel(x, y, color);
+            }
+
+        texture.Apply();
+        renderer.material.mainTexture = texture;
     }
 
     public void GenerateNormalNoise()
@@ -126,7 +181,7 @@ class PerlinTexture : GenericBehaviour
 
     void GenerateTextureSin()
     {
-        Renderer renderer = objects[3].GetComponent<MeshRenderer>();
+        Renderer renderer = objects[2].GetComponent<MeshRenderer>();
         Texture2D texture = new Texture2D(width, height);
 
         for (int x = 0; x < width; x++)
@@ -137,12 +192,9 @@ class PerlinTexture : GenericBehaviour
 
 
                 float noise = PGApi.PGApi.PerlinNoise_Improved3D(xd, yd, 0);
-                noise = noise < 0 ? noise * -1 : noise;
-                noise = Mathf.Lerp(0, Mathf.PI / 2, (float)noise);
 
-                float rand = (float)noise;
-                rand = Mathf.Sin(rand);
-                Color color = new Color(rand, rand, rand);
+                noise = Mathf.Sin(xd+ noise);
+                Color color = new Color(noise, noise, noise);
                 texture.SetPixel(x, y, color);
             }
 
