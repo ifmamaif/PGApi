@@ -80,12 +80,12 @@ float ValueNoiseND(int nDim, ...)
 		return 0.0;
 	}
 
-	const int PERMUTATIONS = 2 << (nDim - 1);
-	int interpolations = nDim;
+	const auto PERMUTATIONS = 2 << (nDim - 1);
+	auto interpolations = nDim;
 
-	float* input = new float[nDim];
-	float* inputFloats = new float[nDim];
-	float* corners = new float[PERMUTATIONS];
+	auto* input = new float[nDim];
+	auto* inputFloats = new float[nDim];
+	auto* corners = new float[PERMUTATIONS];
 
 	VA_LIST_GET(nDim, float, input);
 
@@ -101,10 +101,10 @@ float ValueNoiseND(int nDim, ...)
 	//inputInteger[0] = inputInteger[0] & 255;
 
 	// random values at the corners of the cell using permutation table	
-	for (int i = 0; i < PERMUTATIONS; i++)
+	for (auto i = 0; i < PERMUTATIONS; i++)
 	{
 		corners[i] = 0;
-		for (int j = 0; j < nDim; j++)
+		for (auto j = 0; j < nDim; j++)
 		{
 			corners[i] += g_HASH_TABLE_KEN_PERLIN[inputInteger[j] + CheckBitStatus(i, nDim - 1 - j) + (int)(corners[i])];
 			int bit = CheckBitStatus(i, nDim - 1 - j);
@@ -117,18 +117,21 @@ float ValueNoiseND(int nDim, ...)
 
 
 	// remapping of tx and ty using the Smoothstep function 
-	for (int i = 0; i < nDim; i++)
+	for (auto i = 0; i < nDim; i++)
 	{
 		inputFloats[i] = smoothstep(inputFloats[i]);
 	}
 	//inputFloats[0] = smoothstep(inputFloats[0]);
 
 	// linearly interpolate values along the x,y,... axis
-	for (int i = 0; i < nDim; i++)
+	for (auto i = 0; i < nDim; i++)
 	{
-		for (int j = 0; j < interpolations; j++)
+		for (auto j = 0; j < interpolations; j++)
 		{
-			corners[j] = Lerpf((float)corners[j], (float)corners[j + interpolations], inputFloats[i]);
+			float corner = corners[j];
+			float nextCorner = corners[j + interpolations];
+			float weight = inputFloats[i];
+			corners[j] = Lerpf(corner, nextCorner, weight);
 		}
 		interpolations /= 2;
 	}

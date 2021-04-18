@@ -56,11 +56,14 @@ float ClassicPerlinNoise2D(float x, float y)
 	int gi10 = g_HASH_TABLE_KEN_PERLIN[xi + 1 + g_HASH_TABLE_KEN_PERLIN[yi]] % 12;
 	int gi11 = g_HASH_TABLE_KEN_PERLIN[xi + 1 + g_HASH_TABLE_KEN_PERLIN[yi+1]] % 12;
 
+	float xMin = x - 1;
+	float yMin = y - 1;
+
 	// Calculate noise contributions from each of the eight corners
 	float n00 = DotN(2,g_GRAD3[gi00], x, y);
-	float n01 = DotN(2,g_GRAD3[gi01], x, y - 1);
-	float n10 = DotN(2,g_GRAD3[gi10], x - 1, y);
-	float n11 = DotN(2,g_GRAD3[gi11], x - 1, y - 1);
+	float n01 = DotN(2,g_GRAD3[gi01], x, yMin);
+	float n10 = DotN(2,g_GRAD3[gi10], xMin, y);
+	float n11 = DotN(2,g_GRAD3[gi11], xMin, yMin);
 
 	// Compute the fade curve value for each of x, y, z
 	float u = Fadef(x);
@@ -103,15 +106,19 @@ float ClassicPerlinNoise3D(float x, float y, float z)
 	int gi110 = g_HASH_TABLE_KEN_PERLIN[xi + 1 + g_HASH_TABLE_KEN_PERLIN[yi + 1 + g_HASH_TABLE_KEN_PERLIN[zi]]] % 12;
 	int gi111 = g_HASH_TABLE_KEN_PERLIN[xi + 1 + g_HASH_TABLE_KEN_PERLIN[yi + 1 + g_HASH_TABLE_KEN_PERLIN[zi + 1]]] % 12;
 
+	float xMin = x - 1;
+	float yMin = y - 1;
+	float zMin = z - 1;
+
 	// Calculate noise contributions from each of the eight corners
-	float n000 = DotN(3,g_GRAD3[gi000], x, y, z);
-	float n001 = DotN(3,g_GRAD3[gi001], x, y, z - 1);
-	float n010 = DotN(3,g_GRAD3[gi010], x, y - 1, z);
-	float n011 = DotN(3,g_GRAD3[gi011], x, y - 1, z - 1);
-	float n100 = DotN(3,g_GRAD3[gi100], x - 1, y, z);
-	float n101 = DotN(3,g_GRAD3[gi101], x - 1, y, z - 1);
-	float n110 = DotN(3,g_GRAD3[gi110], x - 1, y - 1, z);
-	float n111 = DotN(3,g_GRAD3[gi111], x - 1, y - 1, z - 1);
+	float n000 = DotN(3, g_GRAD3[gi000], x, y, z);
+	float n001 = DotN(3, g_GRAD3[gi001], x, y, zMin);
+	float n010 = DotN(3, g_GRAD3[gi010], x, yMin, z);
+	float n011 = DotN(3, g_GRAD3[gi011], x, yMin, zMin);
+	float n100 = DotN(3, g_GRAD3[gi100], xMin, y, z);
+	float n101 = DotN(3, g_GRAD3[gi101], xMin, y, zMin);
+	float n110 = DotN(3, g_GRAD3[gi110], xMin, yMin, z);
+	float n111 = DotN(3, g_GRAD3[gi111], xMin, yMin, zMin);
 
 	// Compute the fade curve value for each of x, y, z
 	float u = Fadef(x);
@@ -133,8 +140,6 @@ float ClassicPerlinNoise3D(float x, float y, float z)
 
 	return nxyz;
 }
-
-
 
 float PerlinNoiseND(int nDim, ...)
 {
