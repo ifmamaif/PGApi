@@ -13,7 +13,7 @@ float ClassicPerlinNoise1D(float x)
 	// Find unit grid cell containing point
 	int xi = FastFloorf(x);
 
-	// Get relative xyz coordinates of point within that cell
+	// Get relative x coordinates of point within that cell
 	x = x - xi;
 
 	// Wrap the integer cells at 255 (smaller integer period can be introduced here)
@@ -23,15 +23,15 @@ float ClassicPerlinNoise1D(float x)
 	int gi0 = g_HASH_TABLE_KEN_PERLIN[xi] % 12;
 	int gi1 = g_HASH_TABLE_KEN_PERLIN[xi + 1] % 12;
 
-	// Calculate noise contributions from each of the eight corners
+	// Calculate noise contributions from each of the eight corners (2 corners in 1 dimension)
 	float n0 = Dotf((float)g_GRAD3[gi0][0], x);
 	float n1 = Dotf((float)g_GRAD3[gi1][0], x - 1);
 
-	// Compute the fade curve value for each of x, y, z
-	float u = Fadef(x);
+	// Compute the fade curve value of x
+	float fc = Fadef(x);
 
 	// Interpolate along x the contributions from each of the corners
-	float nx = Lerpf(n0, n1, u);
+	float nx = Lerpf(n0, n1, fc);
 
 	return nx;
 }
