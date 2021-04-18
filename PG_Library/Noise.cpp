@@ -55,19 +55,28 @@ float OctavePerlin(float x, float y, float z, int octaves, float persistence)
 	return total / maxValue;
 }
 
-float Turbulence(float x, float y, float z, int octaves, float amplitude, float magnification)
+//Fractional Brownian motion (Turbulence function)
+float Fbm(float x, float y, float z, int numOctaves, float amplitude, float gain, float frequency, float lacunarity)
 {
+	// Gain (amplitude multiplier) controls amplitude change between each band. Typically: gain = 0.5
+	// Lacunarity (frequency multiplier) controls frequency change between each band. Typically: lacunarity = 2
+
+	// octaves = the number of layers
+	// frequency = magnification
+
 	// Noise with many frequencies present looks more natural 
 	// can get this by summing noise at different magnifications
-	float result = 0;
-	for (int i = 0; i < octaves; i++)
+	float noiseSum = 0;
+	float amplitudeSum = 0;
+	for (int i = 0; i < numOctaves; i++)
 	{
-		result += amplitude * PerlinNoise_Improved3D(x, y, z);
-
-		magnification *= 2;
-		amplitude /= 2;
+		noiseSum += amplitude * PerlinNoise_Improved3D(x*frequency, y * frequency, z * frequency);
+		amplitudeSum += amplitude;
+		amplitude *= gain;
+		frequency *= lacunarity;
 	}
-	return result;
+	noiseSum /= amplitudeSum;
+	return noiseSum;
 }
 
 float Marbling(float x, float y, float z, float frequency, float amplitude)
@@ -76,5 +85,5 @@ float Marbling(float x, float y, float z, float frequency, float amplitude)
 	// a = marble noise amplitude
 
 	//marble(x,y,z) = sin(f*(x+a*turb(x,y,z)))
-	return sin(frequency * (x + amplitude * Turbulence(x, y, z,8, amplitude, frequency)));
+	return sin(frequency * (x + amplitude * Fbm(x, y, z,8, amplitude,.5f, frequency,2)));
 }

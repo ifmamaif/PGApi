@@ -11,5 +11,6 @@ extern "C"
 
 	EXPORT_API float OctavePerlin(float x, float y, float z, int octaves, float persistence);
 
-	EXPORT_API float Turbulence(float x, float y, float z, int octaves, float amplitude,float magnification);
+	EXPORT_API float Fbm(float x, float y, float z, int numOctaves, float amplitude, float gain, float frequency, float lacunarity);
+	EXPORT_API float Marbling(float x, float y, float z, float frequency, float amplitude);
 }
