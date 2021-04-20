@@ -75,7 +75,7 @@ float Fbm(float x, float y, float z, int numOctaves, float amplitude, float gain
 		amplitude *= gain;
 		frequency *= lacunarity;
 	}
-	noiseSum /= amplitudeSum;
+	//noiseSum /= amplitudeSum;
 	return noiseSum;
 }
 

@@ -95,9 +95,11 @@ public class MainScene : MonoBehaviour
 
         NewDemo<Heart>("Hearth Preview");                                   // 5
         NewDemo<NoisesDemo>("Perlin Noises");                               // 6
-        NewDemo<MarbleTexture>("Marble Texture");                           // 6
-        demo_Level = NewDemo<PerlinTexture>("Perlin Textures");             // 7
+        NewDemo<MarbleTexture>("Marble Texture");                           // 7
+        demo_Level = NewDemo<PerlinTexture>("Perlin Textures");             // 8
         demo_Level.transform.localScale = new Vector3(1, 1, 1);
+
+        NewDemo<EarthMap>("Earth Map");                                     // 9
 
         ActivateDemo(listOfDemos[0].Key);
     }
