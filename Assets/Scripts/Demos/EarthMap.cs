@@ -25,10 +25,8 @@ public class EarthMap : GenericBehaviour
 
     public bool autoUpdate = false;
     public bool autoMove = false;
-    public bool usePGApi = false;
 
     private float textureSize = 1.24f;  // texturi 124 x 124
-    private Vector3 initialPosition;
     private Renderer thisrenderer;
 
     public override void Constructor()
@@ -46,8 +44,6 @@ public class EarthMap : GenericBehaviour
 
         boardHolder = new GameObject("Terrain");                    //Instantiate Board and set boardHolder to its transform.
         boardHolder.transform.SetParent(this.transform);
-
-        initialPosition = boardHolder.transform.position;
 
         terrain = GameObject.CreatePrimitive(PrimitiveType.Quad);   //	the land based on procedural generate by perlinnoise
         terrain.GetComponent<MeshCollider>().enabled = false;
