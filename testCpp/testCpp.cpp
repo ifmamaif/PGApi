@@ -10,6 +10,8 @@
 #include "../PG_Library/Constants.h"
 #include "../PG_Library/PerlinNoiseImproved.h"
 #include "../PG_Library/SimplexNoise.h"
+#include "../PG_Library/Noise.h"
+#include "../PG_Library/Math.h"
 
 #include <time.h>
 
@@ -160,14 +162,68 @@ int TestValueNoise()
 }
 
 
+void da()
+{
+	float min = 1;
+	float max = -1;
+
+	int width = 100;
+	int height = 100;
+
+	int scale = 20;
+	int offset = 800;
+
+	for (int i = 0; i < width; i++)
+	{
+		for (int j = 0; j < height; j++)
+		{
+			float x = (float)i * scale + offset;// / width;
+			float y = (float)j * scale + offset;// / height;
+
+			auto noise = Fbm(x, y, 0, 8, 1, 0.5f, 0.0005f, 2);
+			//100 -0.0371563
+			//100 0.147357
+
+			//200 -0.0728363    -400
+			//200 0.206986		+600
+
+			//400 -0.137426     -600
+			//400 0.249434      +400
+
+			//500 -0.201062
+			//500 0.249434
+
+			noise *= 2;
+			noise += 1;
+			noise /= 2;	
+			noise = RoundToInt(noise);
+
+			if (min > noise)
+			{
+				min = noise;
+			}
+			if (max < noise)
+			{
+				max = noise;
+			}
+
+			std::cout << noise<< " " ;
+		}
+		std::cout << std::endl;
+	}
+
+	std::cout << min << std::endl;
+	std::cout << max << std::endl;
+}
+
 int main(int argc,char* argv[])
 {
-	GetMinMaxPerlinNoise_Improved(ClassicPerlinNoise3D);
-	GetMinMaxPerlinNoise_Improved(PerlinNoise_Improved3D);
-	GetMinMaxPerlinNoise_Improved(SimplexNoise3D);
+	//GetMinMaxPerlinNoise_Improved(ClassicPerlinNoise3D);
+	//GetMinMaxPerlinNoise_Improved(PerlinNoise_Improved3D);
+	//GetMinMaxPerlinNoise_Improved(SimplexNoise3D);
 	//std::cout << TestPerlinNDim() << std::endl;
 	//std::cout << TestValueNoise() << std::endl;
-
+	da();
     //system("pause");
 }
 

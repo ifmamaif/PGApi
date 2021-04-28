@@ -55,5 +55,8 @@ namespace PGApi
 
         [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
         public static extern float SimplexNoise3D(float x, float y, float z);
+
+        [DllImport("PG_Library", CallingConvention = CallingConvention.Cdecl)]
+        public static extern float Fbm(float x, float y, float z, int numOctaves, float amplitude, float gain, float frequency, float lacunarity);
     }
 }

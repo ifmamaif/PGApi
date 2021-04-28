@@ -67,15 +67,12 @@ float Fbm(float x, float y, float z, int numOctaves, float amplitude, float gain
 	// Noise with many frequencies present looks more natural 
 	// can get this by summing noise at different magnifications
 	float noiseSum = 0;
-	float amplitudeSum = 0;
 	for (int i = 0; i < numOctaves; i++)
 	{
 		noiseSum += amplitude * PerlinNoise_Improved3D(x*frequency, y * frequency, z * frequency);
-		amplitudeSum += amplitude;
 		amplitude *= gain;
 		frequency *= lacunarity;
 	}
-	noiseSum /= amplitudeSum;
 	return noiseSum;
 }
 

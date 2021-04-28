@@ -1,4 +1,5 @@
-﻿using UnityEngine;  //	GameObject , Color
+﻿using Assets.Scripts;
+using UnityEngine;  //	GameObject , Color
 
 public class MDS : GenericBehaviour
 {
@@ -112,28 +113,28 @@ public class MDS : GenericBehaviour
 		regions = new TerrainType[8];
 		regions[0].name = "Water Deep";
 		regions[0].height = 0.3f;
-		regions[0].colour = HexToColor("#3263C3");
+		regions[0].colour = Utils.HexToColor("#3263C3");
 		regions[1].name = "Water Shallow";
 		regions[1].height = 0.4f;
-		regions[1].colour = HexToColor("#3667C7");
+		regions[1].colour = Utils.HexToColor("#3667C7");
 		regions[2].name = "Sand";
 		regions[2].height = 0.45f;
-		regions[2].colour = HexToColor("#D2D07D");
+		regions[2].colour = Utils.HexToColor("#D2D07D");
 		regions[3].name = "Grass";
 		regions[3].height = 0.55f;
-		regions[3].colour = HexToColor("#569817");
+		regions[3].colour = Utils.HexToColor("#569817");
 		regions[4].name = "Grass 2";
 		regions[4].height = 0.6f;
-		regions[4].colour = HexToColor("#3E6B12");
+		regions[4].colour = Utils.HexToColor("#3E6B12");
 		regions[5].name = "Rock";
 		regions[5].height = 0.7f;
-		regions[5].colour = HexToColor("#5A453C");
+		regions[5].colour = Utils.HexToColor("#5A453C");
 		regions[6].name = "Rock 2";
 		regions[6].height = 0.9f;
-		regions[6].colour = HexToColor("#4B3C35");
+		regions[6].colour = Utils.HexToColor("#4B3C35");
 		regions[7].name = "Snow";
 		regions[7].height = 1f;
-		regions[7].colour = HexToColor("#FFFFFF");
+		regions[7].colour = Utils.HexToColor("#FFFFFF");
 	}
 
 	void UpdateMap()
@@ -153,9 +154,11 @@ public class MDS : GenericBehaviour
 	public Texture2D TextureFromcolorMap()
 	{
 		Color[] colorMap = GeneratecolorMap();
-		Texture2D texture = new Texture2D(perlinWidth, perlinHeight);
-		texture.filterMode = FilterMode.Point;
-		texture.wrapMode = TextureWrapMode.Clamp;
+		Texture2D texture = new Texture2D(perlinWidth, perlinHeight)
+		{
+			filterMode = FilterMode.Point,
+			wrapMode = TextureWrapMode.Clamp
+		};
 		texture.SetPixels(colorMap);
 		texture.Apply();
 		return texture;
@@ -200,10 +203,5 @@ public class MDS : GenericBehaviour
 		return noiseMap;
 	}
 
-	public static Color HexToColor(string hex)
-	{
-		ColorUtility.TryParseHtmlString(hex, out Color myColor);
-		return myColor;
-	}
 
 }
