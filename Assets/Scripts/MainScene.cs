@@ -4,14 +4,12 @@ using UnityEngine;
 public class MainScene : MonoBehaviour
 {
     #region Members
-    GameObject m_CameraObject = null;
-    GameObject m_UI = null;
-
-    private delegate void ResetLevelFunction();
-    private ResetLevelFunction resetLevel;
-
-    readonly List<KeyValuePair<GameObject, ResetLevelFunction>> listOfDemos = new List<KeyValuePair<GameObject, ResetLevelFunction>>();
-
+    private GameObject m_CameraObject = null;
+    private GameObject m_UI = null;
+    private PreviewDemos m_PreviewDemos;
+       
+    public GameObject parentCanvas = null;
+    public GameObject buttonPrefab = null;
     #endregion
 
     #region Methods
@@ -19,6 +17,8 @@ public class MainScene : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        m_PreviewDemos = new PreviewDemos(parentCanvas,buttonPrefab);
+
         m_CameraObject = new GameObject("MainCamera");
         m_CameraObject.transform.position = new Vector3(0, 0, -10);
 
@@ -60,92 +60,40 @@ public class MainScene : MonoBehaviour
         text.font = null;
         text.color = Color.white;
 
-        //GameObject changeGenerator = new GameObject("Change Generator");
-        //changeGenerator.transform.SetParent(m_UI.transform);
-        //changeGenerator.transform.localPosition = new Vector3(-108, -44, 0);
-        //
-        //text = changeGenerator.AddComponent<TextMesh>();
-        //text.text = "Press 1\nPress 2\nPress 3\nPress 4\nPress 0";
-        //text.offsetZ = 0;
-        //text.characterSize = 8;
-        //text.lineSpacing = 1;
-        //text.anchor = TextAnchor.MiddleLeft;
-        //text.alignment = TextAlignment.Center;
-        //text.tabSize = 4;
-        //text.fontSize = 0;
-        //text.fontStyle = FontStyle.Normal;
-        //text.richText = true;
-        //text.font = null;
-        //text.color = Color.black;
+        m_PreviewDemos.AddNewDemo<LevelGeneration>("Room Generator");                 
 
-        NewDemo<LevelGeneration>("Room Generator");                         // 0
-
-        GameObject demo_Level = NewDemo<Atestat>("Atestat");                // 1
+        GameObject demo_Level = m_PreviewDemos.AddNewDemo<Atestat>("Atestat");        
         demo_Level.transform.localScale = new Vector3(6.6f, 6.6f, 1);
 
-        demo_Level = NewDemo<MeshGenerator>("Mesh Generator");              // 2
+        demo_Level = m_PreviewDemos.AddNewDemo<MeshGenerator>("Mesh Generator");      
         demo_Level.transform.localPosition = new Vector3(-60, -38, 5);
         demo_Level.transform.localEulerAngles = new Vector3(-30f, -1, -5);
         demo_Level.transform.localScale = new Vector3(7, 7, 7);
 
-        NewDemo<MDS>("MDS");                                                // 3
+        m_PreviewDemos.AddNewDemo<MDS>("MDS");                                        
 
-        demo_Level = NewDemo<PerlinNoisePreview>("Perlin Preview");         // 4
+        demo_Level = m_PreviewDemos.AddNewDemo<PerlinNoisePreview>("Perlin Preview"); 
         demo_Level.transform.localScale = new Vector3(88, 88, 1);
 
-        NewDemo<Heart>("Hearth Preview");                                   // 5
-        NewDemo<NoisesDemo>("Perlin Noises");                               // 6
-        NewDemo<MarbleTexture>("Marble Texture");                           // 7
-        demo_Level = NewDemo<PerlinTexture>("Perlin Textures");             // 8
+        m_PreviewDemos.AddNewDemo<Heart>("Hearth Preview");                           
+        m_PreviewDemos.AddNewDemo<NoisesDemo>("Perlin Noises");                       
+        m_PreviewDemos.AddNewDemo<MarbleTexture>("Marble Texture");                   
+        demo_Level = m_PreviewDemos.AddNewDemo<PerlinTexture>("Perlin Textures");     
         demo_Level.transform.localScale = new Vector3(1, 1, 1);
 
-        NewDemo<EarthMap>("Earth Map");                                     // 9
-
-        ActivateDemo(listOfDemos[0].Key);
+        m_PreviewDemos.AddNewDemo<EarthMap>("Earth Map");
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown("r"))
-        {
-            resetLevel();
-            return;
-        }
+        m_PreviewDemos.UpdateOnKeyPress();
+
         if (Input.GetKeyDown("d"))
         {
             m_UI.SetActive(!m_UI.activeSelf);
             return;
         }
-
-        for (int i = 0; i < 10 && i < listOfDemos.Count; i++)
-        {
-            if (Input.GetKeyDown(i.ToString()))
-            {
-                ActivateDemo(listOfDemos[i].Key);
-                return;
-            }
-        }
-    }
-
-    GameObject NewDemo<T>(string Name) where T : GenericBehaviour
-    {
-        GameObject newObject = new GameObject(Name);
-        var newComponentScript = newObject.AddComponent<T>();
-
-        listOfDemos.Add(new KeyValuePair<GameObject, ResetLevelFunction>(newObject, () => { newComponentScript.Generate(); }));
-        newComponentScript.Constructor();
-
-        return newObject;
-    }
-
-    void ActivateDemo(GameObject gameObject)
-    {
-        listOfDemos.ForEach(x => x.Key.SetActive(false));
-        var pair = listOfDemos.Find(x => x.Key.name == gameObject.name);
-        resetLevel = pair.Value;
-        resetLevel();
-        pair.Key.SetActive(true);
     }
 
     #endregion
