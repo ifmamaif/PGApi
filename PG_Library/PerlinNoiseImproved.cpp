@@ -100,12 +100,12 @@ float PerlinNoise_Improved2D(float x, float y)
 	yi = yi & 255;
 
 	// HASH COORDINATES OF THE 8 CUBE CORNERS,
-	int A = g_HASH_TABLE_KEN_PERLIN[xi] + yi;
-	int B = g_HASH_TABLE_KEN_PERLIN[xi + 1] + yi;
-	int	AA = g_HASH_TABLE_KEN_PERLIN[A];
-	int	AB = g_HASH_TABLE_KEN_PERLIN[A + 1];
-	int	BA = g_HASH_TABLE_KEN_PERLIN[B];
-	int	BB = g_HASH_TABLE_KEN_PERLIN[B + 1];
+	int A  = g_HASH_TABLE_KEN_PERLIN[xi	   ] + yi,
+	    B  = g_HASH_TABLE_KEN_PERLIN[xi + 1] + yi,
+	    AA = g_HASH_TABLE_KEN_PERLIN[A     ],
+	    AB = g_HASH_TABLE_KEN_PERLIN[A  + 1],
+	    BA = g_HASH_TABLE_KEN_PERLIN[B     ],
+	    BB = g_HASH_TABLE_KEN_PERLIN[B  + 1];
 
 	// Calculate gradients of the cube 8 Corners
 	float g000 = Gradient2D(g_HASH_TABLE_KEN_PERLIN[AA], x	  , y   );	// ( 1, 1,0) bottom left
