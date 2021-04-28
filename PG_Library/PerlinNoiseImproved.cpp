@@ -108,10 +108,10 @@ float PerlinNoise_Improved2D(float x, float y)
 	int	BB = g_HASH_TABLE_KEN_PERLIN[B + 1];
 
 	// Calculate gradients of the cube 8 Corners
-	float g000 = Gradient2D(g_HASH_TABLE_KEN_PERLIN[AA], x, y);			// bottom left
-	float g001 = Gradient2D(g_HASH_TABLE_KEN_PERLIN[BA], x - 1, y);		// bottom right
-	float g002 = Gradient2D(g_HASH_TABLE_KEN_PERLIN[AB], x, y - 1);		// top left
-	float g003 = Gradient2D(g_HASH_TABLE_KEN_PERLIN[BB], x - 1, y - 1);	// top right
+	float g000 = Gradient2D(g_HASH_TABLE_KEN_PERLIN[AA], x	  , y   );	// ( 1, 1,0) bottom left
+	float g001 = Gradient2D(g_HASH_TABLE_KEN_PERLIN[BA], x - 1, y   );	// (-1, 1,0) bottom right
+	float g002 = Gradient2D(g_HASH_TABLE_KEN_PERLIN[AB], x    , y - 1);	// ( 1,-1,0) top left
+	float g003 = Gradient2D(g_HASH_TABLE_KEN_PERLIN[BB], x - 1, y - 1);	// (-1,-1,0) top right
 
 	// COMPUTE FADE CURVES FOR EACH OF X,Y,Z.
 	float u = Fadef(x),
