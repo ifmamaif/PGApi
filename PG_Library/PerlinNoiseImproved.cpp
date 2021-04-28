@@ -115,7 +115,7 @@ float PerlinNoise_Improved2D(float x, float y)
 
 	// COMPUTE FADE CURVES FOR EACH OF X,Y,Z.
 	float u = Fadef(x),
-		v = Fadef(y);
+		  v = Fadef(y);
 
 	// AND ADD BLENDED RESULTS FROM  8 CORNERS OF CUBE
 	// Interpolations
