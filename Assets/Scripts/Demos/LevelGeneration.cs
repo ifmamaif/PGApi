@@ -70,9 +70,21 @@ public class LevelGeneration : GenericBehaviour
 
     private class MapSpriteSelector : MonoBehaviour
     {
-        public Sprite spU, spD, spR, spL,
-                spUD, spRL, spUR, spUL, spDR, spDL,
-                spULD, spRUL, spDRU, spLDR, spUDRL;
+        public Sprite spU = null, 
+                      spD = null, 
+                      spR = null, 
+                      spL = null,
+                      spUD = null, 
+                      spRL = null,
+                      spUR = null,
+                      spUL = null,
+                      spDR = null,
+                      spDL = null,
+                      spULD = null, 
+                      spRUL = null,
+                      spDRU = null,
+                      spLDR = null,
+                      spUDRL = null;
         public bool up, down, left, right;
         public int type; // 0: normal, 1: enter
         public Color normalColor, enterColor;
