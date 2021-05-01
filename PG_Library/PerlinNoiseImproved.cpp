@@ -34,8 +34,8 @@ float PerlinNoise_Improved3D(float x, float y, float z)
 	zi = zi & 255;
 
 	// HASH COORDINATES OF THE 8 CUBE CORNERS,
-	int a = g_HASH_TABLE_KEN_PERLIN[xi];
-	int b = g_HASH_TABLE_KEN_PERLIN[xi + 1];
+	int a  = g_HASH_TABLE_KEN_PERLIN[xi];
+	int b  = g_HASH_TABLE_KEN_PERLIN[xi + 1];
 	int	aa = g_HASH_TABLE_KEN_PERLIN[a + yi];		// g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[xi	 ] + yi		]
 	int	ab = g_HASH_TABLE_KEN_PERLIN[a + yi + 1];	// g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[xi	 ] + yi + 1 ]
 	int	ba = g_HASH_TABLE_KEN_PERLIN[b + yi];		// g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[xi + 1] + yi		]
@@ -62,8 +62,8 @@ float PerlinNoise_Improved3D(float x, float y, float z)
 
 	// COMPUTE FADE CURVES FOR EACH OF X,Y,Z.
 	float u = Fadef(x),
-		v = Fadef(y),
-		w = Fadef(z);
+		  v = Fadef(y),
+		  w = Fadef(z);
 
 	// AND ADD BLENDED RESULTS FROM  8 CORNERS OF CUBE
 	// Interpolations
@@ -89,40 +89,36 @@ float PerlinNoise_Improved2D(float x, float y)
 	int xi = FloorToIntd(x),
 		yi = FloorToIntd(y);
 
-	// FIND RELATIVE X,Y,Z OF POINT IN CUBE.
-	// Fractional part of input
+	// Fractional part of input -> Find relative x,y of point in the cube.
 	x -= xi;
 	y -= yi;
 
-	// FIND UNIT CUBE THAT CONTAINS POINT.
-	// Wrap to 0..255
+	// Wrap to 0..255 -> Find unit cube that contains point.
 	xi = xi & 255;
 	yi = yi & 255;
 
-	// HASH COORDINATES OF THE 8 CUBE CORNERS,
-	int A = g_HASH_TABLE_KEN_PERLIN[xi] + yi;
-	int B = g_HASH_TABLE_KEN_PERLIN[xi + 1] + yi;
-	int	AA = g_HASH_TABLE_KEN_PERLIN[A];
-	int	AB = g_HASH_TABLE_KEN_PERLIN[A + 1];
-	int	BA = g_HASH_TABLE_KEN_PERLIN[B];
-	int	BB = g_HASH_TABLE_KEN_PERLIN[B + 1];
+	// Hash coordinates of the cube in 4 corners (8 in the 3D case)
+	int A  = g_HASH_TABLE_KEN_PERLIN[xi	   ] + yi,
+	    B  = g_HASH_TABLE_KEN_PERLIN[xi + 1] + yi,
+	    AA = g_HASH_TABLE_KEN_PERLIN[A     ],
+	    AB = g_HASH_TABLE_KEN_PERLIN[A  + 1],
+	    BA = g_HASH_TABLE_KEN_PERLIN[B     ],
+	    BB = g_HASH_TABLE_KEN_PERLIN[B  + 1];
 
-	// Calculate gradients of the cube 8 Corners
-	float g000 = Gradient2D(g_HASH_TABLE_KEN_PERLIN[AA], x, y);			// bottom left
-	float g001 = Gradient2D(g_HASH_TABLE_KEN_PERLIN[BA], x - 1, y);		// bottom right
-	float g002 = Gradient2D(g_HASH_TABLE_KEN_PERLIN[AB], x, y - 1);		// top left
-	float g003 = Gradient2D(g_HASH_TABLE_KEN_PERLIN[BB], x - 1, y - 1);	// top right
+	// Calculate gradients of the each corner of the cube
+	float g000 = Gradient2D(g_HASH_TABLE_KEN_PERLIN[AA], x	  , y   );	// ( 1, 1,0) bottom left
+	float g001 = Gradient2D(g_HASH_TABLE_KEN_PERLIN[BA], x - 1, y   );	// (-1, 1,0) bottom right
+	float g002 = Gradient2D(g_HASH_TABLE_KEN_PERLIN[AB], x    , y - 1);	// ( 1,-1,0) top left
+	float g003 = Gradient2D(g_HASH_TABLE_KEN_PERLIN[BB], x - 1, y - 1);	// (-1,-1,0) top right
 
-	// COMPUTE FADE CURVES FOR EACH OF X,Y,Z.
+	// Compute fade curves for x, y
 	float u = Fadef(x),
-		v = Fadef(y);
+		  v = Fadef(y);
 
-	// AND ADD BLENDED RESULTS FROM  8 CORNERS OF CUBE
-	// Interpolations
+	// Interpolations -> Add blended results from the corners of the cube
 	// first
 	float l01 = Lerpf(g000, g001, u);
 	float l02 = Lerpf(g002, g003, u);
-
 	// second
 	float l11 = Lerpf(l01, l02, v);
 

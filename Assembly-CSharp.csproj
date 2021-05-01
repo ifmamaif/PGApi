@@ -74,6 +74,7 @@
     <Compile Include="Assets\Scripts\Demos\NoisesDemo.cs" />
     <Compile Include="Assets\Scripts\Demos\PerlinNoisePreview.cs" />
     <Compile Include="Assets\Scripts\Demos\PerlinTexture.cs" />
+    <Compile Include="Assets\Scripts\Demos\PreviewDemos.cs" />
     <Compile Include="Assets\Scripts\MainScene.cs" />
     <Compile Include="Assets\Scripts\PGApi\Cell.cs" />
     <Compile Include="Assets\Scripts\PGApi\KenPerlin.cs" />
