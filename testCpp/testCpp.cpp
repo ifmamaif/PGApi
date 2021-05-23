@@ -1,8 +1,6 @@
 ﻿// testCpp.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
-#include <iostream>
-
 #include "../PG_Library/MazeWorm.h"
 #include "../PG_Library/Random.h"
 #include "../PG_Library/KenPerlin.h"
@@ -12,50 +10,52 @@
 #include "../PG_Library/SimplexNoise.h"
 #include "../PG_Library/Noise.h"
 #include "../PG_Library/Math.h"
+#include "../PG_Library/PerlinUtils.h"
+
+#include <ctime>
+#include <cstdlib>
+#include <iostream>
 
 #include <time.h>
+#include <stdlib.h>
+#include <stdio.h>
 
-void GetMinMaxPerlinNoise_Improved(float (*f)(float,float,float))
+#include "Test_PerlinNoise.h"
+
+void PRNG_C() {
+	srand(time(NULL)); /* seed the generator */
+	int rand1 = rand(); /* a pseudorandom integer between 0 and RAND_MAX */
+	printf("Random number between 0 and %d: %d\n", RAND_MAX, (int)rand1);
+	/* Or, within a specific range: */
+	int min = 0;
+	int max = 100;
+	float rand2 = (float)rand() * max / RAND_MAX + 1;
+	int round = (int)rand2;
+	printf("Random number between %d and %d: %d (%f)\n", min, max, round, rand2);
+	return;
+}
+
+int PRNG_Cplusplus() {
+	srand(time(NULL));
+	std::cout << "Random number between 0 and " << RAND_MAX << ": " << rand() << "\n"
+		<< "Random number between 1 and 100: " << (rand() % 100) + 1 << std::endl;
+	return 0;
+}
+
+void GradientsValue1()
 {
-	//Minim - 0.878596,  -0.900608 ,  -0.837054 ,  -0.863498 ,  -0.837278
-	//Maxim 0.90416 , 0.898667 ,  0.959816 , 0.958262,0.927884
-	float min = 1;
-	float max = -1;
-
-	for (int i = 0; i < 10000; i++)
+	for (int i = 0; i < 16; i++)
 	{
-		float x = Randf()*1000;
-		float y = Randf()*1000;
-		float z = Randf()*1000;
-
-		float res = f(x, y, z);
-		if (res < min)
-		{
-			min = res;
-		}
-		if (res > max)
-		{
-			max = res;
-		}
+		std::cout << i << " " << Gradient1D(i, 1)<< std::endl;
 	}
+}
 
-	float increment = 0;
-	for (int i = 0; i < 10001; i++)
+void GradientsValue2()
+{
+	for (int i = 0; i < 65; i++)
 	{
-		float res = f(increment, increment, increment);
-		if (res < min)
-		{
-			min = res;
-		}
-		if (res > max)
-		{
-			max = res;
-		}
-		increment += 0.00001f;
+		std::cout << i << ": "<< " 2,3 " << Gradient2D(i, 2,3) << std::endl;
 	}
-
-	std::cout << "Minim " << min << std::endl;
-	std::cout << "Maxim " << max << std::endl;
 }
 
 int TestPerlinNDim()
@@ -216,15 +216,21 @@ void da()
 	std::cout << max << std::endl;
 }
 
+
+
 int main(int argc,char* argv[])
 {
-	//GetMinMaxPerlinNoise_Improved(ClassicPerlinNoise3D);
-	//GetMinMaxPerlinNoise_Improved(PerlinNoise_Improved3D);
-	//GetMinMaxPerlinNoise_Improved(SimplexNoise3D);
+	//GetMinMaxNoise(ClassicPerlinNoise3D);
+	//GetMinMaxNoise(PerlinNoise_Improved3D);
+	//GetMinMaxNoise(SimplexNoise3D);
+	//GetMinMaxNoise2D(noise_simplex);
+	TestVersions(SimplexNoise2D,noise_simplex_optimized);
 	//std::cout << TestPerlinNDim() << std::endl;
 	//std::cout << TestValueNoise() << std::endl;
-	da();
+	//da();
+	//GradientsValue2();
     //system("pause");
+	//Test_PerlinNoise();
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

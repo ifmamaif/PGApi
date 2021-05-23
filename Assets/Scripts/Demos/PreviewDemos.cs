@@ -16,6 +16,7 @@ class PreviewDemos
     private readonly GameObject m_PrefabButton;
     private readonly GameObject m_ParentCanvas;
     private GameObject m_CurrentDemo = null;
+    private const int OFFSET_BUTTONS_Y = 300;
 
     public PreviewDemos(GameObject parentCanvas,GameObject prefabButton)
     {
@@ -55,7 +56,7 @@ class PreviewDemos
         newComponentScript.Constructor();
 
         var buttonObject= UnityEngine.Object.Instantiate(m_PrefabButton, new Vector3(0, 0, 0), Quaternion.identity, m_ParentCanvas.transform);
-        buttonObject.transform.localPosition = new Vector3(0, m_Buttons.Count * 30, 0);
+        buttonObject.transform.localPosition = new Vector3(0, OFFSET_BUTTONS_Y - m_Buttons.Count * 30, 0);
         m_Buttons.Add(buttonObject);
 
         var button = buttonObject.GetComponent<Button>();

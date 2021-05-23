@@ -156,11 +156,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="testCpp.cpp" />
+    <ClCompile Include="Test_PerlinNoise.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PG_Library\PG_Library.vcxproj">
       <Project>{382f3426-6ad3-4f8c-bed4-bc2cf31c7d45}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Test_PerlinNoise.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

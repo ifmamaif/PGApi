@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class PerlinNoisePreview : GenericBehaviour
 {
@@ -8,43 +9,53 @@ public class PerlinNoisePreview : GenericBehaviour
     public float offsetx = 100f;
     public float offsety = 100f;
 
-    private GameObject perlinObject;
-    private GameObject randomObject;
-    
+    protected const int numObj = 4;
+    protected GameObject[] objects = new GameObject[numObj];
+
     // Start is called before the first frame update
     public override void Constructor()
     {
-        perlinObject = GameObject.CreatePrimitive(PrimitiveType.Quad);
-        randomObject = GameObject.CreatePrimitive(PrimitiveType.Quad);
+        for (int i = 0; i < numObj; i++)
+        {
+            var gameObj = GameObject.CreatePrimitive(PrimitiveType.Quad);
+            gameObj.transform.parent = gameObject.transform;
+            gameObj.transform.localScale = new Vector3(40, 40, 1);
+            objects[i] = gameObj;
+        }
 
-        perlinObject.name = ("Perlin Noise");
-        randomObject.name = ("Random");
+        objects[0].name = ("Random");
+        objects[0].transform.localPosition = new Vector3(-41f, 21, 0);
 
-        perlinObject.transform.parent = gameObject.transform;
-        randomObject.transform.parent = gameObject.transform;
+        objects[1].name = ("Perlin Noise");
+        objects[1].transform.localPosition = new Vector3(41f, 21, 0);
 
-        perlinObject.transform.localPosition = new Vector3(0.51f, 0, 0.9f);
-        randomObject.transform.localPosition = new Vector3(-0.51f, 0, 0.9f);
+        objects[2].name = ("Perlin Noise Improved");
+        objects[2].transform.localPosition = new Vector3(-41f, -21, 0);
 
-        perlinObject.transform.localScale = Vector3.one;
-        randomObject.transform.localScale = Vector3.one;
-
-        Generate();
-        GenerateTextureRandom();
+        objects[3].name = ("Simplex Noise");
+        objects[3].transform.localPosition = new Vector3(41f, -21, 0);
     }
-
+    
     public override void Generate()
     {
-        Renderer renderer = perlinObject.GetComponent<MeshRenderer>();
-        Texture2D texture = new Texture2D(width, height);
+        GenerateTexture(0, Rand);
+        GenerateTexture(1, PGApi.PGApi.ClassicPerlinNoise2D);
+        GenerateTexture(2, PGApi.PGApi.PerlinNoise_Improved2D);
+        GenerateTexture(3, PGApi.PGApi.SimplexNoise2D);
+    }
 
-        float[,] preColors = PGApi.Perlin.Generate2DMapUnity(width, height, scale, offsetx, offsety);
+    void GenerateTexture(int indexObj, Func<float, float, float> noiseFunc)
+    {
+        Renderer renderer = objects[indexObj].GetComponent<MeshRenderer>();
+        Texture2D texture = new Texture2D(width, height);
 
         for (int x = 0; x < width; x++)
             for (int y = 0; y < height; y++)
             {
-                float value = (float)preColors[x, y];
-                Color color = new Color(value, value, value);
+                float xd = (float)x / width * scale + offsetx;
+                float yd = (float)y / height * scale + offsety;
+
+                var color = ColorFragmentShader(new Vector3(xd, yd, 0), noiseFunc);
                 texture.SetPixel(x, y, color);
             }
 
@@ -52,27 +63,21 @@ public class PerlinNoisePreview : GenericBehaviour
         renderer.material.mainTexture = texture;
     }
 
-    void GenerateTextureRandom()
+    float Rand(float x, float y)
     {
-        Renderer renderer = randomObject.GetComponent<MeshRenderer>();
-        Texture2D texture = new Texture2D(width, height);
+        return UnityEngine.Random.value;
+    }
 
-        for (int x = 0; x < width; x++)
-            for (int y = 0; y < height; y++)
-            {
-                float rand = UnityEngine.Random.value;
-                Color color = new Color(rand, rand, rand);
-                texture.SetPixel(x, y, color);
-            }
+    float Rand(float x,float y,float z)
+    {
+        return UnityEngine.Random.value;
+    }
 
-        texture.Apply();
-        renderer.material.mainTexture = texture;
+    protected virtual Color ColorFragmentShader(Vector3 v_texCoord3D, Func<float, float, float> noiseFunc)
+    {
+        var noise = noiseFunc(v_texCoord3D.x, v_texCoord3D.y);
+        return new Color(noise, noise, noise, 1f);
     }
 
 
-    // Update is called once per frame
-    public void Update()
-    {
-        Generate();
-    }
 }

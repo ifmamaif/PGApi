@@ -28,7 +28,7 @@ float ClassicPerlinNoise1D(float x)
 	float n1 = Dotf((float)g_GRAD3[gi1][0], x - 1);
 
 	// Compute the fade curve value of x
-	float fc = Fadef(x);
+	float fc = HermiteBlendingFunctionf(x);
 
 	// Interpolate along x the contributions from each of the corners
 	float nx = Lerpf(n0, n1, fc);
@@ -66,8 +66,8 @@ float ClassicPerlinNoise2D(float x, float y)
 	float n11 = DotN(2,g_GRAD3[gi11], xMin, yMin);
 
 	// Compute the fade curve value for each of x, y, z
-	float u = Fadef(x);
-	float v = Fadef(y);
+	float u = HermiteBlendingFunctionf(x);
+	float v = HermiteBlendingFunctionf(y);
 
 	// Interpolate along x the contributions from each of the corners
 	float nx0 = Lerpf(n00, n10, u);
@@ -77,6 +77,11 @@ float ClassicPerlinNoise2D(float x, float y)
 	float nxy = Lerpf(nx0, nx1, v);
 
 	return nxy;
+}
+
+float FadeOriginal(float x)
+{
+	return (3 - 2 * x) * x * x;
 }
 
 float ClassicPerlinNoise3D(float x, float y, float z)
@@ -121,9 +126,9 @@ float ClassicPerlinNoise3D(float x, float y, float z)
 	float n111 = DotN(3, g_GRAD3[gi111], xMin, yMin, zMin);
 
 	// Compute the fade curve value for each of x, y, z
-	float u = Fadef(x);
-	float v = Fadef(y);
-	float w = Fadef(z);
+	float u = HermiteBlendingFunctionf(x);
+	float v = HermiteBlendingFunctionf(y);
+	float w = HermiteBlendingFunctionf(z);
 
 	// Interpolate along x the contributions from each of the corners
 	float nx00 = Lerpf(n000, n100, u);

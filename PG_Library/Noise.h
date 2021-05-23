@@ -13,4 +13,5 @@ extern "C"
 
 	EXPORT_API float Fbm(float x, float y, float z, int numOctaves, float amplitude, float gain, float frequency, float lacunarity);
 	EXPORT_API float Marbling(float x, float y, float z, float frequency, float amplitude);
+
 }

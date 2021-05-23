@@ -15,7 +15,7 @@
 // This C++ implementation is based on the speed-improved Java version 2012-03-09
 // by Stefan Gustavson (original Java source code in the public domain).
 // - Based on example code by Stefan Gustavson (stegu@itn.liu.se).
-// - Optimisations by Peter Eastman (peastman@drizzle.stanford.edu).
+// - Optimizations by Peter Eastman (peastman@drizzle.stanford.edu).
 // - Better rank ordering method by Stefan Gustavson in 2012.
 // 
 // This implementation is "Simplex Noise" as presented by
@@ -65,6 +65,22 @@ static const int grad4[32][4] =
 	{-1,1,1,0}	, {-1,1,-1,0}, {-1,-1,1,0}, {-1,-1,-1,0}
 };
 
+// A lookup table to traverse the simplex around a given point in 4D.
+// Details can be found where this table is used, in the 4D noise method.
+// This method is a *lot* faster than using (int)Math.floor(x)
+static int fastfloor(double x) {
+	return x > 0 ? (int)x : (int)x - 1;
+}
+static float dot(const int g[], float x, float y) {
+	return g[0] * x + g[1] * y;
+}
+static float dot(const int g[], float x, float y, float z) {
+	return g[0] * x + g[1] * y + g[2] * z;
+}
+static float dot(const int g[], float x, float y, float z, float w) {
+	return g[0] * x + g[1] * y + g[2] * z + g[3] * w;
+}
+
 template <class... Args>
 float ContributionFromCorners(const int gradient[],const int nInput , Args&&... args)
 {
@@ -105,6 +121,36 @@ float ContributionFromCorners(const int gradient[],const int nInput , Args&&... 
 	//float result = t * t * Gradient2D(nInput, gradient, input);
 	delete[] input;
 	return result;
+}
+
+float Contribution2D(int gi, float x, float y)
+{
+	float t0 = 0.5f - x * x - y * y;
+	if (t0 < 0)
+		return 0.0f;
+
+	t0 *= t0;
+	return t0 * t0 * dot(g_GRAD3_Simplex[gi], x, y); // (x,y) of grad3 used for 2D gradient
+}
+
+float Contribution3D(int gi, float x, float y, float z)
+{
+	float t0 = 0.5f - x * x - y * y - z * z;
+	if (t0 < 0)
+		return 0.0f;
+
+	t0 *= t0;
+	return t0 * t0 * dot(g_GRAD3_Simplex[gi], x, y, z); // (x,y) of grad3 used for 2D gradient
+}
+
+float Contribution4D(int gi, float x, float y, float z, float w)
+{
+	float t0 = 0.5f - x * x - y * y - z * z - w * w;
+	if (t0 < 0)
+		return 0.0f;
+
+	t0 *= t0;
+	return t0 * t0 * dot(grad4[gi], x, y, z, w); // (x,y) of grad3 used for 2D gradient
 }
 
 float SimplexNoise1D(float x) {
@@ -196,9 +242,9 @@ float SimplexNoise2D(float xin, float yin)
 	// Noise contributions from the three corners
 	float n0, n1, n2;
 	// Calculate the contribution from the three corners
-	n0 = ContributionFromCorners(grad4[gi0], 2, x0, y0);
-	n1 = ContributionFromCorners(grad4[gi1], 2, x1, y1);
-	n2 = ContributionFromCorners(grad4[gi2], 2, x2, y2);
+	n0 = Contribution2D(gi0, x0, y0);
+	n1 = Contribution2D(gi1, x1, y1);
+	n2 = Contribution2D(gi2, x2, y2);
 
 	// Add contributions from each corner to get the const noise value.
 	// The result is scaled to return values in the interval [-1,1].
@@ -209,7 +255,7 @@ float SimplexNoise2D(float xin, float yin)
 float SimplexNoise3D(float xin, float yin, float zin)
 {
 	// Skew the input space to determine which simplex cell we're in
-	const float F3 = 1.0f / 3.0f;
+	const float F3 = 0.33333333333f; // 1.0f / 3.0f;
 	// Very nice and simple skew factor for 3D
 	float s = (xin + yin + zin) * F3;
 	int i = FastFloorf(xin + s);
@@ -217,7 +263,7 @@ float SimplexNoise3D(float xin, float yin, float zin)
 	int k = FastFloorf(zin + s);
 
 	// Very nice and simple unskew factor, too
-	const float G3 = 1.0f / 6.0f;
+	const float G3 = 0.16666666666f; // 1.0f / 6.0f;
 	const float t = (i + j + k) * G3;
 
 	// Unskew the cell origin back to (x,y,z) space
@@ -293,15 +339,15 @@ float SimplexNoise3D(float xin, float yin, float zin)
 	int gi0 = g_HASH_TABLE_KEN_PERLIN[i + g_HASH_TABLE_KEN_PERLIN[j + g_HASH_TABLE_KEN_PERLIN[k]]] % 12;
 	int gi1 = g_HASH_TABLE_KEN_PERLIN[i + i1 + g_HASH_TABLE_KEN_PERLIN[j + j1 + g_HASH_TABLE_KEN_PERLIN[k + k1]]] % 12;
 	int gi2 = g_HASH_TABLE_KEN_PERLIN[i + i2 + g_HASH_TABLE_KEN_PERLIN[j + j2 + g_HASH_TABLE_KEN_PERLIN[k + k2]]] % 12;
-	int gi3 = g_HASH_TABLE_KEN_PERLIN[i + 1 + g_HASH_TABLE_KEN_PERLIN[j+ 1 + g_HASH_TABLE_KEN_PERLIN[k + 1]]] % 12;
+	int gi3 = g_HASH_TABLE_KEN_PERLIN[i + 1 + g_HASH_TABLE_KEN_PERLIN[j + 1 + g_HASH_TABLE_KEN_PERLIN[k + 1]]] % 12;
 
 	// Noise contributions from the four corners
 	float n0, n1, n2, n3;
 	// Calculate the contribution from the four corners	
-	n0 = ContributionFromCorners(g_GRAD3[gi0], 3, x0, y0, z0);
-	n1 = ContributionFromCorners(g_GRAD3[gi1], 3, x1, y1, z1);
-	n2 = ContributionFromCorners(g_GRAD3[gi2], 3, x2, y2, z2);
-	n3 = ContributionFromCorners(g_GRAD3[gi3], 3, x3, y3, z3);
+	n0 = Contribution3D(gi0, x0, y0, z0);
+	n1 = Contribution3D(gi1, x1, y1, z1);
+	n2 = Contribution3D(gi2, x2, y2, z2);
+	n3 = Contribution3D(gi3, x3, y3, z3);
 
 	// Add contributions from each corner to get the const noise value.
 	// The result is scaled to stay just inside [-1,1]
@@ -412,178 +458,186 @@ float SimplexNoise4D(float x, float y, float z, float w) {
 	// Noise contributions from the five corners
 	float n0, n1, n2, n3, n4;
 	// Calculate the contribution from the five corners
-	n0 = ContributionFromCorners(grad4[gi0], 4, x0, y0, z0, w0);
-	n1 = ContributionFromCorners(grad4[gi1], 4, x1, y1, z1, w1);
-	n2 = ContributionFromCorners(grad4[gi2], 4, x2, y2, z2, w2);
-	n3 = ContributionFromCorners(grad4[gi3], 4, x3, y3, z3, w3);
-	n4 = ContributionFromCorners(grad4[gi4], 4, x4, y4, z4, w4);
+	n0 = Contribution4D(gi0, x0, y0, z0, w0);
+	n1 = Contribution4D(gi1, x1, y1, z1, w1);
+	n2 = Contribution4D(gi2, x2, y2, z2, w2);
+	n3 = Contribution4D(gi3, x3, y3, z3, w3);
+	n4 = Contribution4D(gi4, x4, y4, z4, w4);
 
 	// Sum up and scale the result to cover the range [-1,1]
 	return 27.0f * (n0 + n1 + n2 + n3 + n4);
 }
 
 
-//float SimplexNoiseND(int nDim, ...)
-//{
-//	if (nDim < 1)
-//	{
-//		return 0; 
-//	}
-//
-//	// Get the input from the function with unknown number of parameters
-//	float* input = new float[nDim];
-//	VA_LIST_GET(nDim, float, input);
-//
-//	// The skewing and unskewing factors are hairy again for the N-D case
-//	// SKEWING
-//	const float SKEWING = (sqrt(nDim + 1) - 1) / nDim;
-//	// UNSKEWING
-//	const float UNSKEWING = (1 - 1 / (sqrt(nDim+1))) / nDim;
-//	
-//	// Factor for N-D skewing
-//	float s = 0;
-//	for (int i = 0; i < nDim; i++)
-//	{
-//		s += input[i];
-//	}
-//	s *= SKEWING; 
-//	// Skew the (x,y,z,...) space to determine which cell of the simplicities we are in
-//	int* cellSkewed = new int[nDim];
-//	for (int i = 0; i < nDim; i++)
-//	{
-//		cellSkewed[i] = FastFloorf(input[i] + s);
-//	}
-//
-//	// Factor for N-D unskewing
-//	float t = 0;
-//	for (int i = 0; i < nDim; i++)
-//	{
-//		t += input[i];
-//	}
-//	t *= UNSKEWING;
-//	// Unskew the cell origin back to (x,y,z,...) space
-//	int* cellUnskewed = new int[nDim];
-//	for (int i = 0; i < nDim; i++)
-//	{
-//		cellUnskewed[i] = (int)(cellSkewed[i] - t);
-//	}
-//
-//	// The x,y,z,w distances from the cell origin
-//	for (int i=0;i<nDim;i++)
-//	{
-//		cellUnskewed[i] = (int)(input[i] - cellUnskewed[i]);
-//	}
-//
-//	// To find out which of the possible simplicities we're in, we need to
-//	// determine the magnitude ordering of x0, y0, z0 and ...
-//	// Pair-wise comparisons are performed between each possible pair
-//	// of coordinates, and the results are used to rank the numbers.
-//	int* magnitudes = new int[nDim];
-//	for (int i = 0; i < nDim; i++)
-//	{
-//		for (int j = i + 1; j < nDim; j++)
-//		{
-//			if (cellUnskewed[i] > cellUnskewed[j])
-//			{
-//				magnitudes[i]++;
-//			}
-//			else
-//			{
-//				magnitudes[j]++;
-//			}
-//		}
-//	}
-//
-//	// The integer offsets for the second,third,fourth,... simplex corner
-//	// [rankx, ranky, rankz, ....] is a N-vector
-//    // in some order. We use a thresholding to set the coordinates in turn.
-//	int** simplexCorners = new int* [nDim];
-//	for (int i = 0; i < nDim-1; i++)
-//	{
-//		simplexCorners[i] = new int[nDim];
-//		for (int j = 0; j < nDim; j++)
-//		{
-//			simplexCorners[i][j] = magnitudes[j] >= (3-i) ? 1 : 0;
-//		}
-//	}
-//	for (int j = 0; j < nDim; j++)
-//	{
-//		simplexCorners[nDim-1][j] = 1;
-//	}
-//
-//
-//	// The final corner has all coordinate offsets = 1, so no need to compute that.
-//	float** finalCorner = new float* [nDim];
-//	for (int i = 0; i < nDim; i++)
-//	{
-//		finalCorner[i] = new float[nDim];
-//		for (int j = 0; j < nDim; j++)
-//		{
-//			finalCorner[i][j] = cellUnskewed[j] - simplexCorners[i][j] + (i + 1) * UNSKEWING;
-//		}
-//	}
-//
-//	// Work out the hashed gradient indices of the five simplex corners
-//	for (int i = 0; i < nDim; i++)
-//	{
-//		cellSkewed[i] &= 255;
-//	}
-//
-//	int* gradients = new int[nDim + 1];
-//	gradients[0] = 0;
-//	for (int i = nDim - 1; i >= 0; i--)
-//	{
-//		gradients[0] += permutation[cellSkewed[i] + gradients[0]];
-//	}
-//	gradients[0] %= 32;
-//	for (int i = 0; i < nDim; i++)
-//	{
-//		gradients[i+1] = 0;
-//		for (int j = 0; j < nDim; j++)
-//		{
-//			gradients[i+1] += permutation[(int)(cellSkewed[i] + finalCorner[i] + gradients[i+1])];
-//		}
-//		gradients[i + 1] = 0;
-//	}
-//		
-//	// Calculate the contribution from the five corners
-//	float* contributions = new float[nDim + 1];
-//	// Noise contributions from the five corners
-//	float* noise = new float[nDim + 1];
-//
-//
-//	contributions[0] = 0.6;
-//	for (int j = 0; j < nDim; j++)
-//	{
-//		contributions[0] -= cellUnskewed[j] * cellUnskewed[j];
-//	}
-//	if (contributions[0] < 0)
-//	{
-//		noise[0] = 0;
-//	}
-//	else
-//	{
-//		contributions[0] *= contributions[0];
-//		noise[0] = contributions[0] * contributions[0] * DotN(nDim,gradients, cellUnskewed);
-//	}
-//	for (int i = 1; i < nDim + 1; i++)
-//	{
-//		contributions[i] = 0.6;
-//		for (int j = 0; j < nDim; j++)
-//		{
-//			contributions[i] -= cellUnskewed[j] * cellUnskewed[j];
-//		}
-//		if (contributions[i] < 0)
-//		{
-//			noise[i] = 0;
-//		}
-//		else
-//		{
-//			contributions[i] *= contributions[i];
-//			noise[i] = contributions[i] * contributions[i] * DotN(nDim, gradients, finalCorner[i]);
-//		}
-//	}
-//
-//	const float someConstant = 70;
-//	return someConstant * Sum(noise);
-//}
+float SimplexNoiseND(int nDim, ...)
+{
+	if (nDim < 1)
+	{
+		return 0;
+	}
+
+	// Get the input from the function with unknown number of parameters
+	float* input = new float[nDim];
+	//VA_LIST_GET(nDim, float, input);
+
+	// The skewing and unskewing factors are hairy again for the N-D case
+	// SKEWING
+	const float SKEWING = (sqrt(nDim + 1) - 1) / nDim;
+	// UNSKEWING
+	const float UNSKEWING = (1 - 1 / (sqrt(nDim + 1))) / nDim;
+
+	// Factor for N-D skewing
+	float s = 0;
+	for (int i = 0; i < nDim; i++)
+	{
+		s += input[i];
+	}
+	s *= SKEWING;
+	// Skew the (x,y,z,...) space to determine which cell of the simplicities we are in
+	int* cellSkewed = new int[nDim];
+	for (int i = 0; i < nDim; i++)
+	{
+		cellSkewed[i] = FastFloorf(input[i] + s);
+	}
+
+	// Factor for N-D unskewing
+	float t = 0;
+	for (int i = 0; i < nDim; i++)
+	{
+		t += input[i];
+	}
+	t *= UNSKEWING;
+	// Unskew the cell origin back to (x,y,z,...) space
+	int* cellUnskewed = new int[nDim];
+	for (int i = 0; i < nDim; i++)
+	{
+		cellUnskewed[i] = (int)(cellSkewed[i] - t);
+	}
+
+	// The x,y,z,w distances from the cell origin
+	for (int i = 0; i < nDim; i++)
+	{
+		cellUnskewed[i] = (int)(input[i] - cellUnskewed[i]);
+	}
+
+	// To find out which of the possible simplicities we're in, we need to
+	// determine the magnitude ordering of x0, y0, z0 and ...
+	// Pair-wise comparisons are performed between each possible pair
+	// of coordinates, and the results are used to rank the numbers.
+	int* magnitudes = new int[nDim];
+	for (int i = 0; i < nDim; i++)
+	{
+		for (int j = i + 1; j < nDim; j++)
+		{
+			if (cellUnskewed[i] > cellUnskewed[j])
+			{
+				magnitudes[i]++;
+			}
+			else
+			{
+				magnitudes[j]++;
+			}
+		}
+	}
+
+	// The integer offsets for the second,third,fourth,... simplex corner
+	// [rankx, ranky, rankz, ....] is a N-vector
+	// in some order. We use a thresholding to set the coordinates in turn.
+	int** simplexCorners = new int* [nDim];
+	for (int i = 0; i < nDim - 1; i++)
+	{
+		simplexCorners[i] = new int[nDim];
+		for (int j = 0; j < nDim; j++)
+		{
+			simplexCorners[i][j] = magnitudes[j] >= (3 - i) ? 1 : 0;
+		}
+	}
+	for (int j = 0; j < nDim; j++)
+	{
+		simplexCorners[nDim - 1][j] = 1;
+	}
+
+
+	// The final corner has all coordinate offsets = 1, so no need to compute that.
+	float** finalCorner = new float* [nDim];
+	for (int i = 0; i < nDim; i++)
+	{
+		finalCorner[i] = new float[nDim];
+		for (int j = 0; j < nDim; j++)
+		{
+			finalCorner[i][j] = cellUnskewed[j] - simplexCorners[i][j] + (i + 1) * UNSKEWING;
+		}
+	}
+
+	// Work out the hashed gradient indices of the five simplex corners
+	for (int i = 0; i < nDim; i++)
+	{
+		cellSkewed[i] &= 255;
+	}
+
+	int modulusGradient = nDim * 2 << (nDim - 1); // numarul de muchii
+
+	int* gradients = new int[nDim + 1];
+	gradients[0] = 0;
+	for (int i = nDim - 1; i >= 0; i--)
+	{
+		gradients[0] += g_HASH_TABLE_KEN_PERLIN[cellSkewed[i] + gradients[0]];
+	}
+	gradients[0] %= 32;
+	for (int i = 0; i < nDim; i++)
+	{
+		gradients[i + 1] = 0;
+		for (int j = 0; j < nDim; j++)
+		{
+			gradients[i + 1] += g_HASH_TABLE_KEN_PERLIN[(int)(cellSkewed[i] + finalCorner[i] + gradients[i + 1])];
+		}
+		gradients[i + 1] = 0;
+	}
+
+	// Calculate the contribution from the five corners
+	float* contributions = new float[nDim + 1];
+	// Noise contributions from the five corners
+	float* noise = new float[nDim + 1];
+
+
+	contributions[0] = 0.6;
+	for (int j = 0; j < nDim; j++)
+	{
+		contributions[0] -= cellUnskewed[j] * cellUnskewed[j];
+	}
+	if (contributions[0] < 0)
+	{
+		noise[0] = 0;
+	}
+	else
+	{
+		contributions[0] *= contributions[0];
+		noise[0] = contributions[0] * contributions[0] * DotN(nDim, gradients, cellUnskewed);
+	}
+	for (int i = 1; i < nDim + 1; i++)
+	{
+		contributions[i] = 0.6;
+		for (int j = 0; j < nDim; j++)
+		{
+			contributions[i] -= cellUnskewed[j] * cellUnskewed[j];
+		}
+		if (contributions[i] < 0)
+		{
+			noise[i] = 0;
+		}
+		else
+		{
+			contributions[i] *= contributions[i];
+			noise[i] = contributions[i] * contributions[i] * DotN(nDim, gradients, finalCorner[i]);
+		}
+	}
+
+	const float someConstant = 70;
+	int sum = 0;
+	for (int i = 0; i < nDim + 1; i++)
+	{
+		sum += noise[i];
+	}
+
+	return someConstant * sum;
+}

@@ -65,16 +65,20 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\BasicScripts\GenericBehaviour.cs" />
     <Compile Include="Assets\Scripts\Demos\Atestat.cs" />
+    <Compile Include="Assets\Scripts\Demos\CloudTexture.cs" />
     <Compile Include="Assets\Scripts\Demos\EarthMap.cs" />
+    <Compile Include="Assets\Scripts\Demos\FurTexture.cs" />
     <Compile Include="Assets\Scripts\Demos\Heart.cs" />
     <Compile Include="Assets\Scripts\Demos\LevelGeneration.cs" />
     <Compile Include="Assets\Scripts\Demos\MDS.cs" />
+    <Compile Include="Assets\Scripts\Demos\Marble1.cs" />
     <Compile Include="Assets\Scripts\Demos\MarbleTexture.cs" />
     <Compile Include="Assets\Scripts\Demos\MeshGenerator.cs" />
     <Compile Include="Assets\Scripts\Demos\NoisesDemo.cs" />
     <Compile Include="Assets\Scripts\Demos\PerlinNoisePreview.cs" />
     <Compile Include="Assets\Scripts\Demos\PerlinTexture.cs" />
     <Compile Include="Assets\Scripts\Demos\PreviewDemos.cs" />
+    <Compile Include="Assets\Scripts\Demos\WoodTexture.cs" />
     <Compile Include="Assets\Scripts\MainScene.cs" />
     <Compile Include="Assets\Scripts\PGApi\Cell.cs" />
     <Compile Include="Assets\Scripts\PGApi\KenPerlin.cs" />

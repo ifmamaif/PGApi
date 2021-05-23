@@ -73,7 +73,7 @@ public class MainScene : MonoBehaviour
         m_PreviewDemos.AddNewDemo<MDS>("MDS");                                        
 
         demo_Level = m_PreviewDemos.AddNewDemo<PerlinNoisePreview>("Perlin Preview"); 
-        demo_Level.transform.localScale = new Vector3(88, 88, 1);
+        //demo_Level.transform.localScale = new Vector3(88, 88, 1);
 
         m_PreviewDemos.AddNewDemo<Heart>("Hearth Preview");                           
         m_PreviewDemos.AddNewDemo<NoisesDemo>("Perlin Noises");                       
@@ -82,6 +82,11 @@ public class MainScene : MonoBehaviour
         demo_Level.transform.localScale = new Vector3(1, 1, 1);
 
         m_PreviewDemos.AddNewDemo<EarthMap>("Earth Map");
+        m_PreviewDemos.AddNewDemo<Marble1>("Marble 1");
+        m_PreviewDemos.AddNewDemo<WoodTexture>("Wood Texture");
+        m_PreviewDemos.AddNewDemo<CloudTexture>("Cloud Texture");
+        m_PreviewDemos.AddNewDemo<FurTexture>("Fur Texture");
+
     }
 
     // Update is called once per frame
