@@ -46,8 +46,7 @@ float Gradient3D(int hash, float x, float y, float z)
 	float u = h < 8 /* 0b1000 */ ? x : y;						// If the most significant bit (MSB) of the hash is 0 then set u = x.  Otherwise y.
 
 	// Fix repeats at h = 12 to 15
-	float v;													// In Ken Perlin's original implementation this was another conditional operator (?:).  I
-																// expanded it for readability.
+	float v;													// In Ken Perlin's original implementation this was another conditional operator (?:).
 	if (h < 4 /* 0b0100 */)                                     // If the first and second significant bits are 0 set v = y
 		v = y;
 	else if (h == 12 /* 0b1100 */ || h == 14 /* 0b1110*/)		// If the first and second significant bits are 1 set v = x

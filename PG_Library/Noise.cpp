@@ -8,11 +8,6 @@
 
 float** Generate2DMap(int width, int height, float scale, float offsetX, float offsetY)
 {
-	//float** noiseMap = (float**)malloc(sizeof(float*)*width);
-	//for (int i = 0; i < width; i++)
-	//{
-	//	noiseMap[i] = (float*)malloc(sizeof(float)*height);
-	//}
 	float** noiseMap = new float* [width];
 	for (int i = 0; i < width; i++)
 	{
@@ -78,9 +73,5 @@ float Fbm(float x, float y, float z, int numOctaves, float amplitude, float gain
 
 float Marbling(float x, float y, float z, float frequency, float amplitude)
 {
-	// f = marble pattern frequency
-	// a = marble noise amplitude
-
-	//marble(x,y,z) = sin(f*(x+a*turb(x,y,z)))
 	return sin(frequency * (x + amplitude * Fbm(x, y, z,8, amplitude,.5f, frequency,2)));
 }
