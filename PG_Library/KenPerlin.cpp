@@ -6,9 +6,7 @@
 #include "Allocation.h"
 #include "PerlinUtils.h"
 
-
-
-float ClassicPerlinNoise1D(float x)
+float PerlinNoise_Classic1D(float x)
 {
 	// Find unit grid cell containing point
 	int xi = FastFloorf(x);
@@ -36,7 +34,7 @@ float ClassicPerlinNoise1D(float x)
 	return nx;
 }
 
-float ClassicPerlinNoise2D(float x, float y)
+float PerlinNoise_Classic2D(float x, float y)
 {
 	// Find unit grid cell containing point
 	int xi = FastFloorf(x);
@@ -84,7 +82,7 @@ float FadeOriginal(float x)
 	return (3 - 2 * x) * x * x;
 }
 
-float ClassicPerlinNoise3D(float x, float y, float z)
+float PerlinNoise_Classic3D(float x, float y, float z)
 {
 	// Find unit grid cell containing point
 	int xi = FastFloorf(x);
@@ -154,7 +152,8 @@ float PerlinNoiseND(int nDim, ...)
 	}
 
 	// Arrays
-	float* input = new float[nDim];                                       // Get the input from the function with unknown number of parameter
+	// Get the input from the function with unknown number of parameter
+	float* input = new float[nDim];                                       
 	
 	// Get the input from the function with unknown number of parameters
 	VA_LIST_GET(nDim, float, input);

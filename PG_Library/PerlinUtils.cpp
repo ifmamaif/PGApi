@@ -57,7 +57,6 @@ float Gradient3D(int hash, float x, float y, float z)
 	return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);	// Use the last 2 bits to decide if u and v are positive or negative.  Then return their addition.
 }
 
-
 float Gradient1D_Improved(int hash, float x) 
 {
 	switch (hash & 0xF)

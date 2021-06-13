@@ -43,12 +43,12 @@ void Test_PerlinNoise()
 		auto y = Randf() * 1000;
 		auto z = Randf() * 1000;
 
-		float res = ClassicPerlinNoise3D(x, y, z);
+		float res = PerlinNoise_Classic3D(x, y, z);
 		testMinMax(res);
 		auto cent = (float)i / iteration;
-		res = ClassicPerlinNoise3D(cent, cent, cent);
+		res = PerlinNoise_Classic3D(cent, cent, cent);
 		testMinMax(res);
-		res = ClassicPerlinNoise3D(cent + x, cent + y, cent + z);
+		res = PerlinNoise_Classic3D(cent + x, cent + y, cent + z);
 		testMinMax(res);
 	}
 

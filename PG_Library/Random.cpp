@@ -30,7 +30,6 @@ int Rand_s()
 
 int RandBetween(int minInclusive, int maxExclusive)
 {
-    //return ((Rand() % b) + a) % b;
     return minInclusive + (Rand() % (maxExclusive - minInclusive + 1));
 }
 
