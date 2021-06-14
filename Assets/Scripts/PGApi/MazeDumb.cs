@@ -14,7 +14,7 @@ public static class MazeDumb
 		{
 			for (int j = 0; j < width; j++)
 			{
-				result[i, j] = (PGApi.PGApi.RandBetween(1, 101) < 66) ? 1 : 0;
+				result[i, j] = (PGApi.PGApi.AleatoriuÎntre(1, 101) < 66) ? 1 : 0;
 			}
 		}
 		result[playerPos.y, playerPos.x] = 1;

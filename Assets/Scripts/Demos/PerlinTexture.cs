@@ -21,7 +21,7 @@ class PerlinTexture : GenericBehaviour
         {
             var obj = GameObject.CreatePrimitive(PrimitiveType.Quad);
             obj.transform.parent = gameObject.transform;
-            obj.transform.localScale = new Vector3(40, 40, 1);//Vector3.one;//new Vector3(0.88f,0.88f,1);
+            obj.transform.localScale = new Vector3(40, 40, 1);
             objects[i] = obj;
 
         }
@@ -42,16 +42,9 @@ class PerlinTexture : GenericBehaviour
     public override void Generate()
     {
         GenerateNormalNoise();
-        //GenerateTextureRandom();
         GenerateSumNoise();
-        //GenerateTextureRandomPos();
-        //GenerateTextureSin();
-
-        //GenerateSumNoiseAbs();
         GenerateTextureSin();
-
         GenerateTextureCosX();
-        //GenerateTextureSinX();
     }
 
     public void GenerateSumNoise()
@@ -68,7 +61,7 @@ class PerlinTexture : GenericBehaviour
                 for (int z=0;z<4;z++)
                 {
                     float pow2 = Mathf.Pow(2,z);
-                    noise += PGApi.PGApi.PerlinNoise_Improved2D(pow2* xd, pow2*yd) / pow2;
+                    noise += PGApi.PGApi.ZgomotulPerlin_Îmbunătățit2D(pow2* xd, pow2*yd) / pow2;
                     
                 }
 
@@ -94,7 +87,7 @@ class PerlinTexture : GenericBehaviour
                 for (int z = 0; z < 4; z++)
                 {
                     float pow2 = Mathf.Pow(2, z);
-                    var n = PGApi.PGApi.PerlinNoise_Improved2D(pow2 * xd, pow2 * yd) / pow2;
+                    var n = PGApi.PGApi.ZgomotulPerlin_Îmbunătățit2D(pow2 * xd, pow2 * yd) / pow2;
                     if (n < 0) n = 0 - n;
                     noise += n;
                 }
@@ -138,12 +131,9 @@ class PerlinTexture : GenericBehaviour
                 float yd = (float)y / height * scale + offsety;
 
 
-                float noise = PGApi.PGApi.PerlinNoise_Improved3D(xd, yd, 0);
+                float noise = PGApi.PGApi.ZgomotulPerlin_Îmbunătățit3D(xd, yd, 0);
                                
                 float rand = pink_constant / (float)noise;
-                //rand = rand == float.PositiveInfinity ? float.MaxValue : rand == float.NegativeInfinity ? float.MinValue : rand;
-                //rand = rand / float.MaxValue;
-                //rand = (rand + 1) / 2;
                 Color color = new Color(rand, rand, rand);
                 texture.SetPixel(x, y, color);
             }
@@ -164,13 +154,10 @@ class PerlinTexture : GenericBehaviour
                 float yd = (float)y / height * scale + offsety;
 
 
-                float noise = PGApi.PGApi.PerlinNoise_Improved3D(xd, yd, 0);
+                float noise = PGApi.PGApi.ZgomotulPerlin_Îmbunătățit3D(xd, yd, 0);
                 noise = noise < 0 ? noise * -1 : noise;
 
-                float rand = (float)noise;// pink_constant / (float)noise;
-                //rand = rand == float.PositiveInfinity ? float.MaxValue : rand == float.NegativeInfinity ? float.MinValue : rand;
-                //rand = rand / float.MaxValue;
-                //rand = (rand + 1) / 2;
+                float rand = (float)noise;
                 Color color = new Color(rand, rand, rand);
                 texture.SetPixel(x, y, color);
             }
@@ -191,7 +178,7 @@ class PerlinTexture : GenericBehaviour
                 float yd = (float)y / height * scale + offsety;
 
 
-                float noise = PGApi.PGApi.PerlinNoise_Improved3D(xd, yd, 0);
+                float noise = PGApi.PGApi.ZgomotulPerlin_Îmbunătățit3D(xd, yd, 0);
 
                 noise = Mathf.Sin(xd+ noise);
                 Color color = new Color(noise, noise, noise);
@@ -214,7 +201,7 @@ class PerlinTexture : GenericBehaviour
                 float yd = (float)y / height * scale + offsety;
 
 
-                float noise = PGApi.PGApi.PerlinNoise_Improved3D(xd, yd, 0);
+                float noise = PGApi.PGApi.ZgomotulPerlin_Îmbunătățit3D(xd, yd, 0);
                 float rand = (float)(xd + noise);
                 rand = Mathf.Cos(rand);
                 Color color = new Color(rand, rand, rand);
@@ -237,7 +224,7 @@ class PerlinTexture : GenericBehaviour
                 float yd = (float)y / height * scale + offsety;
 
 
-                float noise = PGApi.PGApi.PerlinNoise_Improved3D(xd, yd, 0);
+                float noise = PGApi.PGApi.ZgomotulPerlin_Îmbunătățit3D(xd, yd, 0);
                 float rand = (float)(xd + noise);
                 rand = Mathf.Sin(rand);
                 Color color = new Color(rand, rand, rand);
@@ -258,7 +245,7 @@ class PerlinTexture : GenericBehaviour
             {
                 float xd = (float)x / width ;
                 float yd = (float)y / height;
-                float noise = ((float)PGApi.PGApi.PerlinNoise_Improved3D(xd, yd, 0)+1/2);
+                float noise = ((float)PGApi.PGApi.ZgomotulPerlin_Îmbunătățit3D(xd, yd, 0)+1/2);
 
                 float rand = (xd + yd ) / 2;
                 rand = (rand + noise) / 2;

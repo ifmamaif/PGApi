@@ -39,9 +39,9 @@ public class PerlinNoisePreview : GenericBehaviour
     public override void Generate()
     {
         GenerateTexture(0, Rand);
-        GenerateTexture(1, PGApi.PGApi.ClassicPerlinNoise2D);
-        GenerateTexture(2, PGApi.PGApi.PerlinNoise_Improved2D);
-        GenerateTexture(3, PGApi.PGApi.SimplexNoise2D);
+        GenerateTexture(1, PGApi.PGApi.ZgomotulPerlin_Clasic2D);
+        GenerateTexture(2, PGApi.PGApi.ZgomotulPerlin_Îmbunătățit2D);
+        GenerateTexture(3, PGApi.PGApi.ZgomotulPerlin_Simplex2D);
     }
 
     void GenerateTexture(int indexObj, Func<float, float, float> noiseFunc)

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 // Hash lookup table as defined by Ken Perlin.  This is a randomly
 // arranged array of all numbers from 0-255 inclusive.
@@ -20,9 +20,9 @@
  * A vector-valued noise over 3D accesses it 96 times, and a
  * float-valued 4D noise 64 times. We want this to fit in the cache!
  */
-static const int g_HASH_TABLE_KEN_PERLIN[] =
+static const int g_TABELA_HASH_KEN_PERLIN[] =
 {
-	// first 256 values [0,255] (all values)
+	// Primele 256 de valori între [0,255]
 	151,	160,	137,	91,		90,		15,		131,	13,		201,	95,		96,		53,		194,	233,	7,		225,
 	140,	36,		103,	30,		69,		142,	8,		99,		37,		240,	21,		10,		23,		190,	6,		148,
 	247,	120,	234,	75,		0,		26,		197,	62,		94,		252,	219,	203,	117,	35,		11,		32,
@@ -39,8 +39,8 @@ static const int g_HASH_TABLE_KEN_PERLIN[] =
 	81,		51,		145,	235,	249,	14,		239,	107,	49,		192,	214,	31,		181,	199,	106,	157,
 	184,	84,		204,	176,	115,	121,	50,		45,		127,	4,		150,	254,	138,	236,	205,	93,
 	222,	114,	67,		29,		24,		72,		243,	141,	128,	195,	78,		66,		215,	61,		156,	180,
-	// To remove the need for index wrapping, double the permutation table length
-	// duplicate 256 values
+	// Pentru a elimina necesitatea verificării indexorului, se dublează lungimea tabelei de permutări.
+	// Din nou cele 256 de valori (duplicate)
 	 151,	160,	137,	91,		90,		15,		131,	13,		201,	95,		96,		53,		194,	233,	7,		225,
 	 140,	36,		103,	30,		69,		142,	8,		99,		37,		240,	21,		10,		23,		190,	6,		148,
 	 247,	120,	234,	75,		0,		26,		197,	62,		94,		252,	219,	203,	117,	35,		11,		32,
@@ -65,7 +65,7 @@ static const int g_GRAD3_Simplex[12][3] =
 	{1,0,1},{-1,0,1},{1,0,-1},{-1,0,-1},
 	{0,1,1},{0,-1,1},{0,1,-1},{0,-1,-1}
 };
-static const int g_GRAD3[12][3] =
+static const int g_VECTORI_DIRECTIE[12][3] =
 {
 	{ 0,1,1}, { 0,1,-1 }, {0,-1,1 }, { 0,-1,-1 },
 	{ 1,0,1 }, { 1,0,-1 }, { -1,0,1 }, { -1,0,-1 },

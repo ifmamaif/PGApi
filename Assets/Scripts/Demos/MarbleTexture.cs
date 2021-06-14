@@ -56,7 +56,7 @@ class MarbleTexture : GenericBehaviour
                 float xd = (float)x / width * scale + offsetx;
                 float yd = (float)y / height * scale + offsety;
 
-                float noise = PGApi.PGApi.PerlinNoise_Improved3D(xd, yd, 0);
+                float noise = PGApi.PGApi.ZgomotulPerlin_Îmbunătățit3D(xd, yd, 0);
                 noise = Mathf.Sin(xd + noise);
 
                 Color color = new Color(noise, noise, noise);
@@ -78,7 +78,7 @@ class MarbleTexture : GenericBehaviour
                 float xd = (float)x / width * scale + offsetx;
                 float yd = (float)y / height * scale + offsety;
 
-                float noise = PGApi.PGApi.PerlinNoise_Improved3D(xd, yd, 0);
+                float noise = PGApi.PGApi.ZgomotulPerlin_Îmbunătățit3D(xd, yd, 0);
                 noise = Mathf.Cos(xd + noise);
 
                 Color color = new Color(noise, noise, noise);

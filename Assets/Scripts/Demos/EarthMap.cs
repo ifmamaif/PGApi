@@ -119,7 +119,7 @@ public class EarthMap : GenericBehaviour
                 //float yCoord = (float)y / perlinHeight * perlinScale + perlinOffsetY;
                 float xCoord = (float)x * perlinScale + perlinOffsetX;
                 float yCoord = (float)y  * perlinScale + perlinOffsetY;
-                var noise = PGApi.PGApi.Fbm(xCoord, yCoord, 0, 8, 1, 0.5f, 0.0005f, 2);
+                var noise = PGApi.PGApi.MișcareFracționatăBrowniană(xCoord, yCoord, 0, 8, 1, 0.5f, 0.0005f, 2);
                 noise *= 2f;
                 noise += 1;
                 noise /= 2;

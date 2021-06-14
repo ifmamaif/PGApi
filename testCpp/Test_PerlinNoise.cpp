@@ -39,16 +39,16 @@ void Test_PerlinNoise()
 
 	for (int i = 0; i < iteration; i++)
 	{
-		auto x = Randf() * 1000;
-		auto y = Randf() * 1000;
-		auto z = Randf() * 1000;
+		auto x = Aleatoriu01f() * 1000;
+		auto y = Aleatoriu01f() * 1000;
+		auto z = Aleatoriu01f() * 1000;
 
-		float res = PerlinNoise_Classic3D(x, y, z);
+		float res = ZgomotulPerlin_Clasic3D(x, y, z);
 		testMinMax(res);
 		auto cent = (float)i / iteration;
-		res = PerlinNoise_Classic3D(cent, cent, cent);
+		res = ZgomotulPerlin_Clasic3D(cent, cent, cent);
 		testMinMax(res);
-		res = PerlinNoise_Classic3D(cent + x, cent + y, cent + z);
+		res = ZgomotulPerlin_Clasic3D(cent + x, cent + y, cent + z);
 		testMinMax(res);
 	}
 
@@ -77,9 +77,9 @@ void GetMinMaxNoise(float (*f)(float, float, float))
 
 	for (int i = 0; i < iteration; i++)
 	{
-		float x = Randf() * 1000;
-		float y = Randf() * 1000;
-		float z = Randf() * 1000;
+		float x = Aleatoriu01f() * 1000;
+		float y = Aleatoriu01f() * 1000;
+		float z = Aleatoriu01f() * 1000;
 
 		float res = f(x, y, z);
 		testMinMax(res);
@@ -119,8 +119,8 @@ void GetMinMaxNoise2D(float (*f)(float, float))
 
 	for (int i = 0; i < iteration; i++)
 	{
-		float x = Randf() * 1000;
-		float y = Randf() * 1000;
+		float x = Aleatoriu01f() * 1000;
+		float y = Aleatoriu01f() * 1000;
 
 		float res = f(x, y);
 		testMinMax(res);
@@ -148,8 +148,8 @@ void TestVersions(float (*f1)(float, float), float (*f2)(float, float))
 	
 	for (int i = 0; i < iteration; i++)
 	{
-		float x = Randf() * 1000;
-		float y = Randf() * 1000;
+		float x = Aleatoriu01f() * 1000;
+		float y = Aleatoriu01f() * 1000;
 
 		float res1 = f1(x, y);
 		float res2 = f2(x, y);

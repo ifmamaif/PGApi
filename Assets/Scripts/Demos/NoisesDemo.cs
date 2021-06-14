@@ -23,7 +23,7 @@ class NoisesDemo : GenericBehaviour
         {
             var obj = GameObject.CreatePrimitive(PrimitiveType.Quad);
             obj.transform.parent = gameObject.transform;
-            obj.transform.localScale = new Vector3(40, 40, 1);//Vector3.one;//new Vector3(0.88f,0.88f,1);
+            obj.transform.localScale = new Vector3(40, 40, 1);
             objects[i] = obj;
 
         }
@@ -56,7 +56,7 @@ class NoisesDemo : GenericBehaviour
                 float xd = (float)x / width * scale + offsetx;
                 float yd = (float)y / height * scale + offsety;
 
-                float noise = PGApi.PGApi.ClassicPerlinNoise2D(xd, yd);
+                float noise = PGApi.PGApi.ZgomotulPerlin_Clasic2D(xd, yd);
                 noise = (noise + 1) / 2;
                 Color color = new Color(noise, noise, noise);
                 texture.SetPixel(x, y, color);
@@ -77,7 +77,7 @@ class NoisesDemo : GenericBehaviour
                 float xd = (float)x / width * scale + offsetx;
                 float yd = (float)y / height * scale + offsety;
 
-                float noise = PGApi.PGApi.ClassicPerlinNoise3D(xd, yd,0);
+                float noise = PGApi.PGApi.ZgomotulPerlin_Clasic3D(xd, yd,0);
                 noise = (noise + 1) / 2;
                 Color color = new Color(noise, noise, noise);
                 texture.SetPixel(x, y, color);
@@ -98,7 +98,7 @@ class NoisesDemo : GenericBehaviour
                 float xd = (float)x / width * scale + offsetx;
                 float yd = (float)y / height * scale + offsety;
 
-                float noise = PGApi.PGApi.PerlinNoise_Improved2D(xd, yd);
+                float noise = PGApi.PGApi.ZgomotulPerlin_Îmbunătățit2D(xd, yd);
                 noise = (noise + 1) / 2;
                 Color color = new Color(noise, noise, noise);
                 texture.SetPixel(x, y, color);
@@ -119,7 +119,7 @@ class NoisesDemo : GenericBehaviour
                 float xd = (float)x / width * scale + offsetx;
                 float yd = (float)y / height * scale + offsety;
 
-                float noise = PGApi.PGApi.PerlinNoise_Improved3D(xd, yd,0);
+                float noise = PGApi.PGApi.ZgomotulPerlin_Îmbunătățit3D(xd, yd,0);
                 noise = (noise + 1) / 2;
 
                 Color color = new Color(noise, noise, noise);
@@ -141,7 +141,7 @@ class NoisesDemo : GenericBehaviour
                 float xd = (float)x / width * scale + offsetx;
                 float yd = (float)y / height * scale + offsety;
 
-                float noise = PGApi.PGApi.SimplexNoise2D(xd, yd);
+                float noise = PGApi.PGApi.ZgomotulPerlin_Simplex2D(xd, yd);
                 noise = (noise + 1) / 2;
 
                 Color color = new Color(noise, noise, noise);
@@ -163,7 +163,7 @@ class NoisesDemo : GenericBehaviour
                 float xd = (float)x / width * scale + offsetx;
                 float yd = (float)y / height * scale + offsety;
 
-                float noise = PGApi.PGApi.SimplexNoise3D(xd, yd,0);
+                float noise = PGApi.PGApi.ZgomotulPerlin_Simplex3D(xd, yd,0);
                 noise = (noise + 1) / 2;
 
                 Color color = new Color(noise, noise, noise);

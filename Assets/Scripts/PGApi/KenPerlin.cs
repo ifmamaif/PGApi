@@ -11,7 +11,7 @@
 				{
 					float xCoord = (float)x / width * scale + offsetX;
 					float yCoord = (float)y / height * scale + offsetY;
-					noiseMap[x, y] = PGApi.PerlinNoise_Improved2D(xCoord, yCoord);
+					noiseMap[x, y] = PGApi.ZgomotulPerlin_Îmbunătățit2D(xCoord, yCoord);
 				}
 			}
 			return noiseMap;

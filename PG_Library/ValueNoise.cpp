@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "ValueNoise.h"
 
 #include "Constants.h"
@@ -12,19 +12,19 @@ float smoothstep(const float& t)
 
 float ValueNoise(const float x)
 {
-	int xInteger = FastFloorf(x);
+	int xInteger = ParteaÎntreagăRapidf(x);
 
 	float interpolation = x - xInteger;
 
 	int xMin = xInteger % 256;
 	int xMax = (xMin == 256 - 1) ? 0 : xMin + 1;
 
-	return Lerpf((float)(g_HASH_TABLE_KEN_PERLIN[xMin]), (float)(g_HASH_TABLE_KEN_PERLIN[xMax]), interpolation);
+	return InterpolareLiniarăf((float)(g_TABELA_HASH_KEN_PERLIN[xMin]), (float)(g_TABELA_HASH_KEN_PERLIN[xMax]), interpolation);
 }
 
 float ValueNoise1D(const float x)
 {
-	const int xInteger = FastFloorf(x);
+	const int xInteger = ParteaÎntreagăRapidf(x);
 
 	const float tx = x - xInteger;
 
@@ -32,20 +32,20 @@ float ValueNoise1D(const float x)
 	const int rx1 = (rx0 + 1) & 255;
 
 	// random values at the corners of the cell using permutation table
-	const int& c00 = g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[rx0]];
-	const int& c10 = g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[rx1]];
+	const int& c00 = g_TABELA_HASH_KEN_PERLIN[g_TABELA_HASH_KEN_PERLIN[rx0]];
+	const int& c10 = g_TABELA_HASH_KEN_PERLIN[g_TABELA_HASH_KEN_PERLIN[rx1]];
 
 	// remapping of tx and ty using the Smoothstep function 
 	const float sx = smoothstep(tx);
 
 	// linearly interpolate values along the x axis
-	return Lerpf((float)c00, (float)c10, sx);
+	return InterpolareLiniarăf((float)c00, (float)c10, sx);
 }
 
 float ValueNoise2D(const float x, const float y) 
 {
-	int xInteger = FastFloorf(x);
-	int yInteger = FastFloorf(y);
+	int xInteger = ParteaÎntreagăRapidf(x);
+	int yInteger = ParteaÎntreagăRapidf(y);
 
 	float tx = x - xInteger;
 	float ty = y - yInteger;
@@ -56,21 +56,21 @@ float ValueNoise2D(const float x, const float y)
 	int ry1 = (ry0 + 1) & 255;
 
 	// random values at the corners of the cell using permutation table
-	const int& c00 = g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[rx0] + ry0]];
-	const int& c10 = g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[rx1] + ry0]];
-	const int& c01 = g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[rx0] + ry1]];
-	const int& c11 = g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[rx1] + ry1]];
+	const int& c00 = g_TABELA_HASH_KEN_PERLIN[g_TABELA_HASH_KEN_PERLIN[g_TABELA_HASH_KEN_PERLIN[rx0] + ry0]];
+	const int& c10 = g_TABELA_HASH_KEN_PERLIN[g_TABELA_HASH_KEN_PERLIN[g_TABELA_HASH_KEN_PERLIN[rx1] + ry0]];
+	const int& c01 = g_TABELA_HASH_KEN_PERLIN[g_TABELA_HASH_KEN_PERLIN[g_TABELA_HASH_KEN_PERLIN[rx0] + ry1]];
+	const int& c11 = g_TABELA_HASH_KEN_PERLIN[g_TABELA_HASH_KEN_PERLIN[g_TABELA_HASH_KEN_PERLIN[rx1] + ry1]];
 
 	// remapping of tx and ty using the Smoothstep function 
 	float sx = smoothstep(tx);
 	float sy = smoothstep(ty);
 
 	// linearly interpolate values along the x axis
-	float nx0 = Lerpf((float)c00, (float)c10, sx);
-	float nx1 = Lerpf((float)c01, (float)c11, sx);
+	float nx0 = InterpolareLiniarăf((float)c00, (float)c10, sx);
+	float nx1 = InterpolareLiniarăf((float)c01, (float)c11, sx);
 
 	// linearly interpolate the nx0/nx1 along they y axis
-	return Lerpf(nx0, nx1, sy);
+	return InterpolareLiniarăf(nx0, nx1, sy);
 }
 
 float ValueNoiseND(int nDim, ...)
@@ -92,7 +92,7 @@ float ValueNoiseND(int nDim, ...)
 	int* inputInteger = new int[nDim];
 	for (int i = 0; i < nDim; i++)
 	{
-		inputInteger[i] = FastFloorf(input[i]);
+		inputInteger[i] = ParteaÎntreagăRapidf(input[i]);
 		inputFloats[i] = input[i] - inputInteger[i];
 		inputInteger[i] = inputInteger[i] & 255;
 	}
@@ -106,11 +106,11 @@ float ValueNoiseND(int nDim, ...)
 		corners[i] = 0;
 		for (auto j = 0; j < nDim; j++)
 		{
-			corners[i] += g_HASH_TABLE_KEN_PERLIN[inputInteger[j] + CheckBitStatus(i, nDim - 1 - j) + (int)(corners[i])];
-			int bit = CheckBitStatus(i, nDim - 1 - j);
+			corners[i] += g_TABELA_HASH_KEN_PERLIN[inputInteger[j] + VerificareBit(i, nDim - 1 - j) + (int)(corners[i])];
+			int bit = VerificareBit(i, nDim - 1 - j);
 			//corners[i] = (float)g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[inputInteger[j] + bit]];
 		}
-		corners[i] = (float)g_HASH_TABLE_KEN_PERLIN[(int)(corners[i])];
+		corners[i] = (float)g_TABELA_HASH_KEN_PERLIN[(int)(corners[i])];
 	}
 	//corners[0] = (float)g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[inputInteger[0]]];
 	//corners[1] = (float)g_HASH_TABLE_KEN_PERLIN[g_HASH_TABLE_KEN_PERLIN[inputInteger[0] + 1]];
@@ -131,7 +131,7 @@ float ValueNoiseND(int nDim, ...)
 			float corner = corners[j];
 			float nextCorner = corners[j + interpolations];
 			float weight = inputFloats[i];
-			corners[j] = Lerpf(corner, nextCorner, weight);
+			corners[j] = InterpolareLiniarăf(corner, nextCorner, weight);
 		}
 		interpolations /= 2;
 	}

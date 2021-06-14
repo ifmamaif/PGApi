@@ -9,11 +9,6 @@
             type = (byte)(value & 0x0f);
         }
 
-        //public void AddFreedom()
-        //{
-        //    type = (byte) Random.Rand((uint)(type + 1), 16);
-        //}
-
         public static Cell SetTypeCell(Cell[,] buffer, int rows, int columns, int x, int y)
         {
             Cell cell = new Cell((byte)(x > 0 ? buffer[x - 1, y] != null ? 1 : 0 : 0));

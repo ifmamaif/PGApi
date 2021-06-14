@@ -27,8 +27,8 @@ public class WoodTexture : PerlinNoisePreview
         Vector3 t1 = new Vector3(x_v * 2, y_v * 2, z_v * 2);
         Vector3 t2 = new Vector3(0, 0, 0);
         
-        float temp_x = 60 * noiseFunc(t1.x, t1.y);//, t1.z);
-        float temp_y = 60 * noiseFunc(t2.x, t2.y);//, t2.z);
+        float temp_x = 60 * noiseFunc(t1.x, t1.y);
+        float temp_y = 60 * noiseFunc(t2.x, t2.y);
         
         x_v -= temp_x;
         y_v -= temp_y;

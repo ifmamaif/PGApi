@@ -1,93 +1,86 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "Math.h"
 
 static const float EPSILON = 1e-7F;
 
 #define Macro_Abs(x) x > 0 ? x : -x
 
-int Absi(int value)
+int AbsolutÎntregi(int value)
 {
     return Macro_Abs(value);
 }
 
-float Absf(float value)
+float AbsolutÎntregf(float value)
 {
     return Macro_Abs(value);
 }
 
-double Absd(double value)
+double AbsolutÎntregd(double value)
 {
     return Macro_Abs(value);
 }
 
-int FloorToIntf(float f)
+int ParteaÎntreagăf(float f)
 {
     int integer_f = (int)f;
-    if (Absf(f - integer_f) > EPSILON)
+    if (AbsolutÎntregf(f - integer_f) > EPSILON)
     {
         return f < 0 ? integer_f + 1 : integer_f;
     }
     return integer_f;
 }
 
-int FloorToIntd(double f)
+int ParteaÎntreagăd(double f)
 {
 	int integer_d = (int)f;
-	if (Absd(f - integer_d) > EPSILON)
+	if (AbsolutÎntregd(f - integer_d) > EPSILON)
 	{
 		return f < 0 ? integer_d + 1 : integer_d;
 	}
 	return integer_d;
 }
 
-int RoundToInt(float f)
+int RotunjireLaÎntregf(float f)
 {
     const float HALF = 0.5f;
     if (f >= 0)
     {
         return (int)(f + HALF);
     }
-    return (int)-(Absf(f) + HALF);
+    return (int)-(AbsolutÎntregf(f) + HALF);
 }
 
-// Function to linearly interpolate between a0 and a1
-// weight should be in the range [0.0, 1.0]
-float Lerpf(float a0, float a1, float weight)
+float InterpolareLiniarăf(float a, float b, float greutate)
 {
-    // this is slightly faster equivalent formula for : (1.0 - w)*a0 + w * a1
+    return a + greutate * (b - a);
+}
+
+double InterpolareLiniarăd(double a0, double a1, double weight)
+{
     return a0 + weight * (a1 - a0);
 }
 
-// Function to linearly interpolate between a0 and a1
-// weight should be in the range [0.0, 1.0]
-double Lerpd(double a0, double a1, double weight)
-{
-    // this is slightly faster equivalent formula for : (1.0 - w)*a0 + w * a1
-    return a0 + weight * (a1 - a0);
-}
-
-int FastFloorf(float d)
+int ParteaÎntreagăRapidf(float d)
 {
     return d > 0 ? (int)d : (int)d - 1;
 }
 
-int FastFloord(double d)
+int ParteaÎntreagăRapidd(double d)
 {
 	return d > 0 ? (int)d : (int)d - 1;
 }
 
-int Doti(int x, int y)
+int ProdusScalari(int x, int y)
 {
     return x * y;
 }
 
-float Dotf(float x, float y)
+float ProdusScalarf(float x, float y)
 {
 	return x * y;
 }
 
-//Parameters of functions that correspond to ... are promoted before passing to your variadic function. char and short are promoted to int, float is promoted to double, etc.
-float DotN(int nDim, const int g[], ... )
+float ProdusScalarN(int nDim, const int g[], ... )
 {
     float result = 0;
 	va_list list;
@@ -102,7 +95,7 @@ float DotN(int nDim, const int g[], ... )
     return result;
 }
 
-float DotArray(int nDim, const int g[], const float x[])
+float ProdusScalarVector(int nDim, const int g[], const float x[])
 {
     float result = 0;
 	for (int i = 0; i < nDim; i++)
@@ -112,7 +105,7 @@ float DotArray(int nDim, const int g[], const float x[])
 	return result;
 }
 
-int CheckBitStatus(int number, int bitPosition)
+int VerificareBit(int number, int bitPosition)
 {
     int bitChecker = 1 << bitPosition;
     int si = number & bitChecker;

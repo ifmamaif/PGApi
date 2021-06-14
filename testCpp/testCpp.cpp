@@ -23,14 +23,14 @@
 #include "Test_PerlinNoise.h"
 
 void PRNG_C() {
-	srand(time(NULL)); /* seed the generator */
-	int rand1 = rand(); /* a pseudorandom integer between 0 and RAND_MAX */
-	printf("Random number between 0 and %d: %d\n", RAND_MAX, (int)rand1);
-	int min = 0;
-	int max = 100;
-	float rand2 = (float)rand() * max / RAND_MAX + 1;
-	int round = (int)rand2;
-	printf("Random number between %d and %d: %d (%f)\n", min, max, round, rand2);
+	srand(time(NULL)); /* inițializarea generatorului cu data prezentă */
+	int valoareAleatoare1 = rand(); /* o valoare pseudo-aleatoare întreagă între 0 și RAND_MAX */
+	printf("Un număr aleator între 0 și %d: %d\n", RAND_MAX, (int)valoareAleatoare1);
+	int minim = 0;
+	int maxim = 100;
+	float valoareAleatoare2 = (float)rand() * maxim / RAND_MAX + 1;
+	int rotunjire = (int)valoareAleatoare2;
+	printf("Un număr aleator între %d și %d: %d (%f)\n", minim, maxim, rotunjire, valoareAleatoare2);
 	return;
 }
 
@@ -75,12 +75,12 @@ void TestMinMax()
 			float x = (float)i * scale + offset;
 			float y = (float)j * scale + offset;
 
-			auto noise = Fbm(x, y, 0, 8, 1, 0.5f, 0.0005f, 2);
+			auto noise = MișcareFracționatăBrowniană(x, y, 0, 8, 1, 0.5f, 0.0005f, 2);
 
 			noise *= 2;
 			noise += 1;
 			noise /= 2;	
-			noise = RoundToInt(noise);
+			noise = RotunjireLaÎntregf(noise);
 
 			if (min > noise)
 			{
@@ -104,5 +104,5 @@ void TestMinMax()
 
 int main(int argc,char* argv[])
 {
-	TestVersions(SimplexNoise2D,noise_simplex_optimized);
+	std::cout << "Hello";
 }

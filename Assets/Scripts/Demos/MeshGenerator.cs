@@ -50,9 +50,9 @@ public class MeshGenerator : GenericBehaviour
         {
             for (int x = 0; x <= xSize; x++)
             {
-                float y = (float)PGApi.PGApi.PerlinNoise_Improved2D(xOffSet + (x * .3f), zOffSet + (z * .3f)) * 2f;
+                float y = (float)PGApi.PGApi.ZgomotulPerlin_Îmbunătățit2D(xOffSet + (x * .3f), zOffSet + (z * .3f)) * 2f;
                 vertices[i] = new Vector3(x, y, z);
-                float colorValue = (float)PGApi.PGApi.PerlinNoise_Improved2D(xOffSet + x * .3f, zOffSet + z * .3f);
+                float colorValue = (float)PGApi.PGApi.ZgomotulPerlin_Îmbunătățit2D(xOffSet + x * .3f, zOffSet + z * .3f);
                 colors[i] = Color.Lerp(Color.red, Color.green, colorValue);
                 i++;
             }
