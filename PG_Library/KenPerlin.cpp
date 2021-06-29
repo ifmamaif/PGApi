@@ -10,9 +10,9 @@ float ZgomotulPerlin_Clasic1D(float x)
 {
 	int xIntreg = ParteaÎntreagăRapidf(x);
 	
-	xIntreg = xIntreg & 255;
-
 	x = x - xIntreg;
+
+	xIntreg = xIntreg & 255;
 
 	int gradient1 = g_TABELA_HASH_KEN_PERLIN[xIntreg] % 12;
 	int gradient2 = g_TABELA_HASH_KEN_PERLIN[xIntreg + 1] % 12;
@@ -34,6 +34,10 @@ float ZgomotulPerlin_Clasic2D(float x, float y)
 	int xÎntreg = ParteaÎntreagăRapidf(x);
 	int yÎntreg = ParteaÎntreagăRapidf(y);
 
+	// Se ia partea fracționară pentru calcularea produsului scalar
+	x = x - xÎntreg;
+	y = y - yÎntreg;
+
 	// Se restrâng valorile la 0 ... 255 deoarece tabela de hash are 256 de elemente
 	xÎntreg = xÎntreg & 255;
 	yÎntreg = yÎntreg & 255;
@@ -44,11 +48,7 @@ float ZgomotulPerlin_Clasic2D(float x, float y)
 	int gradient2 = g_TABELA_HASH_KEN_PERLIN[xÎntreg + g_TABELA_HASH_KEN_PERLIN[yÎntreg + 1]] % 12;
 	int gradient3 = g_TABELA_HASH_KEN_PERLIN[xÎntreg + 1 + g_TABELA_HASH_KEN_PERLIN[yÎntreg]] % 12;
 	int gradient4 = g_TABELA_HASH_KEN_PERLIN[xÎntreg + 1 + g_TABELA_HASH_KEN_PERLIN[yÎntreg + 1]] % 12;
-
-	// Se ia partea fracționară pentru calcularea produsului scalar
-	x = x - xÎntreg;
-	y = y - yÎntreg;
-
+	
 	// Se calculează câte o valoare de minim pentru parametrii de intrare (scăzând 1)
 	float xMinim = x - 1;
 	float yMinim = y - 1;

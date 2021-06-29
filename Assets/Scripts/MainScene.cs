@@ -46,19 +46,19 @@ public class MainScene : MonoBehaviour
         pressR.transform.SetParent(m_UI.transform);
         pressR.transform.localPosition = new Vector3(0, 0, 0);
 
-        TextMesh text = pressR.AddComponent<TextMesh>();
-        text.text = "Press R to reload";
-        text.offsetZ = 0;
-        text.characterSize = 5;
-        text.lineSpacing = 1;
-        text.anchor = TextAnchor.UpperCenter;
-        text.alignment = TextAlignment.Center;
-        text.tabSize = 4;
-        text.fontSize = 0;
-        text.fontStyle = FontStyle.Normal;
-        text.richText = true;
-        text.font = null;
-        text.color = Color.white;
+        //TextMesh text = pressR.AddComponent<TextMesh>();
+        //text.text = "Press R to reload";
+        //text.offsetZ = 0;
+        //text.characterSize = 5;
+        //text.lineSpacing = 1;
+        //text.anchor = TextAnchor.UpperCenter;
+        //text.alignment = TextAlignment.Center;
+        //text.tabSize = 4;
+        //text.fontSize = 0;
+        //text.fontStyle = FontStyle.Normal;
+        //text.richText = true;
+        //text.font = null;
+        //text.color = Color.white;
 
         m_PreviewDemos.AddNewDemo<LevelGeneration>("Room Generator");                 
 
