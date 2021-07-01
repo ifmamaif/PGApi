@@ -69,6 +69,8 @@
     <Compile Include="Assets\Scripts\Demos\EarthMap.cs" />
     <Compile Include="Assets\Scripts\Demos\FurTexture.cs" />
     <Compile Include="Assets\Scripts\Demos\Heart.cs" />
+    <Compile Include="Assets\Scripts\Demos\Heart1.cs" />
+    <Compile Include="Assets\Scripts\Demos\Heart2.cs" />
     <Compile Include="Assets\Scripts\Demos\LevelGeneration.cs" />
     <Compile Include="Assets\Scripts\Demos\MDS.cs" />
     <Compile Include="Assets\Scripts\Demos\Marble1.cs" />

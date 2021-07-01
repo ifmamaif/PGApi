@@ -75,7 +75,8 @@ public class MainScene : MonoBehaviour
         demo_Level = m_PreviewDemos.AddNewDemo<PerlinNoisePreview>("Perlin Preview"); 
         //demo_Level.transform.localScale = new Vector3(88, 88, 1);
 
-        m_PreviewDemos.AddNewDemo<Heart>("Hearth Preview");                           
+        m_PreviewDemos.AddNewDemo<Heart>("Hearth Preview");
+        m_PreviewDemos.AddNewDemo<Heart1>("Hearth Preview 1");
         m_PreviewDemos.AddNewDemo<NoisesDemo>("Perlin Noises");                       
         m_PreviewDemos.AddNewDemo<MarbleTexture>("Marble Texture");                   
         demo_Level = m_PreviewDemos.AddNewDemo<PerlinTexture>("Perlin Textures");     
